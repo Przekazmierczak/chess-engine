@@ -14,6 +14,14 @@ Piece::Piece(
     player = legend[input_symbol]["player"];
 }
 
+bool Piece::operator==(const Piece& other) const {
+    return (this->symbol == other.symbol &&
+            this->row == other.row &&
+            this->column == other.column &&
+            this->piece == other.piece &&
+            this->player == other.player);
+}
+
 bool Piece::is_valid_position(int row, int column) {
     return row >= 0 && row < ROWS && column >= 0 && column < COLS;
 }

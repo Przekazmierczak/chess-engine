@@ -64,6 +64,8 @@ class Piece {
 
         Piece(char input_symbol, int input_row, int input_column);
 
+        bool operator==(const Piece& other) const;
+
         bool is_valid_position(int row, int column);
 
         bool is_not_pinned(

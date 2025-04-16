@@ -2,6 +2,7 @@
 #include "Piece.h"
 
 #include "gtest/gtest.h"
+#include <iostream>
 
 namespace {
     TEST(CreateBoard, Correct) {
@@ -56,7 +57,9 @@ namespace {
         // Compare each element in the board manually
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
-                EXPECT_EQ(actual_board[i][j].get(), expected_board[i][j].get());  
+                if (actual_board[i][j].get() || expected_board[i][j]) {
+                    EXPECT_EQ(*(actual_board[i][j].get()), *(expected_board[i][j].get()));
+                }
             }
         }
     }
