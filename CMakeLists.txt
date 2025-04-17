@@ -21,7 +21,7 @@ if(MSVC)
 endif()
 
 # Add the test executable
-add_executable(ChessMinMaxTests Board_unittest.cpp Board.cpp Piece.cpp)
+add_executable(ChessMinMaxTests Board_unittest.cpp Piece_unittest.cpp Board.cpp Piece.cpp)
 
 # Link GoogleTest libraries
 target_link_libraries(ChessMinMaxTests gtest_main)

@@ -93,7 +93,7 @@ Piece::Result Piece::check_piece_possible_moves (
                     board_class.board[new_row][new_column] &&
                     board_class.board[new_row][new_column]->player != player
                 ) {
-                    result.moves.push_back({new_row, new_column});
+                    result.moves.insert({new_row, new_column});
                     if (board_class.board[new_row][new_column]->piece == "king") {
                         checkin_pieces[{row, column}];
                     }
@@ -116,7 +116,7 @@ Piece::Result Piece::check_piece_possible_moves (
                 ) {
                     if (is_not_pinned({row, column}, {new_row, new_column}, board_class, pinned_pieces)) {
                         if (checkin_pieces.empty() || checking_positions.count({new_row, new_column})) {
-                            result.moves.push_back({new_row, new_column});
+                            result.moves.insert({new_row, new_column});
                         }
                     }
                 } else {
@@ -136,7 +136,7 @@ Piece::Result Piece::check_piece_possible_moves (
                 ) {
                     if (is_not_pinned({row, column}, {new_row, new_column}, board_class, pinned_pieces)) {
                         if (checkin_pieces.empty() || checking_positions.count({new_row, new_column})) {
-                            result.attacks.push_back({new_row, new_column});
+                            result.attacks.insert({new_row, new_column});
                         }
                     }
                 }
@@ -147,7 +147,7 @@ Piece::Result Piece::check_piece_possible_moves (
                 ) {
                     if (is_not_pinned({row, column}, {new_row, new_column}, board_class, pinned_pieces)) {
                         if (checkin_pieces.empty() || checking_positions.count({new_row, new_column})) {
-                            result.attacks.push_back({new_row, new_column});
+                            result.attacks.insert({new_row, new_column});
                         }
                     }
                 }
@@ -231,7 +231,7 @@ Piece::Result Piece::check_piece_possible_moves (
                         if (board_class.board[new_row][new_column]->player != player) {
                             if ((is_not_pinned({row, column}, {new_row, new_column}, board_class, pinned_pieces))) {
                                 if (checkin_pieces.empty() || checking_positions.count({new_row, new_column})) {
-                                    result.attacks.push_back({new_row, new_column});
+                                    result.attacks.insert({new_row, new_column});
                                 }
                             }
                         }
@@ -239,7 +239,7 @@ Piece::Result Piece::check_piece_possible_moves (
                     } else {
                         if (is_not_pinned({row, column}, {new_row, new_column}, board_class, pinned_pieces)) {
                             if (checkin_pieces.empty() || checking_positions.count({new_row, new_column})) {
-                                result.moves.push_back({new_row, new_column});
+                                result.moves.insert({new_row, new_column});
                             }
                         }
                     }
@@ -284,13 +284,13 @@ Piece::Result Piece::check_piece_possible_moves (
                         if (!board_class.board[new_row][new_column]) {
                             if (is_not_pinned({row, column}, {new_row, new_column}, board_class, pinned_pieces)) {
                                 if (checkin_pieces.empty() || checking_positions.count({new_row, new_column})) {
-                                    result.moves.push_back({new_row, new_column});
+                                    result.moves.insert({new_row, new_column});
                                 }
                             }
                         } else if (board_class.board[new_row][new_column]->player != player) {
                             if (is_not_pinned({row, column}, {new_row, new_column}, board_class, pinned_pieces)) {
                                 if (checkin_pieces.empty() || checking_positions.count({new_row, new_column})) {
-                                    result.attacks.push_back({new_row, new_column});
+                                    result.attacks.insert({new_row, new_column});
                                 }
                             }
                         }
@@ -304,7 +304,7 @@ Piece::Result Piece::check_piece_possible_moves (
                                     !attacked_positions.count({row, 1}) &&
                                     !attacked_positions.count({row, 2})
                                 ) {
-                                    result.moves.push_back({new_row, new_column});
+                                    result.moves.insert({new_row, new_column});
                                 }
                             }
                         } else if (direction == std::array<int, 2> {0, 2}) {
@@ -317,16 +317,16 @@ Piece::Result Piece::check_piece_possible_moves (
                                     !attacked_positions.count({row, 4}) &&
                                     !attacked_positions.count({row, 5})
                                 ) {
-                                    result.moves.push_back({new_row, new_column});
+                                    result.moves.insert({new_row, new_column});
                                 }
                             }
                         } else if (!board_class.board[new_row][new_column]) {
                             if (!attacked_positions.count({new_row, new_column})) {
-                                result.moves.push_back({new_row, new_column});
+                                result.moves.insert({new_row, new_column});
                             }
                         } else if (board_class.board[new_row][new_column]->player != player) {
                             if (!attacked_positions.count({new_row, new_column})) {
-                                result.attacks.push_back({new_row, new_column});
+                                result.attacks.insert({new_row, new_column});
                             }
                         }
                     }

@@ -57,9 +57,16 @@ class Piece {
         };
 
         struct Result {
-            std::vector<std::array<int, 2>> moves;
-            std::vector<std::array<int, 2>> attacks;
+            std::unordered_set<std::array<int, 2>, PositionHash> moves;
+            std::unordered_set<std::array<int, 2>, PositionHash> attacks;
             bool promotion = false;
+
+            bool operator==(const Result& other) const {
+            return (this->moves == other.moves &&
+                    this->attacks == other.attacks &&
+                    this->promotion == other.promotion
+                    );
+            }
         };
 
         Piece(char input_symbol, int input_row, int input_column);
