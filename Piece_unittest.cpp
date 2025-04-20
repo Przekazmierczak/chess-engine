@@ -25,6 +25,7 @@ namespace {
 
     TEST(TestBasicMovements, Correct) {
         Board board;
+        board.castling = "____";
         
         for (int i = 0; i < 8; i++) {
             for (int j = 0; j < 8; j++) {
@@ -75,7 +76,7 @@ namespace {
         PositionMap checkin_pieces;
         PositionMap pinned_pieces;
 
-
+        // WHITE
         EXPECT_EQ(
             board.board[1][0]->check_piece_possible_moves(board, attacked_positions, checkin_pieces, pinned_pieces),
             create_expected_result(
@@ -157,23 +158,392 @@ namespace {
             )
         );
 
-        Piece::Result result = board.board[0][4]->check_piece_possible_moves(board, attacked_positions, checkin_pieces, pinned_pieces);
-
-        // for (auto move : result.moves) {
-        //     std::cout << move[0] << "-" << move[1] << std::endl;
-        // }
-
         EXPECT_EQ(
             board.board[0][4]->check_piece_possible_moves(board, attacked_positions, checkin_pieces, pinned_pieces),
             create_expected_result(
-                {{1, 4}, {0, 5}, {0, 3}, {1, 5}, {1, 3}, {0, 2}},
+                {{1, 4}, {0, 5}, {0, 3}, {1, 5}, {1, 3}},
                 {},
+                false
+            )
+        );
+
+        // BLACK
+        board.turn = "black";
+        EXPECT_EQ(
+            board.board[6][3]->check_piece_possible_moves(board, attacked_positions, checkin_pieces, pinned_pieces),
+            create_expected_result(
+                {{5, 3}},
+                {},
+                false
+            )
+        );
+
+        EXPECT_EQ(
+            board.board[5][4]->check_piece_possible_moves(board, attacked_positions, checkin_pieces, pinned_pieces),
+            create_expected_result(
+                {{4, 4}},
+                {{4, 3}},
+                false
+            )
+        );
+
+        EXPECT_EQ(
+            board.board[6][7]->check_piece_possible_moves(board, attacked_positions, checkin_pieces, pinned_pieces),
+            create_expected_result(
+                {},
+                {},
+                false
+            )
+        );
+
+        EXPECT_EQ(
+            board.board[7][0]->check_piece_possible_moves(board, attacked_positions, checkin_pieces, pinned_pieces),
+            create_expected_result(
+                {{6, 0}, {5, 0}, {4, 0}, {3, 0}},
+                {{2, 0}},
+                false
+            )
+        );
+
+        EXPECT_EQ(
+            board.board[7][4]->check_piece_possible_moves(board, attacked_positions, checkin_pieces, pinned_pieces),
+            create_expected_result(
+                {{7, 5}, {7, 6}, {7, 7}},
+                {{6, 4}},
+                false
+            )
+        );
+
+        EXPECT_EQ(
+            board.board[7][1]->check_piece_possible_moves(board, attacked_positions, checkin_pieces, pinned_pieces),
+            create_expected_result(
+                {{5, 2}, {5, 0}},
+                {},
+                false
+            )
+        );
+
+        EXPECT_EQ(
+            board.board[5][5]->check_piece_possible_moves(board, attacked_positions, checkin_pieces, pinned_pieces),
+            create_expected_result(
+                {{7, 6}, {3, 6}, {3, 4}, {4, 7}},
+                {{4 ,3}},
+                false
+            )
+        );
+
+        EXPECT_EQ(
+            board.board[7][2]->check_piece_possible_moves(board, attacked_positions, checkin_pieces, pinned_pieces),
+            create_expected_result(
+                {{6, 1}, {5, 0}},
+                {},
+                false
+            )
+        );
+
+        EXPECT_EQ(
+            board.board[7][3]->check_piece_possible_moves(board, attacked_positions, checkin_pieces, pinned_pieces),
+            create_expected_result(
+                {{6, 2}},
+                {{6, 4}},
                 false
             )
         );
 
     }
 
+    TEST(BlockTheKingMove, Correct) {
+        Board board;
+        board.castling = "____";
+        board.turn = "black";
+        
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                board.board[i][j] = nullptr;
+            }
+        }
+
+        // ("pawn", "white", (1, 2))
+        board.board[1][2] = std::make_unique<Piece>('P', 1, 2);
+        // ("rook", "white", (1, 5))
+        board.board[1][5] = std::make_unique<Piece>('R', 1, 5);
+        // ("knight", "white", (0, 5))
+        board.board[0][5] = std::make_unique<Piece>('N', 0, 5);
+        // ("bishop", "white", (2, 6))
+        board.board[2][6] = std::make_unique<Piece>('B', 2, 6);
+        // ("queen", "white", (3, 7))
+        board.board[3][7] = std::make_unique<Piece>('Q', 3, 7);
+        // ("king", "white", (0, 0))
+        board.board[0][0] = std::make_unique<Piece>('K', 0, 0);
+        // ("king", "black", (3, 4))
+        board.board[3][4] = std::make_unique<Piece>('k', 3, 4);
+
+        PositionSet attacked_positions;
+        PositionMap checkin_pieces;
+        PositionMap pinned_pieces;
+
+        // Update attacked_positions, checkin_pieces, pinned_pieces
+        for (int row = 0; row < board.ROWS; row++) {
+            for (int col = 0; col < board.COLS; col++) {
+                if (board.board[row][col] && board.board[row][col]->player != board.turn) {
+                    board.board[row][col]->check_piece_possible_moves(board, attacked_positions, checkin_pieces, pinned_pieces);
+                }
+            }
+        }
+
+        EXPECT_EQ(
+            board.board[3][4]->check_piece_possible_moves(board, attacked_positions, checkin_pieces, pinned_pieces),
+            create_expected_result(
+                {{4, 3}},
+                {},
+                false
+            )
+        );
+    }
+
+    TEST(BlockTheKingAttack, Correct) {
+        Board board;
+        board.castling = "____";
+        board.turn = "black";
+        
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                board.board[i][j] = nullptr;
+            }
+        }
+
+        // ("pawn", "white", (2, 5))
+        board.board[2][5] = std::make_unique<Piece>('P', 2, 5);
+        // ("pawn", "white", (3, 3))
+        board.board[3][3] = std::make_unique<Piece>('P', 3, 3);
+        // ("pawn", "white", (4, 4))
+        board.board[4][4] = std::make_unique<Piece>('P', 4, 4);
+        // ("pawn", "white", (4, 5))
+        board.board[4][5] = std::make_unique<Piece>('P', 4, 5);
+        // ("rook", "white", (0, 4))
+        board.board[0][4] = std::make_unique<Piece>('R', 0, 4);
+        // ("knight", "white", (0, 6))
+        board.board[0][6] = std::make_unique<Piece>('N', 0, 6);
+        // ("bishop", "white", (1, 2))
+        board.board[1][2] = std::make_unique<Piece>('B', 1, 2);
+        // ("queen", "white", (3, 7))
+        board.board[3][7] = std::make_unique<Piece>('Q', 3, 7);
+        // ("king", "white", (0, 0))
+        board.board[0][0] = std::make_unique<Piece>('K', 0, 0);
+        // ("king", "black", (3, 4))
+        board.board[3][4] = std::make_unique<Piece>('k', 3, 4);
+
+
+        PositionSet attacked_positions;
+        PositionMap checkin_pieces;
+        PositionMap pinned_pieces;
+
+        // Update attacked_positions, checkin_pieces, pinned_pieces
+        for (int row = 0; row < board.ROWS; row++) {
+            for (int col = 0; col < board.COLS; col++) {
+                if (board.board[row][col] && board.board[row][col]->player != board.turn) {
+                    board.board[row][col]->check_piece_possible_moves(board, attacked_positions, checkin_pieces, pinned_pieces);
+                }
+            }
+        }
+
+        EXPECT_EQ(
+            board.board[3][4]->check_piece_possible_moves(board, attacked_positions, checkin_pieces, pinned_pieces),
+            create_expected_result(
+                {{4, 3}},
+                {},
+                false
+            )
+        );
+    }
+
+    TEST(AbsolutePin, Correct) {
+        Board board;
+        board.castling = "____";
+        board.turn = "black";
+        
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                board.board[i][j] = nullptr;
+            }
+        }
+
+        // ("pawn", "black", (2, 5))
+        board.board[2][5] = std::make_unique<Piece>('p', 2, 5);
+        // ("rook", "white", (3, 0))
+        board.board[3][0] = std::make_unique<Piece>('R', 3, 0);
+        // ("knight", "black", (3, 2))
+        board.board[3][2] = std::make_unique<Piece>('n', 3, 2);
+        // ("bishop", "white", (1, 6))
+        board.board[1][6] = std::make_unique<Piece>('B', 1, 6);
+        // ("bishop", "black", (5, 2))
+        board.board[5][2] = std::make_unique<Piece>('b', 5, 2);
+        // ("queen", "white", (7, 0))
+        board.board[7][0] = std::make_unique<Piece>('Q', 7, 0);
+        // ("king", "white", (0, 0))
+        board.board[0][0] = std::make_unique<Piece>('K', 0, 0);
+        // ("king", "black", (3, 4))
+        board.board[3][4] = std::make_unique<Piece>('k', 3, 4);
+
+        PositionSet attacked_positions;
+        PositionMap checkin_pieces;
+        PositionMap pinned_pieces;
+
+        // Update attacked_positions, checkin_pieces, pinned_pieces
+        for (int row = 0; row < board.ROWS; row++) {
+            for (int col = 0; col < board.COLS; col++) {
+                if (board.board[row][col] && board.board[row][col]->player != board.turn) {
+                    board.board[row][col]->check_piece_possible_moves(board, attacked_positions, checkin_pieces, pinned_pieces);
+                }
+            }
+        }
+
+        EXPECT_EQ(
+            board.board[2][5]->check_piece_possible_moves(board, attacked_positions, checkin_pieces, pinned_pieces),
+            create_expected_result(
+                {},
+                {{1, 6}},
+                false
+            )
+        );
+        
+        EXPECT_EQ(
+            board.board[3][2]->check_piece_possible_moves(board, attacked_positions, checkin_pieces, pinned_pieces),
+            create_expected_result(
+                {},
+                {},
+                false
+            )
+        );
+
+        EXPECT_EQ(
+            board.board[5][2]->check_piece_possible_moves(board, attacked_positions, checkin_pieces, pinned_pieces),
+            create_expected_result(
+                {{6, 1}, {4, 3}},
+                {{7, 0}},
+                false
+            )
+        );
+    }
+
+    TEST(Check, Correct) {
+        Board board;
+        board.castling = "____";
+        board.turn = "black";
+        
+        for (int i = 0; i < 8; i++) {
+            for (int j = 0; j < 8; j++) {
+                board.board[i][j] = nullptr;
+            }
+        }
+
+        // ("pawn", "black", (4, 0))
+        board.board[4][0] = std::make_unique<Piece>('p', 4, 0);
+        // ("pawn", "black", (4, 2))
+        board.board[4][2] = std::make_unique<Piece>('p', 4, 2);
+        // ("pawn", "black", (3, 7))
+        board.board[3][7] = std::make_unique<Piece>('p', 3, 7);
+        // ("rook", "black", (7, 5))
+        board.board[7][5] = std::make_unique<Piece>('r', 7, 5);
+        // ("knight", "black", (1, 2))
+        board.board[1][2] = std::make_unique<Piece>('n', 1, 2);
+        // ("bishop", "black", (1, 3))
+        board.board[1][3] = std::make_unique<Piece>('b', 1, 3);
+        // ("queen", "white", (3, 1))
+        board.board[3][1] = std::make_unique<Piece>('Q', 3, 1);
+        // ("queen", "black", (7, 1))
+        board.board[7][1] = std::make_unique<Piece>('q', 7, 1);
+        // ("king", "white", (0, 0))
+        board.board[0][0] = std::make_unique<Piece>('K', 0, 0);
+        // ("king", "black", (3, 6))
+        board.board[3][6] = std::make_unique<Piece>('k', 3, 6);
+
+        PositionSet attacked_positions;
+        PositionMap checkin_pieces;
+        PositionMap pinned_pieces;
+
+        // Update attacked_positions, checkin_pieces, pinned_pieces
+        for (int row = 0; row < board.ROWS; row++) {
+            for (int col = 0; col < board.COLS; col++) {
+                if (board.board[row][col] && board.board[row][col]->player != board.turn) {
+                    board.board[row][col]->check_piece_possible_moves(board, attacked_positions, checkin_pieces, pinned_pieces);
+                }
+            }
+        }
+
+        // EXPECT_EQ(
+        //     board.board[4][0]->check_piece_possible_moves(board, attacked_positions, checkin_pieces, pinned_pieces),
+        //     create_expected_result(
+        //         {},
+        //         {{3, 1}},
+        //         false
+        //     )
+        // );
+
+        // EXPECT_EQ(
+        //     board.board[4][2]->check_piece_possible_moves(board, attacked_positions, checkin_pieces, pinned_pieces),
+        //     create_expected_result(
+        //         {{3, 2}},
+        //         {{3, 1}},
+        //         false
+        //     )
+        // );
+
+        EXPECT_EQ(
+            board.board[3][7]->check_piece_possible_moves(board, attacked_positions, checkin_pieces, pinned_pieces),
+            create_expected_result(
+                {},
+                {},
+                false
+            )
+        );
+
+        // EXPECT_EQ(
+        //     board.board[7][5]->check_piece_possible_moves(board, attacked_positions, checkin_pieces, pinned_pieces),
+        //     create_expected_result(
+        //         {{3, 5}},
+        //         {},
+        //         false
+        //     )
+        // );
+
+        // EXPECT_EQ(
+        //     board.board[1][2]->check_piece_possible_moves(board, attacked_positions, checkin_pieces, pinned_pieces),
+        //     create_expected_result(
+        //         {{3, 3}},
+        //         {{3, 1}},
+        //         false
+        //     )
+        // );
+
+        // EXPECT_EQ(
+        //     board.board[1][3]->check_piece_possible_moves(board, attacked_positions, checkin_pieces, pinned_pieces),
+        //     create_expected_result(
+        //         {{3, 5}},
+        //         {{3, 1}},
+        //         false
+        //     )
+        // );
+
+        // EXPECT_EQ(
+        //     board.board[7][1]->check_piece_possible_moves(board, attacked_positions, checkin_pieces, pinned_pieces),
+        //     create_expected_result(
+        //         {{3, 5}},
+        //         {{3, 1}},
+        //         false
+        //     )
+        // );
+
+        EXPECT_EQ(
+            board.board[3][6]->check_piece_possible_moves(board, attacked_positions, checkin_pieces, pinned_pieces),
+            create_expected_result(
+                {{2, 5}, {2, 6}, {2, 7}, {4, 5}, {4, 6}, {4, 7}},
+                {},
+                false
+            )
+        );
+
+    }
 
 
     TEST(TestTest, HandlesPositiveInput) {
