@@ -67,6 +67,8 @@ class Piece {
                     this->promotion == other.promotion
                     );
             }
+
+            friend std::ostream& operator<<(std::ostream& out, const Result& res);
         };
 
         Piece(char input_symbol, int input_row, int input_column);

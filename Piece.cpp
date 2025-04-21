@@ -22,6 +22,29 @@ bool Piece::operator==(const Piece& other) const {
             this->player == other.player);
 }
 
+std::ostream& operator<<(std::ostream& OUT, const Piece::Result& res) {
+    int count = 0;
+
+    OUT << "Moves: {";
+    for (auto move : res.moves) {
+        if (count++) OUT << ", ";
+        OUT << "{" << move[0] << ", " << move[1] << "}";
+    }
+    OUT << "}" << std::endl;
+
+    count = 0;
+    OUT << "Attacks: {";
+    for (auto attack : res.attacks) {
+        if (count++) OUT << ", ";
+        OUT << "{" << attack[0] << ", " << attack[1] << "}, ";
+    }
+    OUT << "}" << std::endl;
+
+    OUT << "Promotion: " << (res.promotion ? "true":"false") << std::endl;
+
+    return OUT;
+};
+
 bool Piece::is_valid_position(int row, int column) {
     return row >= 0 && row < ROWS && column >= 0 && column < COLS;
 }
