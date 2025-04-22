@@ -17,6 +17,8 @@ class Board {
 
         Board();
 
+        friend std::ostream& operator<<(std::ostream& out, const Board& board_class);
+
         std::array<std::array<std::unique_ptr<Piece>, 8>, 8> create_board ();
 
         void add_moves();

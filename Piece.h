@@ -75,6 +75,8 @@ class Piece {
 
         bool operator==(const Piece& other) const;
 
+        friend std::ostream& operator<<(std::ostream& out, const Piece& piece);
+
         bool is_valid_position(int row, int column);
 
         bool is_not_pinned(

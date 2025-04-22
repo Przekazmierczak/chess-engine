@@ -22,27 +22,34 @@ bool Piece::operator==(const Piece& other) const {
             this->player == other.player);
 }
 
-std::ostream& operator<<(std::ostream& OUT, const Piece::Result& res) {
+std::ostream& operator<<(std::ostream& out, const Piece& piece) {
+    out << "Piece: " << piece.piece << ", ";
+    out << "player: " << piece.player << ", ";
+    out << "position: (" << piece.row << ", " << piece.column << ")" << std::endl;
+    return out;
+};
+
+std::ostream& operator<<(std::ostream& out, const Piece::Result& res) {
     int count = 0;
 
-    OUT << "Moves: {";
+    out << "Moves: {";
     for (auto move : res.moves) {
-        if (count++) OUT << ", ";
-        OUT << "{" << move[0] << ", " << move[1] << "}";
+        if (count++) out << ", ";
+        out << "{" << move[0] << ", " << move[1] << "}";
     }
-    OUT << "}" << std::endl;
+    out << "}, ";
 
     count = 0;
-    OUT << "Attacks: {";
+    out << "Attacks: {";
     for (auto attack : res.attacks) {
-        if (count++) OUT << ", ";
-        OUT << "{" << attack[0] << ", " << attack[1] << "}, ";
+        if (count++) out << ", ";
+        out << "{" << attack[0] << ", " << attack[1] << "}, ";
     }
-    OUT << "}" << std::endl;
+    out << "}, ";
 
-    OUT << "Promotion: " << (res.promotion ? "true":"false") << std::endl;
+    out << "Promotion: " << (res.promotion ? "true":"false") << std::endl;
 
-    return OUT;
+    return out;
 };
 
 bool Piece::is_valid_position(int row, int column) {

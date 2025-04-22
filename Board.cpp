@@ -8,6 +8,27 @@ Board::Board() {
     board = create_board ();
 }
 
+std::ostream& operator<<(std::ostream& out, const Board& board_class) {
+    out << "Turn: " << board_class.turn << ", ";
+    out << "Castling: " << board_class.castling << ", ";
+    out << "State: " << std::endl;
+
+    for (int row = 0; row < board_class.ROWS; row++) {
+        std::cout << row + 1 << " ";
+        for (int col = 0; col < board_class.COLS; col++) {
+            if (board_class.board[row][col]) {
+                std::cout << "[" << board_class.board[row][col]->symbol << "]";
+            } else {
+                std::cout << "[ ]";
+            }
+        }
+        std::cout << std::endl;
+    }
+    std::cout << "   a  b  c  d  e  f  g  h " << std::endl;
+    
+    return out;
+};
+
 std::array<std::array<std::unique_ptr<Piece>, 8>, 8> Board::create_board () {
     std::array<std::array<char, 8>, 8> simplify_board = {{
         {'R', 'N', 'B', 'K', 'Q', 'B', 'N', 'R'},
@@ -73,17 +94,17 @@ void Board::add_moves() {
 
 }
 
-void Board::print_board() {
-    for (int row = 0; row < ROWS; row++) {
-        std::cout << row + 1 << " ";
-        for (int col = 0; col < COLS; col++) {
-            if (board[row][col]) {
-                std::cout << "[" << board[row][col]->symbol << "]";
-            } else {
-                std::cout << "[ ]";
-            }
-        }
-        std::cout << std::endl;
-    }
-    std::cout << "   a  b  c  d  e  f  g  h " << std::endl;
-}
+// void Board::print_board() {
+//     for (int row = 0; row < ROWS; row++) {
+//         std::cout << row + 1 << " ";
+//         for (int col = 0; col < COLS; col++) {
+//             if (board[row][col]) {
+//                 std::cout << "[" << board[row][col]->symbol << "]";
+//             } else {
+//                 std::cout << "[ ]";
+//             }
+//         }
+//         std::cout << std::endl;
+//     }
+//     std::cout << "   a  b  c  d  e  f  g  h " << std::endl;
+// }
