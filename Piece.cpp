@@ -22,6 +22,10 @@ bool Piece::operator==(const Piece& other) const {
             this->player == other.player);
 }
 
+bool Piece::operator!=(const Piece& other) const {
+    return !(*this == other);
+}
+
 std::ostream& operator<<(std::ostream& out, const Piece& piece) {
     out << "Piece: " << piece.piece << ", ";
     out << "player: " << piece.player << ", ";

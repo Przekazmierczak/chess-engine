@@ -74,6 +74,7 @@ class Piece {
         Piece(char input_symbol, int input_row, int input_column);
 
         bool operator==(const Piece& other) const;
+        bool operator!=(const Piece& other) const;
 
         friend std::ostream& operator<<(std::ostream& out, const Piece& piece);
 
