@@ -10,10 +10,11 @@ Board::Board() {
 
 Board::Board(
     std::string input_turn,
+    std::string input_castling,
     std::array<std::array<char, 8>, 8> simplify_board
 ) {
     turn = input_turn;
-    castling = "KQkq";
+    castling = input_castling;
     enpassant = {NULL, NULL};
     board = create_board(simplify_board);
 }

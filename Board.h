@@ -19,6 +19,7 @@ class Board {
 
         Board(
             std::string input_turn,
+            std::string input_castling,
             std::array<std::array<char, 8>, 8> simplify_board
         );
 
