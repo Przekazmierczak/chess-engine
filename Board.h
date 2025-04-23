@@ -17,13 +17,27 @@ class Board {
 
         Board();
 
+        Board(
+            std::string input_turn,
+            std::array<std::array<char, 8>, 8> simplify_board
+        );
+
+        Board(
+            std::string input_turn,
+            std::string input_castling,
+            std::array<int, 2> input_enpassant,
+            std::array<std::array<char, 8>, 8> simplify_board
+        );
+
+        bool Board::operator==(const Board& other) const;
+
         friend std::ostream& operator<<(std::ostream& out, const Board& board_class);
 
-        std::array<std::array<std::unique_ptr<Piece>, 8>, 8> create_board ();
+        std::array<std::array<std::unique_ptr<Piece>, 8>, 8> create_board();
+        std::array<std::array<std::unique_ptr<Piece>, 8>, 8> create_board(std::array<std::array<char, 8>, 8> simplify_board);
 
         void add_moves();
         
-        void print_board();
 };
 
 #endif
