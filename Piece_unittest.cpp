@@ -544,11 +544,6 @@ namespace {
         );
 
     }
-
-
-    TEST(TestTest, HandlesPositiveInput) {
-        EXPECT_EQ(1, 1);
-    }
 }
 
 // Main function for GoogleTest
