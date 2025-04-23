@@ -29,30 +29,68 @@ bool Piece::operator!=(const Piece& other) const {
 std::ostream& operator<<(std::ostream& out, const Piece& piece) {
     out << "Piece: " << piece.piece << ", ";
     out << "player: " << piece.player << ", ";
-    out << "position: (" << piece.row << ", " << piece.column << ")" << std::endl;
+    out << "position: (" << piece.row << ", " << piece.column << ")";
     return out;
 };
 
 std::ostream& operator<<(std::ostream& out, const Piece::Result& res) {
-    int count = 0;
-
+    bool first = true;
     out << "Moves: {";
     for (auto move : res.moves) {
-        if (count++) out << ", ";
+        if (first) {
+            first = false;
+        } else {
+            out << ", ";}
         out << "{" << move[0] << ", " << move[1] << "}";
     }
     out << "}, ";
 
-    count = 0;
+    first = true;
     out << "Attacks: {";
     for (auto attack : res.attacks) {
-        if (count++) out << ", ";
+        if (first) {
+            first = false;
+        } else {
+            out << ", ";}
         out << "{" << attack[0] << ", " << attack[1] << "}, ";
     }
     out << "}, ";
 
-    out << "Promotion: " << (res.promotion ? "true":"false") << std::endl;
+    out << "Promotion: " << (res.promotion ? "true":"false");
 
+    return out;
+};
+
+std::ostream& operator<<(std::ostream& out, const PositionSet& set) {
+    bool first = true;
+    out << "{";
+    for (const auto& position : set) {
+        if (first) {
+            first = false;
+        } else {
+            out << ", ";}
+
+        out << "{" << position[0] << ", " << position[1] << "}";
+    }
+    out << "}";
+    return out;
+};
+
+std::ostream& operator<<(std::ostream& out, const PositionMap& map) {
+    bool firstOuter  = true;
+
+    out << "[";
+    for (const auto& position : map) {
+        if (firstOuter) {
+            firstOuter = false;
+        } else {
+            out << ", ";}
+
+        out << "{" << position.first[0] << ", " << position.first[1] << "}: ";
+
+        std::cout << position.second;
+    }
+    out << "]";
     return out;
 };
 
@@ -80,7 +118,7 @@ PositionSet Piece::flatting_checkin_pieces(
     PositionMap& checkin_pieces
 ) {
     PositionSet checking_positions;
-    if (checking_positions.size() == 1) {
+    if (checkin_pieces.size() == 1) {
         for (auto key : checkin_pieces) {
             checking_positions.insert(key.first);
             for (auto value : key.second) {
@@ -219,7 +257,7 @@ Piece::Result Piece::check_piece_possible_moves (
                             attacked_positions.insert({new_row, new_column});
 
                             if (board_class.board[new_row][new_column]->piece == "king" && board_class.board[new_row][new_column]->player != player) {
-                                checkin_pieces[{row, column}];
+                                checkin_pieces[{row, column}] = current_direction;
                                 int next_row = row + (distance + 1) * direction[0];
                                 int next_column = column + (distance + 1) * direction[1];
                                 if (is_valid_position(next_row, next_column)) {

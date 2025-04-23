@@ -16,12 +16,14 @@ using PositionSet = std::unordered_set<
     std::array<int, 2>,
     PositionHash
 >;
+std::ostream& operator<<(std::ostream& out, const PositionSet& set);
 
 using PositionMap = std::unordered_map<
     std::array<int, 2>,
     PositionSet,
     PositionHash
 >;
+std::ostream& operator<<(std::ostream& out, const PositionMap& set);
 
 class Board;
 
@@ -41,7 +43,9 @@ class Piece {
                 std::string,
                 std::string
             >
-        > legend = {
+        >
+
+        legend = {
             {'R', {{"piece", "rook"}, {"player", "white"}}},
             {'N', {{"piece", "knight"}, {"player", "white"}}},
             {'B', {{"piece", "bishop"}, {"player", "white"}}},
