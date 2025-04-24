@@ -136,7 +136,7 @@ namespace {
     }
 
     TEST(CreateBoardClassWithArgs, Correct) {
-        Board board("black", {{
+        Board board("black", "KQkq", {{
             {'R', ' ', 'B', 'K', 'Q', ' ', 'N', ' '},
             {'P', ' ', 'P', ' ', 'P', ' ', 'P', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
