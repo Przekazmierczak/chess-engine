@@ -255,7 +255,9 @@ Piece::Result Piece::check_piece_possible_moves (
                             pinned_piece = {new_row, new_column};
                             attacked_positions.insert({new_row, new_column});
 
-                            if (board_class.board[new_row][new_column]->piece == "king" && board_class.board[new_row][new_column]->player != player) {
+                            if (board_class.board[new_row][new_column]->piece == "king" &&
+                                board_class.board[new_row][new_column]->player != player
+                            ) {
                                 checkin_pieces[{row, column}] = current_direction;
                                 int next_row = row + (distance + 1) * direction[0];
                                 int next_column = column + (distance + 1) * direction[1];
