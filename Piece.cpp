@@ -160,12 +160,12 @@ Piece::Result Piece::check_piece_possible_moves (
                 int new_row = row + direction[0];
                 int new_column = column + direction[1];
 
-                if (
-                    is_valid_position(new_row, new_column) &&
+                if (is_valid_position(new_row, new_column) &&
                     board_class.board[new_row][new_column] &&
                     board_class.board[new_row][new_column]->player != player
                 ) {
                     result.moves.insert({new_row, new_column});
+
                     if (board_class.board[new_row][new_column]->piece == "king") {
                         checkin_pieces[{row, column}];
                     }
@@ -186,10 +186,10 @@ Piece::Result Piece::check_piece_possible_moves (
                     !board_class.board[new_row][new_column] &&
                     can_move_second_time
                 ) {
-                    if (is_not_pinned({row, column}, {new_row, new_column}, board_class, pinned_pieces)) {
-                        if (checkin_pieces.empty() || checking_positions.count({new_row, new_column})) {
-                            result.moves.insert({new_row, new_column});
-                        }
+                    if (is_not_pinned({row, column}, {new_row, new_column}, board_class, pinned_pieces) &&
+                        (checkin_pieces.empty() || checking_positions.count({new_row, new_column}))
+                    ) {
+                        result.moves.insert({new_row, new_column});
                     }
                 } else {
                     can_move_second_time = false;
@@ -201,15 +201,14 @@ Piece::Result Piece::check_piece_possible_moves (
                 int new_row = row + direction[0];
                 int new_column = column + direction[1];
 
-                if (
-                    is_valid_position(new_row, new_column) &&
+                if (is_valid_position(new_row, new_column) &&
                     board_class.board[new_row][new_column] &&
                     board_class.board[new_row][new_column]->player != player
                 ) {
-                    if (is_not_pinned({row, column}, {new_row, new_column}, board_class, pinned_pieces)) {
-                        if (checkin_pieces.empty() || checking_positions.count({new_row, new_column})) {
-                            result.attacks.insert({new_row, new_column});
-                        }
+                    if (is_not_pinned({row, column}, {new_row, new_column}, board_class, pinned_pieces) &&
+                        (checkin_pieces.empty() || checking_positions.count({new_row, new_column}))
+                    ) {
+                        result.attacks.insert({new_row, new_column});
                     }
                 }
 
@@ -217,10 +216,10 @@ Piece::Result Piece::check_piece_possible_moves (
                     is_valid_position(new_row, new_column) &&
                     std::array<int, 2>{new_row, new_column} == board_class.enpassant
                 ) {
-                    if (is_not_pinned({row, column}, {new_row, new_column}, board_class, pinned_pieces)) {
-                        if (checkin_pieces.empty() || checking_positions.count({new_row, new_column})) {
-                            result.attacks.insert({new_row, new_column});
-                        }
+                    if (is_not_pinned({row, column}, {new_row, new_column}, board_class, pinned_pieces) &&
+                        (checkin_pieces.empty() || checking_positions.count({new_row, new_column}))
+                    ) {
+                        result.attacks.insert({new_row, new_column});
                     }
                 }
             }
@@ -260,9 +259,11 @@ Piece::Result Piece::check_piece_possible_moves (
                                 checkin_pieces[{row, column}] = current_direction;
                                 int next_row = row + (distance + 1) * direction[0];
                                 int next_column = column + (distance + 1) * direction[1];
+
                                 if (is_valid_position(next_row, next_column)) {
                                     attacked_positions.insert({next_row, next_column});
                                 }
+
                                 break;
                             } else {
                                 absolute_pin_check = true;
@@ -271,7 +272,9 @@ Piece::Result Piece::check_piece_possible_moves (
                             attacked_positions.insert({new_row, new_column});
                             break;
                         } else if (absolute_pin_check) {
-                            if (board_class.board[new_row][new_column]->piece == "king" && board_class.board[new_row][new_column]->player != player) {
+                            if (board_class.board[new_row][new_column]->piece == "king" &&
+                                board_class.board[new_row][new_column]->player != player
+                            ) {
                                 pinned_pieces[pinned_piece].insert({row, column});
                                 pinned_pieces[pinned_piece].insert(current_direction.begin(), current_direction.end());
                             }
@@ -300,19 +303,18 @@ Piece::Result Piece::check_piece_possible_moves (
                     }
 
                     if (board_class.board[new_row][new_column]) {
-                        if (board_class.board[new_row][new_column]->player != player) {
-                            if ((is_not_pinned({row, column}, {new_row, new_column}, board_class, pinned_pieces))) {
-                                if (checkin_pieces.empty() || checking_positions.count({new_row, new_column})) {
-                                    result.attacks.insert({new_row, new_column});
-                                }
-                            }
+                        if (board_class.board[new_row][new_column]->player != player &&
+                            is_not_pinned({row, column}, {new_row, new_column}, board_class, pinned_pieces) &&
+                            (checkin_pieces.empty() || checking_positions.count({new_row, new_column}))
+                        ) {
+                            result.attacks.insert({new_row, new_column});
                         }
                         break;
                     } else {
-                        if (is_not_pinned({row, column}, {new_row, new_column}, board_class, pinned_pieces)) {
-                            if (checkin_pieces.empty() || checking_positions.count({new_row, new_column})) {
-                                result.moves.insert({new_row, new_column});
-                            }
+                        if (is_not_pinned({row, column}, {new_row, new_column}, board_class, pinned_pieces) &&
+                            (checkin_pieces.empty() || checking_positions.count({new_row, new_column}))
+                        ) {
+                            result.moves.insert({new_row, new_column});
                         }
                     }
                     distance++;
@@ -335,7 +337,11 @@ Piece::Result Piece::check_piece_possible_moves (
                 if (is_valid_position(new_row, new_column)) {
                     if (piece == "knight") {
                         attacked_positions.insert({new_row, new_column});
-                        if (board_class.board[new_row][new_column] && board_class.board[new_row][new_column]->piece == "king" && board_class.board[new_row][new_column]->player != player) {
+
+                        if (board_class.board[new_row][new_column] &&
+                            board_class.board[new_row][new_column]->piece == "king" &&
+                            board_class.board[new_row][new_column]->player != player
+                        ) {
                             checkin_pieces[{row, column}];
                         }
                     } else if (piece == "king") {
@@ -354,34 +360,35 @@ Piece::Result Piece::check_piece_possible_moves (
                 if (is_valid_position(new_row, new_column)) {
                     if (piece == "knight") {
                         if (!board_class.board[new_row][new_column]) {
-                            if (is_not_pinned({row, column}, {new_row, new_column}, board_class, pinned_pieces)) {
-                                if (checkin_pieces.empty() || checking_positions.count({new_row, new_column})) {
-                                    result.moves.insert({new_row, new_column});
-                                }
+                            if (is_not_pinned({row, column}, {new_row, new_column}, board_class, pinned_pieces) &&
+                                (checkin_pieces.empty() || checking_positions.count({new_row, new_column}))
+                            ) {
+                                result.moves.insert({new_row, new_column});
                             }
                         } else if (board_class.board[new_row][new_column]->player != player) {
-                            if (is_not_pinned({row, column}, {new_row, new_column}, board_class, pinned_pieces)) {
-                                if (checkin_pieces.empty() || checking_positions.count({new_row, new_column})) {
-                                    result.attacks.insert({new_row, new_column});
-                                }
+                            if (is_not_pinned({row, column}, {new_row, new_column}, board_class, pinned_pieces) &&
+                                (checkin_pieces.empty() || checking_positions.count({new_row, new_column}))
+                            ) {
+                                result.attacks.insert({new_row, new_column});
                             }
                         }
                     } else if (piece == "king") {
                         if (direction == std::array<int, 2> {0, -2}) {
-                            if ((player == "white" && board_class.castling[0] == 'K') || (player == "black" && board_class.castling[2] == 'k')) {
-                                if (
-                                    checking_positions.empty() &&
-                                    !board_class.board[row][1] &&
-                                    !board_class.board[row][2] &&
-                                    !attacked_positions.count({row, 1}) &&
-                                    !attacked_positions.count({row, 2})
-                                ) {
-                                    result.moves.insert({new_row, new_column});
-                                }
+                            if (
+                                ((player == "white" && board_class.castling[0] == 'K') ||
+                                 (player == "black" && board_class.castling[2] == 'k')) &&
+                                checking_positions.empty() &&
+                                !board_class.board[row][1] &&
+                                !board_class.board[row][2] &&
+                                !attacked_positions.count({row, 1}) &&
+                                !attacked_positions.count({row, 2})
+                            ) {
+                                result.moves.insert({new_row, new_column});
                             }
                         } else if (direction == std::array<int, 2> {0, 2}) {
-                                if ((player == "white" && board_class.castling[1] == 'Q') || (player == "black" && board_class.castling[3] == 'q')) {
                                 if (
+                                    ((player == "white" && board_class.castling[1] == 'Q') ||
+                                     (player == "black" && board_class.castling[3] == 'q')) &&
                                     checking_positions.empty() &&
                                     !board_class.board[row][4] &&
                                     !board_class.board[row][5] &&
@@ -391,7 +398,6 @@ Piece::Result Piece::check_piece_possible_moves (
                                 ) {
                                     result.moves.insert({new_row, new_column});
                                 }
-                            }
                         } else if (!board_class.board[new_row][new_column]) {
                             if (!attacked_positions.count({new_row, new_column})) {
                                 result.moves.insert({new_row, new_column});
