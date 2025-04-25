@@ -4,6 +4,8 @@
 #include <iostream>
 #include <array>
 
+#include "Types.h"
+
 class Piece;
 
 class Board {
@@ -14,6 +16,10 @@ class Board {
         std::string castling;
         std::array<int, 2> enpassant;
         std::array<std::array<std::unique_ptr<Piece>, 8>, 8> board;
+
+        PositionSet attacked_positions;
+        PositionMap checkin_pieces;
+        PositionMap pinned_pieces;
 
         Board();
 
@@ -30,14 +36,14 @@ class Board {
             std::array<std::array<char, 8>, 8> simplify_board
         );
 
-        bool Board::operator==(const Board& other) const;
+        bool operator==(const Board& other) const;
 
         friend std::ostream& operator<<(std::ostream& out, const Board& board_class);
 
         std::array<std::array<std::unique_ptr<Piece>, 8>, 8> create_board();
         std::array<std::array<std::unique_ptr<Piece>, 8>, 8> create_board(std::array<std::array<char, 8>, 8> simplify_board);
 
-        void add_moves();
+        void get_possible_actions();
         
 };
 

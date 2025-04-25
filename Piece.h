@@ -5,25 +5,9 @@
 #include <unordered_map>
 #include <array>
 #include <unordered_set>
+#include <utility>
 
-struct PositionHash {
-    std::size_t operator()(const std::array<int, 2>& arr) const {
-        return std::hash<int>()(arr[0] * 10 + arr[1]);
-    }
-};
-
-using PositionSet = std::unordered_set<
-    std::array<int, 2>,
-    PositionHash
->;
-std::ostream& operator<<(std::ostream& out, const PositionSet& set);
-
-using PositionMap = std::unordered_map<
-    std::array<int, 2>,
-    PositionSet,
-    PositionHash
->;
-std::ostream& operator<<(std::ostream& out, const PositionMap& set);
+#include "Types.h"
 
 class Board;
 
@@ -37,43 +21,22 @@ class Piece {
         std::string piece;
         std::string player;
 
-        std::unordered_map<
-            char,
-            std::unordered_map<
-                std::string,
-                std::string
-            >
-        >
-
-        legend = {
-            {'R', {{"piece", "rook"}, {"player", "white"}}},
-            {'N', {{"piece", "knight"}, {"player", "white"}}},
-            {'B', {{"piece", "bishop"}, {"player", "white"}}},
-            {'K', {{"piece", "king"}, {"player", "white"}}},
-            {'Q', {{"piece", "queen"}, {"player", "white"}}},
-            {'P', {{"piece", "pawn"}, {"player", "white"}}},
-            {'r', {{"piece", "rook"}, {"player", "black"}}},
-            {'n', {{"piece", "knight"}, {"player", "black"}}},
-            {'b', {{"piece", "bishop"}, {"player", "black"}}},
-            {'k', {{"piece", "king"}, {"player", "black"}}},
-            {'q', {{"piece", "queen"}, {"player", "black"}}},
-            {'p', {{"piece", "pawn"}, {"player", "black"}}}
-        };
-
-        struct Result {
+        struct Actions {
             std::unordered_set<std::array<int, 2>, PositionHash> moves;
             std::unordered_set<std::array<int, 2>, PositionHash> attacks;
             bool promotion = false;
 
-            bool operator==(const Result& other) const {
+            bool operator==(const Actions& other) const {
             return (this->moves == other.moves &&
                     this->attacks == other.attacks &&
                     this->promotion == other.promotion
                     );
             }
 
-            friend std::ostream& operator<<(std::ostream& out, const Result& res);
+            friend std::ostream& operator<<(std::ostream& out, const Actions& res);
         };
+
+        Actions possible_actions;
 
         Piece(char input_symbol, int input_row, int input_column);
 
@@ -95,11 +58,8 @@ class Piece {
             PositionMap& checkin_pieces
         );
 
-        Result check_piece_possible_moves (
-            Board& board_class,
-            PositionSet& attacked_positions,
-            PositionMap& checkin_pieces,
-            PositionMap& pinned_pieces
+        void check_piece_possible_moves (
+            Board& board_class
         );
 };
 
