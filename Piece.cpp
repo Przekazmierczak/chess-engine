@@ -23,14 +23,13 @@ const std::unordered_map<
 Piece::Piece(
     char input_symbol,
     int input_row,
-    int input_column
-) {
-    symbol = input_symbol;
-    row = input_row;
-    column = input_column;
-
-    piece = legend.at(input_symbol).first;
-    player = legend.at(input_symbol).second;
+    int input_column)
+    : symbol(input_symbol),
+      row(input_row),
+      column(input_column),
+      piece(legend.at(input_symbol).first),
+      player(legend.at(input_symbol).second),
+      possible_actions() {
 }
 
 bool Piece::operator==(const Piece& other) const {
@@ -117,8 +116,6 @@ PositionSet Piece::flatting_checkin_pieces(
 void Piece::check_piece_possible_moves (
     Board& board_class
 ) {
-    // Result result;
-
     bool opponent = (player == board_class.turn) ? false : true;
 
     auto checking_positions = flatting_checkin_pieces(board_class.checkin_pieces);

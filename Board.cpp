@@ -2,23 +2,22 @@
 #include "Piece.h"
 #include "Types.h"
 
-Board::Board() {
-    turn = "white";
-    castling = "KQkq";
-    enpassant = {NULL, NULL};
-    board = create_board();
+Board::Board()
+    : turn("white"),
+      castling("KQkq"),
+      enpassant({NULL, NULL}),
+      board(create_board()) {
     get_possible_actions();
 }
 
 Board::Board(
     std::string input_turn,
     std::string input_castling,
-    std::array<std::array<char, 8>, 8> simplify_board
-) {
-    turn = input_turn;
-    castling = input_castling;
-    enpassant = {NULL, NULL};
-    board = create_board(simplify_board);
+    std::array<std::array<char, 8>, 8> simplify_board)
+    : turn(input_turn),
+      castling(input_castling),
+      enpassant({NULL, NULL}),
+      board(create_board(simplify_board)) {
     get_possible_actions();
 }
 
@@ -26,12 +25,11 @@ Board::Board(
     std::string input_turn,
     std::string input_castling,
     std::array<int, 2> input_enpassant,
-    std::array<std::array<char, 8>, 8> simplify_board
-) {
-    turn = input_turn;
-    castling = input_castling;
-    enpassant = input_enpassant;
-    board = create_board(simplify_board);
+    std::array<std::array<char, 8>, 8> simplify_board)
+    : turn(input_turn),
+      castling(input_castling),
+      enpassant(input_enpassant),
+      board(create_board(simplify_board)) {
     get_possible_actions();
 }
 
