@@ -22,8 +22,8 @@ class Piece {
         std::string player;
 
         struct Actions {
-            std::unordered_set<std::array<int, 2>, PositionHash> moves;
-            std::unordered_set<std::array<int, 2>, PositionHash> attacks;
+            PositionSet moves;
+            PositionSet attacks;
             bool promotion = false;
 
             bool operator==(const Actions& other) const {
