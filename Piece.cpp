@@ -2,42 +2,27 @@
 #include "Piece.h"
 #include "Types.h"
 
-const std::unordered_map<
-    char,
-    std::pair<std::string, std::string>
-> legend = {
-    {'R', {"rook", "white"}},
-    {'N', {"knight", "white"}},
-    {'B', {"bishop", "white"}},
-    {'K', {"king", "white"}},
-    {'Q', {"queen", "white"}},
-    {'P', {"pawn", "white"}},
-    {'r', {"rook", "black"}},
-    {'n', {"knight", "black"}},
-    {'b', {"bishop", "black"}},
-    {'k', {"king", "black"}},
-    {'q', {"queen", "black"}},
-    {'p', {"pawn", "black"}}
-};
-
 Piece::Piece(
     char input_symbol,
+    std::string input_piece,
+    std::string input_player,
     int input_row,
     int input_column)
     : symbol(input_symbol),
+      piece(input_piece),
+      player(input_player),
       row(input_row),
       column(input_column),
-      piece(legend.at(input_symbol).first),
-      player(legend.at(input_symbol).second),
       possible_actions() {
 }
 
 bool Piece::operator==(const Piece& other) const {
-    return (this->symbol == other.symbol &&
-            this->row == other.row &&
-            this->column == other.column &&
+    return (typeid(*this) == typeid(other) &&
+            this->symbol == other.symbol &&
             this->piece == other.piece &&
-            this->player == other.player);
+            this->player == other.player &&
+            this->row == other.row &&
+            this->column == other.column);
 }
 
 bool Piece::operator!=(const Piece& other) const {
@@ -45,9 +30,10 @@ bool Piece::operator!=(const Piece& other) const {
 }
 
 std::ostream& operator<<(std::ostream& out, const Piece& piece) {
+    out << "Symbol: " << piece.symbol << ", ";
     out << "Piece: " << piece.piece << ", ";
-    out << "player: " << piece.player << ", ";
-    out << "position: (" << piece.row << ", " << piece.column << ")";
+    out << "Player: " << piece.player << ", ";
+    out << "Position: (" << piece.row << ", " << piece.column << ")";
     return out;
 };
 
@@ -78,8 +64,8 @@ std::ostream& operator<<(std::ostream& out, const Piece::Actions& res) {
 
     return out;
 };
-bool Piece::is_valid_position(int row, int column) {
-    return row >= 0 && row < ROWS && column >= 0 && column < COLS;
+bool Piece::is_valid_position(Board& board, int row, int column) {
+    return row >= 0 && row < board.ROWS && column >= 0 && column < board.COLS;
 }
 
 bool Piece::is_not_pinned(
@@ -395,6 +381,16 @@ void Piece::check_piece_possible_moves (
     // }
 }
 
+// Pawn::Pawn(
+//     std::string player,
+//     int input_row,
+//     int input_column)
+//     : Piece(player, input_row, input_column),
+//     //   piece(legend.at(input_symbol).first),
+//       player(legend.at(input_symbol).second),
+//       possible_actions() {
+// }
+
 void Pawn::check_piece_possible_moves (
     Board& board_class
 ) {
@@ -420,7 +416,7 @@ void Pawn::check_piece_possible_moves (
             int new_row = row + direction[0];
             int new_column = column + direction[1];
 
-            if (is_valid_position(new_row, new_column) &&
+            if (is_valid_position(board_class, new_row, new_column) &&
                 board_class.board[new_row][new_column] &&
                 board_class.board[new_row][new_column]->player != player
             ) {
@@ -431,7 +427,7 @@ void Pawn::check_piece_possible_moves (
                 }
             }
             
-            if (is_valid_position(new_row, new_column)) {
+            if (is_valid_position(board_class, new_row, new_column)) {
                 board_class.attacked_positions.insert({new_row, new_column});
             }
         }
@@ -442,7 +438,7 @@ void Pawn::check_piece_possible_moves (
             int new_column = column + direction[1];
 
             if (
-                is_valid_position(new_row, new_column) &&
+                is_valid_position(board_class, new_row, new_column) &&
                 !board_class.board[new_row][new_column] &&
                 can_move_second_time
             ) {
@@ -461,7 +457,7 @@ void Pawn::check_piece_possible_moves (
             int new_row = row + direction[0];
             int new_column = column + direction[1];
 
-            if (is_valid_position(new_row, new_column) &&
+            if (is_valid_position(board_class, new_row, new_column) &&
                 board_class.board[new_row][new_column] &&
                 board_class.board[new_row][new_column]->player != player
             ) {
@@ -472,8 +468,7 @@ void Pawn::check_piece_possible_moves (
                 }
             }
 
-            if (
-                is_valid_position(new_row, new_column) &&
+            if (is_valid_position(board_class, new_row, new_column) &&
                 std::array<int, 2>{new_row, new_column} == board_class.enpassant
             ) {
                 if (is_not_pinned({row, column}, {new_row, new_column}, board_class, board_class.pinned_pieces) &&
@@ -502,7 +497,7 @@ void Knight::check_piece_possible_moves (
             int new_row = row + direction[0];
             int new_column = column + direction[1];
 
-            if (is_valid_position(new_row, new_column)) {
+            if (is_valid_position(board_class, new_row, new_column)) {
                 board_class.attacked_positions.insert({new_row, new_column});
 
                 if (board_class.board[new_row][new_column] &&
@@ -518,7 +513,7 @@ void Knight::check_piece_possible_moves (
             int new_row = row + direction[0];
             int new_column = column + direction[1];
 
-            if (is_valid_position(new_row, new_column)) {
+            if (is_valid_position(board_class, new_row, new_column)) {
                 if (!board_class.board[new_row][new_column]) {
                     if (is_not_pinned({row, column}, {new_row, new_column}, board_class, board_class.pinned_pieces) &&
                         (board_class.checkin_pieces.empty() || checking_positions.count({new_row, new_column}))
@@ -552,7 +547,7 @@ void King::check_piece_possible_moves (
             int new_row = row + direction[0];
             int new_column = column + direction[1];
 
-            if (is_valid_position(new_row, new_column)) {
+            if (is_valid_position(board_class, new_row, new_column)) {
                 if (direction == std::array<int, 2> {0, -2} || direction == std::array<int, 2> {0, 2}) {
                     continue;
                 }
@@ -564,7 +559,7 @@ void King::check_piece_possible_moves (
             int new_row = row + direction[0];
             int new_column = column + direction[1];
 
-            if (is_valid_position(new_row, new_column)) {
+            if (is_valid_position(board_class, new_row, new_column)) {
                 if (direction == std::array<int, 2> {0, -2}) {
                     if (
                         ((player == "white" && board_class.castling[0] == 'K') ||
@@ -621,7 +616,7 @@ void Piece::rook_bishop_queen_template(
                 int new_row = row + distance * direction[0];
                 int new_column = column + distance * direction[1];
 
-                if (!is_valid_position(new_row, new_column)) {
+                if (!is_valid_position(board_class, new_row, new_column)) {
                     break;
                 }
 
@@ -637,7 +632,7 @@ void Piece::rook_bishop_queen_template(
                             int next_row = row + (distance + 1) * direction[0];
                             int next_column = column + (distance + 1) * direction[1];
 
-                            if (is_valid_position(next_row, next_column)) {
+                            if (is_valid_position(board_class, new_row, new_column)) {
                                 board_class.attacked_positions.insert({next_row, next_column});
                             }
 
@@ -675,7 +670,7 @@ void Piece::rook_bishop_queen_template(
                 int new_row = row + distance * direction[0];
                 int new_column = column + distance * direction[1];
 
-                if (!is_valid_position(new_row, new_column)) {
+                if (!is_valid_position(board_class, new_row, new_column)) {
                     break;
                 }
 

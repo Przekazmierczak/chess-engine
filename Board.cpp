@@ -72,18 +72,20 @@ std::ostream& operator<<(std::ostream& out, const Board& board_class) {
 };
 
 void Board::create_add_piece(char symbol, std::array<std::array<std::unique_ptr<Piece>, 8>, 8>& board, int row, int col) {
+    std:: string player = isupper(symbol) ? "white" : "black";
+
     if (toupper(symbol) == 'R') {
-        board[row][col] = std::make_unique<Rook>(symbol, row, col);
+        board[row][col] = std::make_unique<Rook>(symbol, "rook", player, row, col);
     } else if (toupper(symbol) == 'N') {
-        board[row][col] = std::make_unique<Knight>(symbol, row, col);
+        board[row][col] = std::make_unique<Knight>(symbol, "knight", player, row, col);
     } else if (toupper(symbol) == 'B') {
-        board[row][col] = std::make_unique<Bishop>(symbol, row, col);
+        board[row][col] = std::make_unique<Bishop>(symbol, "bishop", player, row, col);
     } else if (toupper(symbol) == 'K') {
-        board[row][col] = std::make_unique<King>(symbol, row, col);
+        board[row][col] = std::make_unique<King>(symbol, "king", player, row, col);
     } else if (toupper(symbol) == 'Q') {
-        board[row][col] = std::make_unique<Queen>(symbol, row, col);
+        board[row][col] = std::make_unique<Queen>(symbol, "queen", player, row, col);
     } else if (toupper(symbol) == 'P') {
-        board[row][col] = std::make_unique<Pawn>(symbol, row, col);
+        board[row][col] = std::make_unique<Pawn>(symbol, "pawn", player, row, col);
     }
 }
 

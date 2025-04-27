@@ -13,13 +13,11 @@ class Board;
 
 class Piece {
     public:
-        const int ROWS = 8;
-        const int COLS = 8;
         char symbol;
-        int row;
-        int column;
         std::string piece;
         std::string player;
+        int row;
+        int column;
 
         struct Actions {
             PositionSet moves;
@@ -38,14 +36,14 @@ class Piece {
 
         Actions possible_actions;
 
-        Piece(char input_symbol, int input_row, int input_column);
+        Piece(char input_symbol, std::string input_piece, std::string input_player, int input_row, int input_column);
 
         bool operator==(const Piece& other) const;
         bool operator!=(const Piece& other) const;
 
         friend std::ostream& operator<<(std::ostream& out, const Piece& piece);
 
-        bool is_valid_position(int row, int column);
+        bool is_valid_position(Board& board, int row, int column);
 
         bool is_not_pinned(
             std::array<int, 2> piece_position,
@@ -72,7 +70,7 @@ class Piece {
 
 class Pawn: public Piece {
     public:
-        Pawn(char input_symbol, int input_row, int input_column): Piece(input_symbol, input_row, input_column) {}
+        Pawn(char input_symbol, std::string input_piece, std::string input_player, int input_row, int input_column): Piece(input_symbol, input_piece, input_player, input_row, input_column) {}
         void check_piece_possible_moves (
             Board& board_class
         );
@@ -80,7 +78,7 @@ class Pawn: public Piece {
 
 class Knight: public Piece {
     public:
-        Knight(char input_symbol, int input_row, int input_column): Piece(input_symbol, input_row, input_column) {}
+        Knight(char input_symbol, std::string input_piece, std::string input_player, int input_row, int input_column): Piece(input_symbol, input_piece, input_player, input_row, input_column) {}
         void check_piece_possible_moves (
             Board& board_class
         );
@@ -88,7 +86,7 @@ class Knight: public Piece {
 
 class King: public Piece {
     public:
-        King(char input_symbol, int input_row, int input_column): Piece(input_symbol, input_row, input_column) {}
+        King(char input_symbol, std::string input_piece, std::string input_player, int input_row, int input_column): Piece(input_symbol, input_piece, input_player, input_row, input_column) {}
         void check_piece_possible_moves (
             Board& board_class
         );
@@ -96,7 +94,7 @@ class King: public Piece {
 
 class Rook: public Piece {
     public:
-        Rook(char input_symbol, int input_row, int input_column): Piece(input_symbol, input_row, input_column) {}
+        Rook(char input_symbol, std::string input_piece, std::string input_player, int input_row, int input_column): Piece(input_symbol, input_piece, input_player, input_row, input_column) {}
         void check_piece_possible_moves (
             Board& board_class
         );
@@ -104,7 +102,7 @@ class Rook: public Piece {
 
 class Bishop: public Piece {
     public:
-        Bishop(char input_symbol, int input_row, int input_column): Piece(input_symbol, input_row, input_column) {}
+        Bishop(char input_symbol, std::string input_piece, std::string input_player, int input_row, int input_column): Piece(input_symbol, input_piece, input_player, input_row, input_column) {}
         void check_piece_possible_moves (
             Board& board_class
         );
@@ -112,7 +110,7 @@ class Bishop: public Piece {
 
 class Queen: public Piece {
     public:
-        Queen(char input_symbol, int input_row, int input_column): Piece(input_symbol, input_row, input_column) {}
+        Queen(char input_symbol, std::string input_piece, std::string input_player, int input_row, int input_column): Piece(input_symbol, input_piece, input_player, input_row, input_column) {}
         void check_piece_possible_moves (
             Board& board_class
         );
