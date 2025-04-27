@@ -71,6 +71,22 @@ std::ostream& operator<<(std::ostream& out, const Board& board_class) {
     return out;
 };
 
+void Board::create_add_piece(char symbol, std::array<std::array<std::unique_ptr<Piece>, 8>, 8>& board, int row, int col) {
+    if (toupper(symbol) == 'R') {
+        board[row][col] = std::make_unique<Rook>(symbol, row, col);
+    } else if (toupper(symbol) == 'N') {
+        board[row][col] = std::make_unique<Knight>(symbol, row, col);
+    } else if (toupper(symbol) == 'B') {
+        board[row][col] = std::make_unique<Bishop>(symbol, row, col);
+    } else if (toupper(symbol) == 'K') {
+        board[row][col] = std::make_unique<King>(symbol, row, col);
+    } else if (toupper(symbol) == 'Q') {
+        board[row][col] = std::make_unique<Queen>(symbol, row, col);
+    } else if (toupper(symbol) == 'P') {
+        board[row][col] = std::make_unique<Pawn>(symbol, row, col);
+    }
+}
+
 std::array<std::array<std::unique_ptr<Piece>, 8>, 8> Board::create_board() {
     std::array<std::array<char, 8>, 8> simplify_board = {{
         {'R', 'N', 'B', 'K', 'Q', 'B', 'N', 'R'},
@@ -88,7 +104,7 @@ std::array<std::array<std::unique_ptr<Piece>, 8>, 8> Board::create_board() {
     for (int row = 0; row < ROWS; row++) {
         for (int col = 0; col < COLS; col++) {
             if (simplify_board[row][col] != ' ') {
-                board[row][col] = std::make_unique<Piece>(simplify_board[row][col], row, col);
+                create_add_piece(simplify_board[row][col], board, row, col);
             }
         }
     }
@@ -102,7 +118,7 @@ std::array<std::array<std::unique_ptr<Piece>, 8>, 8> Board::create_board(std::ar
     for (int row = 0; row < ROWS; row++) {
         for (int col = 0; col < COLS; col++) {
             if (simplify_board[row][col] != ' ') {
-                board[row][col] = std::make_unique<Piece>(simplify_board[row][col], row, col);
+                create_add_piece(simplify_board[row][col], board, row, col);
             }
         }
     }

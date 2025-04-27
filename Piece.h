@@ -58,6 +58,61 @@ class Piece {
             PositionMap& checkin_pieces
         );
 
+        virtual void check_piece_possible_moves (
+            Board& board_class
+        );
+
+        void rook_bishop_queen_template (
+            Board& board_class,
+            std::vector<std::array<int, 2>> directions,
+            bool opponent,
+            PositionSet checking_positions
+        );
+};
+
+class Pawn: public Piece {
+    public:
+        Pawn(char input_symbol, int input_row, int input_column): Piece(input_symbol, input_row, input_column) {}
+        void check_piece_possible_moves (
+            Board& board_class
+        );
+};
+
+class Knight: public Piece {
+    public:
+        Knight(char input_symbol, int input_row, int input_column): Piece(input_symbol, input_row, input_column) {}
+        void check_piece_possible_moves (
+            Board& board_class
+        );
+};
+
+class King: public Piece {
+    public:
+        King(char input_symbol, int input_row, int input_column): Piece(input_symbol, input_row, input_column) {}
+        void check_piece_possible_moves (
+            Board& board_class
+        );
+};
+
+class Rook: public Piece {
+    public:
+        Rook(char input_symbol, int input_row, int input_column): Piece(input_symbol, input_row, input_column) {}
+        void check_piece_possible_moves (
+            Board& board_class
+        );
+};
+
+class Bishop: public Piece {
+    public:
+        Bishop(char input_symbol, int input_row, int input_column): Piece(input_symbol, input_row, input_column) {}
+        void check_piece_possible_moves (
+            Board& board_class
+        );
+};
+
+class Queen: public Piece {
+    public:
+        Queen(char input_symbol, int input_row, int input_column): Piece(input_symbol, input_row, input_column) {}
         void check_piece_possible_moves (
             Board& board_class
         );
