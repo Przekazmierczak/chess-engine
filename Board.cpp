@@ -71,7 +71,12 @@ std::ostream& operator<<(std::ostream& out, const Board& board_class) {
     return out;
 };
 
-void Board::create_add_piece(const char& symbol, std::array<std::array<std::unique_ptr<Piece>, 8>, 8>& board, const int& row, const int& col) {
+void Board::create_add_piece(
+    const char& symbol,
+    std::array<std::array<std::unique_ptr<Piece>, 8>, 8>& board,
+    const int& row,
+    const int& col
+) {
     std:: string player = isupper(symbol) ? "white" : "black";
 
     if (toupper(symbol) == 'R') {

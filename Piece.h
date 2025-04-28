@@ -36,7 +36,12 @@ class Piece {
 
         Actions possible_actions;
 
-        Piece(const char& input_symbol, const std::string& input_piece, const std::string& input_player, const int& input_row, const int& input_column);
+        Piece(const char& input_symbol,
+            const std::string& input_piece,
+            const std::string& input_player,
+            const int& input_row,
+            const int& input_column
+        );
 
         bool operator==(const Piece& other) const;
         bool operator!=(const Piece& other) const;
@@ -62,7 +67,7 @@ class Piece {
             const bool& opponent,
             const PositionSet& checking_positions
         );
-        
+
         virtual void check_piece_possible_moves (
             Board& board_class
         ) = 0;

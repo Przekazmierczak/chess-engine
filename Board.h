@@ -40,7 +40,12 @@ class Board {
 
         friend std::ostream& operator<<(std::ostream& out, const Board& board_class);
 
-        void Board::create_add_piece(const char& symbol, std::array<std::array<std::unique_ptr<Piece>, 8>, 8>& board, const int& row, const int& col);
+        void Board::create_add_piece(
+            const char& symbol,
+            std::array<std::array<std::unique_ptr<Piece>, 8>, 8>& board,
+            const int& row,
+            const int& col
+        );
 
         std::array<std::array<std::unique_ptr<Piece>, 8>, 8> create_board();
         std::array<std::array<std::unique_ptr<Piece>, 8>, 8> create_board(const std::array<std::array<char, 8>, 8>& simplify_board);
