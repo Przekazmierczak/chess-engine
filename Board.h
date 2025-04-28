@@ -24,26 +24,26 @@ class Board {
         Board();
 
         Board(
-            std::string input_turn,
-            std::string input_castling,
-            std::array<std::array<char, 8>, 8> simplify_board
+            const std::string& input_turn,
+            const std::string& input_castling,
+            const std::array<std::array<char, 8>, 8>& simplify_board
         );
 
         Board(
-            std::string input_turn,
-            std::string input_castling,
-            std::array<int, 2> input_enpassant,
-            std::array<std::array<char, 8>, 8> simplify_board
+            const std::string& input_turn,
+            const std::string& input_castling,
+            const std::array<int, 2>& input_enpassant,
+            const std::array<std::array<char, 8>, 8>& simplify_board
         );
 
         bool operator==(const Board& other) const;
 
         friend std::ostream& operator<<(std::ostream& out, const Board& board_class);
 
-        void Board::create_add_piece(char symbol, std::array<std::array<std::unique_ptr<Piece>, 8>, 8>& board, int row, int col);
+        void Board::create_add_piece(const char& symbol, std::array<std::array<std::unique_ptr<Piece>, 8>, 8>& board, const int& row, const int& col);
 
         std::array<std::array<std::unique_ptr<Piece>, 8>, 8> create_board();
-        std::array<std::array<std::unique_ptr<Piece>, 8>, 8> create_board(std::array<std::array<char, 8>, 8> simplify_board);
+        std::array<std::array<std::unique_ptr<Piece>, 8>, 8> create_board(const std::array<std::array<char, 8>, 8>& simplify_board);
 
         void get_possible_actions();
         

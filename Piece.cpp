@@ -3,11 +3,11 @@
 #include "Types.h"
 
 Piece::Piece(
-    char input_symbol,
-    std::string input_piece,
-    std::string input_player,
-    int input_row,
-    int input_column)
+    const char& input_symbol,
+    const std::string& input_piece,
+    const std::string& input_player,
+    const int& input_row,
+    const int& input_column)
     : symbol(input_symbol),
       piece(input_piece),
       player(input_player),
@@ -64,28 +64,28 @@ std::ostream& operator<<(std::ostream& out, const Piece::Actions& res) {
 
     return out;
 };
-bool Piece::is_valid_position(Board& board, int row, int column) {
+bool Piece::is_valid_position(const Board& board, const int& row, const int& column) {
     return row >= 0 && row < board.ROWS && column >= 0 && column < board.COLS;
 }
 
 bool Piece::is_not_pinned(
-    std::array<int, 2> piece_position,
-    std::array<int, 2> move,
-    Board& board_class,
-    PositionMap& pinned_pieces
+    const std::array<int, 2>& piece_position,
+    const std::array<int, 2>& move,
+    const Board& board_class,
+    const PositionMap& pinned_pieces
 ) {
     return (
         player != board_class.turn ||
         !pinned_pieces.count(piece_position) ||
         (
             pinned_pieces.count(piece_position) &&
-            pinned_pieces[piece_position].count(move)
+            pinned_pieces.at(piece_position).count(move)
         )
     );
 }
 
 PositionSet Piece::flatting_checkin_pieces(
-    PositionMap& checkin_pieces
+    const PositionMap& checkin_pieces
 ) {
     PositionSet checking_positions;
     if (checkin_pieces.size() == 1) {
@@ -99,46 +99,46 @@ PositionSet Piece::flatting_checkin_pieces(
     return checking_positions;
 }
 
-Pawn::Pawn(char input_symbol,
-    std::string input_piece,
-    std::string input_player,
-    int input_row,
-    int input_column
+Pawn::Pawn(const char& input_symbol,
+    const std::string& input_piece,
+    const std::string& input_player,
+    const int& input_row,
+    const int& input_column
 ): Piece(input_symbol, input_piece, input_player, input_row, input_column) {}
 
-Knight::Knight(char input_symbol,
-    std::string input_piece,
-    std::string input_player,
-    int input_row,
-    int input_column
+Knight::Knight(const char& input_symbol,
+    const std::string& input_piece,
+    const std::string& input_player,
+    const int& input_row,
+    const int& input_column
 ): Piece(input_symbol, input_piece, input_player, input_row, input_column) {}
 
-King::King(char input_symbol,
-    std::string input_piece,
-    std::string input_player,
-    int input_row,
-    int input_column
+King::King(const char& input_symbol,
+    const std::string& input_piece,
+    const std::string& input_player,
+    const int& input_row,
+    const int& input_column
 ): Piece(input_symbol, input_piece, input_player, input_row, input_column) {}
 
-Rook::Rook(char input_symbol,
-    std::string input_piece,
-    std::string input_player,
-    int input_row,
-    int input_column
+Rook::Rook(const char& input_symbol,
+    const std::string& input_piece,
+    const std::string& input_player,
+    const int& input_row,
+    const int& input_column
 ): Piece(input_symbol, input_piece, input_player, input_row, input_column) {}
 
-Bishop::Bishop(char input_symbol,
-    std::string input_piece,
-    std::string input_player,
-    int input_row,
-    int input_column
+Bishop::Bishop(const char& input_symbol,
+    const std::string& input_piece,
+    const std::string& input_player,
+    const int& input_row,
+    const int& input_column
 ): Piece(input_symbol, input_piece, input_player, input_row, input_column) {}
 
-Queen::Queen(char input_symbol,
-    std::string input_piece,
-    std::string input_player,
-    int input_row,
-    int input_column
+Queen::Queen(const char& input_symbol,
+    const std::string& input_piece,
+    const std::string& input_player,
+    const int& input_row,
+    const int& input_column
 ): Piece(input_symbol, input_piece, input_player, input_row, input_column) {}
 
 void Pawn::check_piece_possible_moves (
@@ -351,9 +351,9 @@ void King::check_piece_possible_moves (
 
 void Piece::rook_bishop_queen_template(
     Board& board_class,
-    std::vector<std::array<int, 2>> directions,
-    bool opponent,
-    PositionSet checking_positions
+    const std::vector<std::array<int, 2>>& directions,
+    const bool& opponent,
+    const PositionSet& checking_positions
 ) {
     if (opponent) {
         for (auto direction : directions) {

@@ -11,9 +11,9 @@ Board::Board()
 }
 
 Board::Board(
-    std::string input_turn,
-    std::string input_castling,
-    std::array<std::array<char, 8>, 8> simplify_board)
+    const std::string& input_turn,
+    const std::string& input_castling,
+    const std::array<std::array<char, 8>, 8>& simplify_board)
     : turn(input_turn),
       castling(input_castling),
       enpassant({NULL, NULL}),
@@ -22,10 +22,10 @@ Board::Board(
 }
 
 Board::Board(
-    std::string input_turn,
-    std::string input_castling,
-    std::array<int, 2> input_enpassant,
-    std::array<std::array<char, 8>, 8> simplify_board)
+    const std::string& input_turn,
+    const std::string& input_castling,
+    const std::array<int, 2>& input_enpassant,
+    const std::array<std::array<char, 8>, 8>& simplify_board)
     : turn(input_turn),
       castling(input_castling),
       enpassant(input_enpassant),
@@ -71,7 +71,7 @@ std::ostream& operator<<(std::ostream& out, const Board& board_class) {
     return out;
 };
 
-void Board::create_add_piece(char symbol, std::array<std::array<std::unique_ptr<Piece>, 8>, 8>& board, int row, int col) {
+void Board::create_add_piece(const char& symbol, std::array<std::array<std::unique_ptr<Piece>, 8>, 8>& board, const int& row, const int& col) {
     std:: string player = isupper(symbol) ? "white" : "black";
 
     if (toupper(symbol) == 'R') {
@@ -114,7 +114,7 @@ std::array<std::array<std::unique_ptr<Piece>, 8>, 8> Board::create_board() {
     return board;
 }
 
-std::array<std::array<std::unique_ptr<Piece>, 8>, 8> Board::create_board(std::array<std::array<char, 8>, 8> simplify_board) {
+std::array<std::array<std::unique_ptr<Piece>, 8>, 8> Board::create_board(const std::array<std::array<char, 8>, 8>& simplify_board) {
     std::array<std::array<std::unique_ptr<Piece>, 8>, 8> board;
 
     for (int row = 0; row < ROWS; row++) {
