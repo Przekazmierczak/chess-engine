@@ -56,16 +56,16 @@ class Piece {
             const PositionMap& checkin_pieces
         );
 
-        virtual void check_piece_possible_moves (
-            Board& board_class
-        ) = 0;
-
         void rook_bishop_queen_template (
             Board& board_class,
             const std::vector<std::array<int, 2>>& directions,
             const bool& opponent,
             const PositionSet& checking_positions
         );
+        
+        virtual void check_piece_possible_moves (
+            Board& board_class
+        ) = 0;
 };
 
 class Pawn: public Piece {
