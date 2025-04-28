@@ -58,7 +58,7 @@ class Piece {
 
         virtual void check_piece_possible_moves (
             Board& board_class
-        );
+        ) = 0;
 
         void rook_bishop_queen_template (
             Board& board_class,
@@ -70,50 +70,86 @@ class Piece {
 
 class Pawn: public Piece {
     public:
-        Pawn(char input_symbol, std::string input_piece, std::string input_player, int input_row, int input_column): Piece(input_symbol, input_piece, input_player, input_row, input_column) {}
+        Pawn(char input_symbol,
+            std::string input_piece,
+            std::string input_player,
+            int input_row,
+            int input_column
+        );
+
         void check_piece_possible_moves (
             Board& board_class
-        );
+        ) override;
 };
 
 class Knight: public Piece {
     public:
-        Knight(char input_symbol, std::string input_piece, std::string input_player, int input_row, int input_column): Piece(input_symbol, input_piece, input_player, input_row, input_column) {}
+        Knight(char input_symbol,
+            std::string input_piece,
+            std::string input_player,
+            int input_row,
+            int input_column
+        );
+
         void check_piece_possible_moves (
             Board& board_class
-        );
+        ) override;
 };
 
 class King: public Piece {
     public:
-        King(char input_symbol, std::string input_piece, std::string input_player, int input_row, int input_column): Piece(input_symbol, input_piece, input_player, input_row, input_column) {}
+        King(char input_symbol,
+            std::string input_piece,
+            std::string input_player,
+            int input_row,
+            int input_column
+        );
+
         void check_piece_possible_moves (
             Board& board_class
-        );
+        ) override;
 };
 
 class Rook: public Piece {
     public:
-        Rook(char input_symbol, std::string input_piece, std::string input_player, int input_row, int input_column): Piece(input_symbol, input_piece, input_player, input_row, input_column) {}
+        Rook(char input_symbol,
+            std::string input_piece,
+            std::string input_player,
+            int input_row,
+            int input_column
+        );
+
         void check_piece_possible_moves (
             Board& board_class
-        );
+        ) override;
 };
 
 class Bishop: public Piece {
     public:
-        Bishop(char input_symbol, std::string input_piece, std::string input_player, int input_row, int input_column): Piece(input_symbol, input_piece, input_player, input_row, input_column) {}
+        Bishop(char input_symbol,
+            std::string input_piece,
+            std::string input_player,
+            int input_row,
+            int input_column
+        );
+
         void check_piece_possible_moves (
             Board& board_class
-        );
+        ) override;
 };
 
 class Queen: public Piece {
     public:
-        Queen(char input_symbol, std::string input_piece, std::string input_player, int input_row, int input_column): Piece(input_symbol, input_piece, input_player, input_row, input_column) {}
+        Queen(char input_symbol,
+            std::string input_piece,
+            std::string input_player,
+            int input_row,
+            int input_column
+        );
+
         void check_piece_possible_moves (
             Board& board_class
-        );
+        ) override;
 };
 
 #endif
