@@ -64,7 +64,7 @@ std::ostream& operator<<(std::ostream& out, const Piece::Actions& res) {
 
     return out;
 };
-bool Piece::is_valid_position(const Board& board, const int& row, const int& column) {
+bool Piece::is_valid_position(const Board& board, const int& row, const int& column) const{
     return row >= 0 && row < board.ROWS && column >= 0 && column < board.COLS;
 }
 
@@ -73,7 +73,7 @@ bool Piece::is_not_pinned(
     const std::array<int, 2>& move,
     const Board& board_class,
     const PositionMap& pinned_pieces
-) {
+) const {
     return (
         player != board_class.turn ||
         !pinned_pieces.count(piece_position) ||
@@ -86,7 +86,7 @@ bool Piece::is_not_pinned(
 
 PositionSet Piece::flatting_checkin_pieces(
     const PositionMap& checkin_pieces
-) {
+) const {
     PositionSet checking_positions;
     if (checkin_pieces.size() == 1) {
         for (auto key : checkin_pieces) {

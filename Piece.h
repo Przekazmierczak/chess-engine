@@ -48,18 +48,18 @@ class Piece {
 
         friend std::ostream& operator<<(std::ostream& out, const Piece& piece);
 
-        bool is_valid_position(const Board& board, const int& row, const int& column);
+        bool is_valid_position(const Board& board, const int& row, const int& column) const;
 
         bool is_not_pinned(
             const std::array<int, 2>& piece_position,
             const std::array<int, 2>& move,
             const Board& board_class,
             const PositionMap& pinned_pieces
-        );
+        ) const;
 
         PositionSet flatting_checkin_pieces(
             const PositionMap& checkin_pieces
-        );
+        ) const;
 
         void rook_bishop_queen_template (
             Board& board_class,
