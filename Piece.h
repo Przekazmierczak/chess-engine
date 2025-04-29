@@ -9,21 +9,24 @@
 
 #include "Types.h"
 
+// Forward declaration of the Board class
 class Board;
 
+// Base class representing a generic chess piece
 class Piece {
     public:
-        char symbol;
-        std::string piece;
-        std::string player;
-        int row;
-        int column;
+        char symbol; // Character symbol representing the piece (e.g., 'P' for pawn)
+        std::string piece; // Name of the piece (e.g., "pawn")
+        std::string player; // Player owning the piece ("white" or "black")
+        int row; // Row position of the piece on the board
+        int column; // Column position of the piece on the board
 
         struct Actions {
-            PositionSet moves;
-            PositionSet attacks;
-            bool promotion = false;
+            PositionSet moves; // Set of valid move positions
+            PositionSet attacks; // Set of valid attack positions
+            bool promotion = false; // Indicates if a pawn promote in next move
 
+            // Equality operator for comparing Actions
             bool operator==(const Actions& other) const {
             return (this->moves == other.moves &&
                     this->attacks == other.attacks &&
@@ -31,11 +34,13 @@ class Piece {
                     );
             }
 
+            // Overloaded output stream operator for Actions
             friend std::ostream& operator<<(std::ostream& out, const Actions& res);
         };
 
-        Actions possible_actions;
+        Actions possible_actions; // Stores the possible actions for the piece
 
+        // Constructor
         Piece(const char& input_symbol,
             const std::string& input_piece,
             const std::string& input_player,
@@ -43,13 +48,17 @@ class Piece {
             const int& input_column
         );
 
+        // Comparison operators for equality and inequality
         bool operator==(const Piece& other) const;
         bool operator!=(const Piece& other) const;
 
+        // Overloaded output stream operator for Piece
         friend std::ostream& operator<<(std::ostream& out, const Piece& piece);
 
+        // Check if a position is within the board bounds
         bool is_valid_position(const Board& board, const int& row, const int& column) const;
 
+        // Checks if moving the piece will not expose the king to a check (i.e., the piece is not pinned)
         bool is_not_pinned(
             const std::array<int, 2>& piece_position,
             const std::array<int, 2>& move,
@@ -57,10 +66,12 @@ class Piece {
             const PositionMap& pinned_pieces
         ) const;
 
+        // Flattens all checking positions into an unordered set for faster lookups
         PositionSet flatting_checkin_pieces(
             const PositionMap& checkin_pieces
         ) const;
 
+        // Helper method for rook, bishop, and queen movement logic
         void rook_bishop_queen_template (
             Board& board_class,
             const std::vector<std::array<int, 2>>& directions,
@@ -68,11 +79,13 @@ class Piece {
             const PositionSet& checking_positions
         );
 
+        // Pure virtual function to determine piece-specific possible moves
         virtual void check_piece_possible_moves (
             Board& board_class
         ) = 0;
 };
 
+// Derived class representing a Pawn
 class Pawn: public Piece {
     public:
         Pawn(const char& input_symbol,
@@ -87,6 +100,7 @@ class Pawn: public Piece {
         ) override;
 };
 
+// Derived class representing a Knight
 class Knight: public Piece {
     public:
         Knight(const char& input_symbol,
@@ -101,6 +115,7 @@ class Knight: public Piece {
         ) override;
 };
 
+// Derived class representing a King
 class King: public Piece {
     public:
         King(const char& input_symbol,
@@ -115,6 +130,7 @@ class King: public Piece {
         ) override;
 };
 
+// Derived class representing a Rook
 class Rook: public Piece {
     public:
         Rook(const char& input_symbol,
@@ -129,6 +145,7 @@ class Rook: public Piece {
         ) override;
 };
 
+// Derived class representing a Bishop
 class Bishop: public Piece {
     public:
         Bishop(const char& input_symbol,
@@ -143,6 +160,7 @@ class Bishop: public Piece {
         ) override;
 };
 
+// Derived class representing a Queen
 class Queen: public Piece {
     public:
         Queen(const char& input_symbol,
