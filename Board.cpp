@@ -2,6 +2,7 @@
 #include "Piece.h"
 #include "Types.h"
 
+// Default constructor initializes the board to the standard starting position
 Board::Board()
     : turn("white"),
       castling("KQkq"),
@@ -10,6 +11,7 @@ Board::Board()
     get_possible_actions();
 }
 
+// Constructor to initialize board with a given turn, castling rights, and custom board state
 Board::Board(
     const std::string& input_turn,
     const std::string& input_castling,
@@ -21,6 +23,7 @@ Board::Board(
     get_possible_actions();
 }
 
+// Constructor to initialize board with custom en passant state and board state
 Board::Board(
     const std::string& input_turn,
     const std::string& input_castling,
@@ -33,14 +36,18 @@ Board::Board(
     get_possible_actions();
 }
 
+// Compare two boards for equality
 bool Board::operator==(const Board& other) const {
     if (this->turn != other.turn) return false;
     if (this->castling != other.castling) return false;
     if (this->enpassant != other.enpassant) return false;
 
+    // Compare individual pieces on the board
     for (int i = 0; i < this->ROWS; i++) {
         for (int j = 0; j < this->COLS; j++) {
+            // Check if either position is non-empty
             if (this->board[i][j] || other.board[i][j]) {
+                // Check if mismatch is found
                 if (*(this->board[i][j]) != *(other.board[i][j])) {
                     return false;
                 }
@@ -50,22 +57,27 @@ bool Board::operator==(const Board& other) const {
     return true;
 }
 
+// Output the current state of the board
 std::ostream& operator<<(std::ostream& out, const Board& board_class) {
     out << "Turn: " << board_class.turn << ", ";
     out << "Castling: " << board_class.castling << ", ";
     out << "State: " << std::endl;
 
     for (int row = 0; row < board_class.ROWS; row++) {
+        // Print row numbers
         std::cout << row + 1 << " ";
         for (int col = 0; col < board_class.COLS; col++) {
             if (board_class.board[row][col]) {
+                // Display piece symbol
                 std::cout << "[" << board_class.board[row][col]->symbol << "]";
             } else {
+                // Empty square
                 std::cout << "[ ]";
             }
         }
         std::cout << std::endl;
     }
+    // Column labels
     std::cout << "   a  b  c  d  e  f  g  h " << std::endl;
     
     return out;
@@ -77,8 +89,10 @@ void Board::create_add_piece(
     const int& row,
     const int& col
 ) {
+    // Determine player color
     std:: string player = isupper(symbol) ? "white" : "black";
 
+    // Create the appropriate piece based on the symbol
     if (toupper(symbol) == 'R') {
         board[row][col] = std::make_unique<Rook>(symbol, "rook", player, row, col);
     } else if (toupper(symbol) == 'N') {
@@ -94,6 +108,7 @@ void Board::create_add_piece(
     }
 }
 
+// Create a board with the standard initial position
 std::array<std::array<std::unique_ptr<Piece>, 8>, 8> Board::create_board() {
     std::array<std::array<char, 8>, 8> simplify_board = {{
         {'R', 'N', 'B', 'K', 'Q', 'B', 'N', 'R'},
@@ -108,6 +123,7 @@ std::array<std::array<std::unique_ptr<Piece>, 8>, 8> Board::create_board() {
 
     std::array<std::array<std::unique_ptr<Piece>, 8>, 8> board;
 
+    // Populate the board with pieces
     for (int row = 0; row < ROWS; row++) {
         for (int col = 0; col < COLS; col++) {
             if (simplify_board[row][col] != ' ') {
@@ -119,9 +135,11 @@ std::array<std::array<std::unique_ptr<Piece>, 8>, 8> Board::create_board() {
     return board;
 }
 
+// Create a board from a custom configuration
 std::array<std::array<std::unique_ptr<Piece>, 8>, 8> Board::create_board(const std::array<std::array<char, 8>, 8>& simplify_board) {
     std::array<std::array<std::unique_ptr<Piece>, 8>, 8> board;
 
+    // Populate the board with pieces
     for (int row = 0; row < ROWS; row++) {
         for (int col = 0; col < COLS; col++) {
             if (simplify_board[row][col] != ' ') {
@@ -133,11 +151,13 @@ std::array<std::array<std::unique_ptr<Piece>, 8>, 8> Board::create_board(const s
     return board;
 }
 
+// Calculate possible moves for the current player
 void Board::get_possible_actions() {
     std::array<std::array<Piece::Actions, 8>, 8> possible_moves;
     bool end = true;
     // std::string winner;
 
+    // Check moves for the opponent's pieces
     for (int row = 0; row < ROWS; row++) {
         for (int col = 0; col < COLS; col++) {
             if (board[row][col] && board[row][col]->player != turn) {
@@ -146,11 +166,13 @@ void Board::get_possible_actions() {
         }
     }
 
+    // Check moves for the current player's pieces
     for (int row = 0; row < ROWS; row++) {
         for (int col = 0; col < COLS; col++) {
             if (board[row][col] && board[row][col]->player == turn) {
                 board[row][col]->check_piece_possible_moves(*this);
 
+                // Determine if the game should continue
                 if (end) {
                     Piece::Actions curr_res = possible_moves[row][col];
                     if (curr_res.moves.size() || curr_res.attacks.size()) {
