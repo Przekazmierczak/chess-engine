@@ -160,10 +160,14 @@ Queen::Queen(const char& input_symbol,
 // Helper method for rook, bishop, and queen movement logic
 void Piece::rook_bishop_queen_template(
     Board& board_class,
-    const std::vector<std::array<int, 2>>& directions,
-    const bool& opponent,
-    const PositionSet& checking_positions
+    const std::vector<std::array<int, 2>>& directions
 ) {
+    // Determine if the current piece belongs to the opponent
+    bool opponent = (player == board_class.turn) ? false : true;
+
+    // Flatten all the checking pieces for quick access
+    auto checking_positions = flatting_checkin_pieces(board_class.checkin_pieces);
+
     if (opponent) {
         // Handles opponent's turn: updates attacked positions and pins
         for (auto direction : directions) {
@@ -382,8 +386,7 @@ void Knight::check_piece_possible_moves (
     auto checking_positions = flatting_checkin_pieces(board_class.checkin_pieces);
 
     // Define all possible moves for a knight relative to its current position
-    std::vector<std::array<int, 2>> directions;
-    directions = {{2, 1}, {-2, 1}, {2, -1}, {-2, -1}, {1, 2}, {-1, 2}, {1, -2}, {-1, -2}};
+    std::vector<std::array<int, 2>> directions = {{2, 1}, {-2, 1}, {2, -1}, {-2, -1}, {1, 2}, {-1, 2}, {1, -2}, {-1, -2}};
 
     if (opponent) {
         // If it is the opponent's turn, focus on marking attacked positions and checking pieces
@@ -442,8 +445,7 @@ void King::check_piece_possible_moves (
     auto checking_positions = flatting_checkin_pieces(board_class.checkin_pieces);
 
     // Define all possible moves for the king, including castling directions
-    std::vector<std::array<int, 2>> directions;
-    directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}, {0, -2}, {0, 2}};
+    std::vector<std::array<int, 2>> directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}, {0, -2}, {0, 2}};
 
     if (opponent) {
         // If it is the opponent's turn, focus on marking attacked positions
@@ -515,50 +517,29 @@ void King::check_piece_possible_moves (
 void Rook::check_piece_possible_moves (
     Board& board_class
 ) {
-    // Determine if the current piece belongs to the opponent
-    bool opponent = (player == board_class.turn) ? false : true;
-
-    // Flatten all the checking pieces for quick access
-    auto checking_positions = flatting_checkin_pieces(board_class.checkin_pieces);
-
     // Define all possible directions the rook can move (vertical and horizontal)
-    std::vector<std::array<int, 2>> directions;
-    directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+    std::vector<std::array<int, 2>> directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
 
     // Utilize the shared logic for rook, bishop, and queen movement
-    rook_bishop_queen_template(board_class, directions, opponent, checking_positions);
+    rook_bishop_queen_template(board_class, directions);
 }
 
 void Bishop::check_piece_possible_moves (
     Board& board_class
 ) {
-    // Determine if the current piece belongs to the opponent
-    bool opponent = (player == board_class.turn) ? false : true;
-
-    // Flatten all the checking pieces for quick access
-    auto checking_positions = flatting_checkin_pieces(board_class.checkin_pieces);
-
     // Define all possible directions the rook can move (vertical and horizontal)
-    std::vector<std::array<int, 2>> directions;
-    directions = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+    std::vector<std::array<int, 2>> directions = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
 
     // Utilize the shared logic for rook, bishop, and queen movement
-    rook_bishop_queen_template(board_class, directions, opponent, checking_positions);
+    rook_bishop_queen_template(board_class, directions);
 }
 
 void Queen::check_piece_possible_moves (
     Board& board_class
 ) {
-    // Determine if the current piece belongs to the opponent
-    bool opponent = (player == board_class.turn) ? false : true;
-
-    // Flatten all the checking pieces for quick access
-    auto checking_positions = flatting_checkin_pieces(board_class.checkin_pieces);
-
     // Define all possible directions the rook can move (vertical and horizontal)
-    std::vector<std::array<int, 2>> directions;
-    directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+    std::vector<std::array<int, 2>> directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
 
     // Utilize the shared logic for rook, bishop, and queen movement
-    rook_bishop_queen_template(board_class, directions, opponent, checking_positions);
+    rook_bishop_queen_template(board_class, directions);
 }

@@ -74,9 +74,7 @@ class Piece {
         // Helper method for rook, bishop, and queen movement logic
         void rook_bishop_queen_template (
             Board& board_class,
-            const std::vector<std::array<int, 2>>& directions,
-            const bool& opponent,
-            const PositionSet& checking_positions
+            const std::vector<std::array<int, 2>>& directions
         );
 
         // Pure virtual function to determine piece-specific possible moves
