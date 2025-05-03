@@ -78,7 +78,7 @@ std::ostream& operator<<(std::ostream& out, const Board& board_class) {
         std::cout << std::endl;
     }
     // Column labels
-    std::cout << "   a  b  c  d  e  f  g  h " << std::endl;
+    std::cout << "   a  b  c  d  e  f  g  h ";
     
     return out;
 };
