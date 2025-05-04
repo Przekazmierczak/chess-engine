@@ -34,6 +34,12 @@ class Piece {
                     );
             }
 
+            void reset() {
+                moves = {};
+                attacks = {};
+                promotion = false;
+            }
+
             // Overloaded output stream operator for Actions
             friend std::ostream& operator<<(std::ostream& out, const Actions& res);
         };
@@ -47,6 +53,8 @@ class Piece {
             const int& input_row,
             const int& input_column
         );
+
+        virtual ~Piece() = default;
 
         // Comparison operators for equality and inequality
         bool operator==(const Piece& other) const;
@@ -81,6 +89,8 @@ class Piece {
         virtual void check_piece_possible_moves (
             Board& board_class
         ) = 0;
+
+        bool check_if_legal_action(int check_row, int check_col);
 };
 
 // Derived class representing a Pawn

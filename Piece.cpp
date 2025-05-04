@@ -162,6 +162,8 @@ void Piece::rook_bishop_queen_template(
     Board& board_class,
     const std::vector<std::array<int, 2>>& directions
 ) {
+    possible_actions.reset();
+
     // Determine if the current piece belongs to the opponent
     bool opponent = (player == board_class.turn) ? false : true;
 
@@ -249,6 +251,7 @@ void Piece::rook_bishop_queen_template(
                         (board_class.checkin_pieces.empty() || checking_positions.count({new_row, new_column}))
                     ) {
                         possible_actions.attacks.insert({new_row, new_column});
+                        board_class.active_pieces.insert({row, column});
                     }
                     break;
                 } else {
@@ -257,6 +260,7 @@ void Piece::rook_bishop_queen_template(
                         (board_class.checkin_pieces.empty() || checking_positions.count({new_row, new_column}))
                     ) {
                         possible_actions.moves.insert({new_row, new_column});
+                        board_class.active_pieces.insert({row, column});
                     }
                 }
                 distance++;
@@ -268,6 +272,8 @@ void Piece::rook_bishop_queen_template(
 void Pawn::check_piece_possible_moves (
     Board& board_class
 ) {
+    possible_actions.reset();
+
     // Determine if the current piece belongs to the opponent
     bool opponent = (player == board_class.turn) ? false : true;
 
@@ -303,7 +309,7 @@ void Pawn::check_piece_possible_moves (
                 board_class.board[new_row][new_column]->player != player
             ) {
                 // Mark the square as a possible move
-                possible_actions.moves.insert({new_row, new_column});
+                possible_actions.attacks.insert({new_row, new_column});
 
                 // If the piece is the opponent's king, mark it as a checking piece
                 if (board_class.board[new_row][new_column]->piece == "king") {
@@ -335,6 +341,7 @@ void Pawn::check_piece_possible_moves (
                     (board_class.checkin_pieces.empty() || checking_positions.count({new_row, new_column}))
                 ) {
                     possible_actions.moves.insert({new_row, new_column});
+                    board_class.active_pieces.insert({row, column});
                 }
             } else {
                 // If the move is blocked, the pawn can no longer move two squares forward
@@ -358,6 +365,7 @@ void Pawn::check_piece_possible_moves (
                     (board_class.checkin_pieces.empty() || checking_positions.count({new_row, new_column}))
                 ) {
                     possible_actions.attacks.insert({new_row, new_column});
+                    board_class.active_pieces.insert({row, column});
                 }
             }
 
@@ -370,6 +378,7 @@ void Pawn::check_piece_possible_moves (
                     (board_class.checkin_pieces.empty() || checking_positions.count({new_row, new_column}))
                 ) {
                     possible_actions.attacks.insert({new_row, new_column});
+                    board_class.active_pieces.insert({row, column});
                 }
             }
         }
@@ -379,6 +388,8 @@ void Pawn::check_piece_possible_moves (
 void Knight::check_piece_possible_moves (
     Board& board_class
 ) {
+    possible_actions.reset();
+
     // Determine if the current piece belongs to the opponent
     bool opponent = (player == board_class.turn) ? false : true;
 
@@ -421,6 +432,7 @@ void Knight::check_piece_possible_moves (
                         (board_class.checkin_pieces.empty() || checking_positions.count({new_row, new_column}))
                     ) {
                         possible_actions.moves.insert({new_row, new_column});
+                        board_class.active_pieces.insert({row, column});
                     }
                 // If the target square contains an opponent piece, it's a valid attack
                 } else if (board_class.board[new_row][new_column]->player != player) {
@@ -428,6 +440,7 @@ void Knight::check_piece_possible_moves (
                         (board_class.checkin_pieces.empty() || checking_positions.count({new_row, new_column}))
                     ) {
                         possible_actions.attacks.insert({new_row, new_column});
+                        board_class.active_pieces.insert({row, column});
                     }
                 }
             }
@@ -438,6 +451,8 @@ void Knight::check_piece_possible_moves (
 void King::check_piece_possible_moves (
     Board& board_class
 ) {
+    possible_actions.reset();
+
     // Determine if the current piece belongs to the opponent
     bool opponent = (player == board_class.turn) ? false : true;
 
@@ -483,6 +498,7 @@ void King::check_piece_possible_moves (
                     ) {
                         // Add queenside castling to possible moves
                         possible_actions.moves.insert({new_row, new_column});
+                        board_class.active_pieces.insert({row, column});
                     }
                 } else if (direction == std::array<int, 2> {0, 2}) {
                         // Check for castling to the kingside
@@ -497,16 +513,19 @@ void King::check_piece_possible_moves (
                         ) {
                             // Add kingside castling to possible moves
                             possible_actions.moves.insert({new_row, new_column});
+                            board_class.active_pieces.insert({row, column});
                         }
                 } else if (!board_class.board[new_row][new_column]) {
                     // If the target square is empty, it is a valid move
                     if (!board_class.attacked_positions.count({new_row, new_column})) {
                         possible_actions.moves.insert({new_row, new_column});
+                        board_class.active_pieces.insert({row, column});
                     }
                 } else if (board_class.board[new_row][new_column]->player != player) {
                     // If the target square contains an opponent piece, it is a valid attack
                     if (!board_class.attacked_positions.count({new_row, new_column})) {
                         possible_actions.attacks.insert({new_row, new_column});
+                        board_class.active_pieces.insert({row, column});
                     }
                 }
             }
@@ -542,4 +561,11 @@ void Queen::check_piece_possible_moves (
 
     // Utilize the shared logic for rook, bishop, and queen movement
     rook_bishop_queen_template(board_class, directions);
+}
+
+bool Piece::check_if_legal_action(int check_row, int check_col) {
+    std::array<int, 2> current = {check_row, check_col};
+    if (possible_actions.moves.find(current) != possible_actions.moves.end()) return true;
+    if (possible_actions.attacks.find(current) != possible_actions.attacks.end()) return true;
+    return false;
 }
