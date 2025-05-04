@@ -17,6 +17,16 @@ std::ostream& operator<<(std::ostream& out, const PositionSet& set) {
     return out;
 };
 
+std::array<int, 2> get_random_element(PositionSet set) {
+    std::srand(std::time(nullptr));
+    int rand_index = rand() % set.size();
+
+    auto iterator = set.begin();
+    std::advance(iterator, rand_index);
+
+    return *iterator;
+}
+
 std::ostream& operator<<(std::ostream& out, const PositionMap& map) {
     bool firstOuter  = true;
 
