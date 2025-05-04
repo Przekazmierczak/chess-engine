@@ -26,6 +26,7 @@ class Board {
         PositionSet attacked_positions; // Positions attacked by the opponent
         PositionMap checkin_pieces; // Pieces causing a check on the king
         PositionMap pinned_pieces; // Pieces pinned to the king
+        PositionSet active_pieces;
 
         // Constructors
         Board();
@@ -63,7 +64,14 @@ class Board {
 
         // Calculate possible moves for the current player
         void get_possible_actions();
-        
+
+        void make_action(int old_row, int old_col, int new_row, int new_col);
+
+        void computer_action();
+
+        // void print_possible_actions();
+
+        // void print_position(int row, int col);
 };
 
 #endif

@@ -153,7 +153,7 @@ std::array<std::array<std::unique_ptr<Piece>, 8>, 8> Board::create_board(const s
 
 // Calculate possible moves for the current player
 void Board::get_possible_actions() {
-    std::array<std::array<Piece::Actions, 8>, 8> possible_moves;
+    // std::array<std::array<Piece::Actions, 8>, 8> possible_moves;
     bool end = true;
     // std::string winner;
 
@@ -173,13 +173,92 @@ void Board::get_possible_actions() {
                 board[row][col]->check_piece_possible_moves(*this);
 
                 // Determine if the game should continue
-                if (end) {
-                    Piece::Actions curr_res = possible_moves[row][col];
-                    if (curr_res.moves.size() || curr_res.attacks.size()) {
-                        end = false;
-                    }
-                }
+                // if (end) {
+                //     Piece::Actions curr_res = possible_moves[row][col];
+                //     if (curr_res.moves.size() || curr_res.attacks.size()) {
+                //         end = false;
+                //     }
+                // }
             }
         }
     }
 }
+
+void Board::make_action(int old_row, int old_col, int new_row, int new_col) {
+    if (board[old_row][old_col] &&
+        board[old_row][old_col]->check_if_legal_action(new_row, new_col)
+    ) {
+        board[new_row][new_col] = std::move(board[old_row][old_col]);
+    
+        board[new_row][new_col]->row = new_row;
+        board[new_row][new_col]->column = new_col;
+
+        turn = (turn == "white") ? "black" : "white";
+
+        std::cout << "Correct action" << std::endl;
+    } else {
+        std::cout << "Wrong action" << std::endl;
+    }
+
+    attacked_positions = {};
+    checkin_pieces = {};
+    pinned_pieces = {};
+    active_pieces = {};
+
+    get_possible_actions();
+}
+
+void Board::computer_action() {
+    std::array<int, 2> old_position = get_random_element(active_pieces);
+    std::cout << "attacks: " << board[old_position[0]][old_position[1]]->possible_actions.attacks.size() << std::endl;
+    std::cout << "moves: " << board[old_position[0]][old_position[1]]->possible_actions.moves.size() << std::endl;
+    if (board[old_position[0]][old_position[1]]->possible_actions.attacks.size()) {
+        std::array<int, 2> new_position = get_random_element(board[old_position[0]][old_position[1]]->possible_actions.attacks);
+        make_action(old_position[0], old_position[1], new_position[0], new_position[1]);
+        return;
+    }
+
+    if (board[old_position[0]][old_position[1]]->possible_actions.moves.size()) {
+        std::array<int, 2> new_position = get_random_element(board[old_position[0]][old_position[1]]->possible_actions.moves);
+        make_action(old_position[0], old_position[1], new_position[0], new_position[1]);
+        return;
+    }
+    std::cerr << "Error: No valid moves or attacks for piece at position [" << old_position[0] << ", " << old_position[1] << "]." << std::endl;
+}
+
+// void Board::print_possible_actions() {
+//     for (int row = 0; row < ROWS; row++) {
+//         for (int col = 0; col < COLS; col++) {
+//             if (board[row][col] && board[row][col]->player == turn) {
+//                 print_position(row, col);
+//                 std::cout << ": ";
+
+//                 bool first = true;
+//                 for (auto move : board[row][col]->possible_actions.moves) {
+//                     if (first) {
+//                         first = false;
+//                     } else {
+//                         std::cout << ", ";
+//                     }
+
+//                     print_position(move[0], move[1]);
+//                 }
+
+//                 for (auto move : board[row][col]->possible_actions.attacks) {
+//                     if (first) {
+//                         first = false;
+//                     } else {
+//                         std::cout << ", ";
+//                     }
+
+//                     print_position(move[0], move[1]);
+//                 }
+//                 std::cout << std::endl;
+//             }
+//         }
+//     }
+// }
+
+// void Board::print_position(int row, int col) {
+//     std::cout << "(" << row + 1 << ", " << char(col + 97) << ")";
+// }
