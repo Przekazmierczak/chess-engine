@@ -28,6 +28,8 @@ class Board {
         PositionMap pinned_pieces; // Pieces pinned to the king
         PositionSet active_pieces;
 
+        std::string winner;
+
         // Constructors
         Board();
         Board(
@@ -42,8 +44,9 @@ class Board {
             const std::array<std::array<char, 8>, 8>& simplify_board
         );
 
-        // Comparison operators for equality
+        // Comparison operators for equality and inequality'
         bool operator==(const Board& other) const;
+        bool operator!=(const Board& other) const;
 
         // Overloaded output stream operator for the board
         friend std::ostream& operator<<(std::ostream& out, const Board& board_class);

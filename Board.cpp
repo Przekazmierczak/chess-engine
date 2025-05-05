@@ -41,7 +41,11 @@ bool Board::operator==(const Board& other) const {
     if (this->turn != other.turn) return false;
     if (this->castling != other.castling) return false;
     if (this->enpassant != other.enpassant) return false;
-
+    if (this->attacked_positions != other.attacked_positions) return false;
+    if (this->checkin_pieces != other.checkin_pieces) return false;
+    if (this->pinned_pieces != other.pinned_pieces) return false;
+    if (this->active_pieces != other.active_pieces) return false;
+    
     // Compare individual pieces on the board
     for (int i = 0; i < this->ROWS; i++) {
         for (int j = 0; j < this->COLS; j++) {
@@ -55,6 +59,10 @@ bool Board::operator==(const Board& other) const {
         }
     }
     return true;
+}
+
+bool Board::operator!=(const Board& other) const {
+    return !(*this == other);
 }
 
 // Output the current state of the board
@@ -153,9 +161,10 @@ std::array<std::array<std::unique_ptr<Piece>, 8>, 8> Board::create_board(const s
 
 // Calculate possible moves for the current player
 void Board::get_possible_actions() {
-    // std::array<std::array<Piece::Actions, 8>, 8> possible_moves;
-    bool end = true;
-    // std::string winner;
+    attacked_positions = {};
+    checkin_pieces = {};
+    pinned_pieces = {};
+    active_pieces = {};
 
     // Check moves for the opponent's pieces
     for (int row = 0; row < ROWS; row++) {
@@ -171,15 +180,15 @@ void Board::get_possible_actions() {
         for (int col = 0; col < COLS; col++) {
             if (board[row][col] && board[row][col]->player == turn) {
                 board[row][col]->check_piece_possible_moves(*this);
-
-                // Determine if the game should continue
-                // if (end) {
-                //     Piece::Actions curr_res = possible_moves[row][col];
-                //     if (curr_res.moves.size() || curr_res.attacks.size()) {
-                //         end = false;
-                //     }
-                // }
             }
+        }
+    }
+
+    if (!active_pieces.size()) {
+        if (checkin_pieces.size()) {
+            winner = (turn == "white") ? "black" : "white";
+        } else {
+            winner = "draw";
         }
     }
 }
@@ -199,11 +208,6 @@ void Board::make_action(int old_row, int old_col, int new_row, int new_col) {
     } else {
         std::cout << "Wrong action" << std::endl;
     }
-
-    attacked_positions = {};
-    checkin_pieces = {};
-    pinned_pieces = {};
-    active_pieces = {};
 
     get_possible_actions();
 }
