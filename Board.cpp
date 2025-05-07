@@ -197,19 +197,54 @@ void Board::make_action(int old_row, int old_col, int new_row, int new_col) {
     if (board[old_row][old_col] &&
         board[old_row][old_col]->check_if_legal_action(new_row, new_col)
     ) {
+        check_enpassant(old_row, old_col, new_row);
+
+        if (castling != "____") {
+            check_castling(old_row, old_col);
+        }
+        
         board[new_row][new_col] = std::move(board[old_row][old_col]);
-    
+        
         board[new_row][new_col]->row = new_row;
         board[new_row][new_col]->column = new_col;
-
+        
         turn = (turn == "white") ? "black" : "white";
-
+        
         std::cout << "Correct action" << std::endl;
     } else {
         std::cout << "Wrong action" << std::endl;
     }
-
+    
     get_possible_actions();
+}
+
+void Board::check_enpassant(int old_row, int old_col, int new_row) {
+    if (board[old_row][old_col]->piece == "pawn" &&
+        (old_row == 1 && new_row == 3) ||
+        (old_row == 6 && new_row == 4)) {
+            enpassant = {(old_row + new_row) / 2, old_col};
+    }
+}
+
+void Board::check_castling(int old_row, int old_col) {
+    std::unordered_map<
+    std::array<int, 2>,
+    std::vector<int>,
+    PositionHash
+    > kings_rooks_positions = {
+        {{0, 3}, {0, 1}}, // The white king
+        {{7, 3}, {2, 3}}, // The black king
+        {{0, 0}, {0}}, // The white rook on the king side
+        {{0, 7}, {1}}, // The white rook on the queen side
+        {{7, 0}, {2}}, // The black rook on the king side
+        {{7, 7}, {3}} // The black rook on the queen side
+    };
+    
+    if (kings_rooks_positions.count({old_row, old_col})) {
+        for (auto index : kings_rooks_positions[{old_row, old_col}]) {
+            castling[index] = '_';
+        }
+    }
 }
 
 void Board::computer_action() {
