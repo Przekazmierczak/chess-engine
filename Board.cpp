@@ -86,9 +86,31 @@ std::ostream& operator<<(std::ostream& out, const Board& board_class) {
         std::cout << std::endl;
     }
     // Column labels
-    std::cout << "   a  b  c  d  e  f  g  h ";
+    std::cout << "   h  g  f  e  d  c  b  a " << std::endl;
     
     return out;
+};
+
+void Board::print_white_perspective() {
+    std::cout << "Turn: " << turn << ", ";
+    std::cout << "State: " << std::endl;
+
+    for (int row = ROWS - 1; row >= 0; row--) {
+        // Print row numbers
+        std::cout << row + 1 << " ";
+        for (int col = COLS - 1; col >= 0; col--) {
+            if (board[row][col]) {
+                // Display piece symbol
+                std::cout << "[" << board[row][col]->symbol << "]";
+            } else {
+                // Empty square
+                std::cout << "[ ]";
+            }
+        }
+        std::cout << std::endl;
+    }
+    // Column labels
+    std::cout << "   a  b  c  d  e  f  g  h " << std::endl;
 };
 
 void Board::create_add_piece(
@@ -247,6 +269,30 @@ void Board::check_castling(int old_row, int old_col) {
     }
 }
 
+Notation::Notation(std:: string position)
+    : row(int(position[0]) - 48),
+      column(position[1]) {
+}
+
+Notation::Notation(int row, int col)
+    : row(row + 1),
+      column(char(104 - col)) {
+}
+
+std::array<int, 2> Notation::parse_square_notation() {
+    std::array<int, 2> position;
+
+    position[0] = row - 1;
+    position[1] = abs(int(column) - 104);
+
+    return position;
+}
+
+std::ostream& operator<<(std::ostream& out, const Notation& notation) {
+    out << notation.row << notation.column;
+    return out;
+};
+
 void Board::computer_action() {
     std::array<int, 2> old_position = get_random_element(active_pieces);
     std::cout << "attacks: " << board[old_position[0]][old_position[1]]->possible_actions.attacks.size() << std::endl;
@@ -296,8 +342,4 @@ void Board::computer_action() {
 //             }
 //         }
 //     }
-// }
-
-// void Board::print_position(int row, int col) {
-//     std::cout << "(" << row + 1 << ", " << char(col + 97) << ")";
 // }

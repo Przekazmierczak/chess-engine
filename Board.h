@@ -51,6 +51,8 @@ class Board {
         // Overloaded output stream operator for the board
         friend std::ostream& operator<<(std::ostream& out, const Board& board_class);
 
+        void print_white_perspective();
+
         // Helper functions for managing the board
         void create_add_piece(
             const char& symbol, // Character representing the piece (e.g., 'K', 'p')
@@ -77,8 +79,18 @@ class Board {
         void computer_action();
 
         // void print_possible_actions();
+};
 
-        // void print_position(int row, int col);
+struct Notation {
+    int row;
+    char column;
+
+    Notation(std::string input_position);
+    Notation(int row, int col);
+
+    std::array<int, 2> parse_square_notation();
+
+    friend std::ostream& operator<<(std::ostream& out, const Notation& notation);
 };
 
 #endif
