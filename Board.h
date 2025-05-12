@@ -54,9 +54,8 @@ class Board {
         void print_white_perspective();
 
         // Helper functions for managing the board
-        void create_add_piece(
+        std::unique_ptr<Piece> create_piece(
             const char& symbol, // Character representing the piece (e.g., 'K', 'p')
-            std::array<std::array<std::unique_ptr<Piece>, 8>, 8>& board, // Board to modify
             const int& row, // Row position
             const int& col // Column position
         );
@@ -75,6 +74,8 @@ class Board {
         void check_enpassant(int old_row, int old_col, int new_row);
 
         void check_castling(int old_row, int old_col);
+
+        std::unique_ptr<Piece> create_promoted_piece_player(int row, int col);
 
         void computer_action();
 

@@ -113,9 +113,8 @@ void Board::print_white_perspective() {
     std::cout << "   a  b  c  d  e  f  g  h " << std::endl;
 };
 
-void Board::create_add_piece(
+std::unique_ptr<Piece> Board::create_piece(
     const char& symbol,
-    std::array<std::array<std::unique_ptr<Piece>, 8>, 8>& board,
     const int& row,
     const int& col
 ) {
@@ -124,17 +123,17 @@ void Board::create_add_piece(
 
     // Create the appropriate piece based on the symbol
     if (toupper(symbol) == 'R') {
-        board[row][col] = std::make_unique<Rook>(symbol, "rook", player, row, col);
+        return std::make_unique<Rook>(symbol, "rook", player, row, col);
     } else if (toupper(symbol) == 'N') {
-        board[row][col] = std::make_unique<Knight>(symbol, "knight", player, row, col);
+        return std::make_unique<Knight>(symbol, "knight", player, row, col);
     } else if (toupper(symbol) == 'B') {
-        board[row][col] = std::make_unique<Bishop>(symbol, "bishop", player, row, col);
+        return std::make_unique<Bishop>(symbol, "bishop", player, row, col);
     } else if (toupper(symbol) == 'K') {
-        board[row][col] = std::make_unique<King>(symbol, "king", player, row, col);
+        return std::make_unique<King>(symbol, "king", player, row, col);
     } else if (toupper(symbol) == 'Q') {
-        board[row][col] = std::make_unique<Queen>(symbol, "queen", player, row, col);
-    } else if (toupper(symbol) == 'P') {
-        board[row][col] = std::make_unique<Pawn>(symbol, "pawn", player, row, col);
+        return std::make_unique<Queen>(symbol, "queen", player, row, col);
+    } else {
+        return std::make_unique<Pawn>(symbol, "pawn", player, row, col);
     }
 }
 
@@ -157,7 +156,7 @@ std::array<std::array<std::unique_ptr<Piece>, 8>, 8> Board::create_board() {
     for (int row = 0; row < ROWS; row++) {
         for (int col = 0; col < COLS; col++) {
             if (simplify_board[row][col] != ' ') {
-                create_add_piece(simplify_board[row][col], board, row, col);
+                board[row][col] = create_piece(simplify_board[row][col], row, col);
             }
         }
     }
@@ -173,7 +172,7 @@ std::array<std::array<std::unique_ptr<Piece>, 8>, 8> Board::create_board(const s
     for (int row = 0; row < ROWS; row++) {
         for (int col = 0; col < COLS; col++) {
             if (simplify_board[row][col] != ' ') {
-                create_add_piece(simplify_board[row][col], board, row, col);
+                board[row][col] = create_piece(simplify_board[row][col], row, col);
             }
         }
     }
@@ -224,6 +223,10 @@ void Board::make_action(int old_row, int old_col, int new_row, int new_col) {
         if (castling != "____") {
             check_castling(old_row, old_col);
         }
+
+        if (board[old_row][old_col]->possible_actions.promotion) {
+            board[old_row][old_col] = create_promoted_piece_player(old_row, old_col);
+        }
         
         board[new_row][new_col] = std::move(board[old_row][old_col]);
         
@@ -267,6 +270,14 @@ void Board::check_castling(int old_row, int old_col) {
             castling[index] = '_';
         }
     }
+}
+
+std::unique_ptr<Piece> Board::create_promoted_piece_player(int row, int col) {
+    char symbol;
+    std::cout << "Pick a promotion [Q, R, N, B, P]: ";
+    std::cin >> symbol;
+
+    return Board::create_piece(symbol, row, col);
 }
 
 void Board::computer_action() {
