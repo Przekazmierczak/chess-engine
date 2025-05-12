@@ -21,29 +21,6 @@ class Piece {
         int row; // Row position of the piece on the board
         int column; // Column position of the piece on the board
 
-        struct Actions {
-            PositionSet moves; // Set of valid move positions
-            PositionSet attacks; // Set of valid attack positions
-            bool promotion = false; // Indicates if a pawn promote in next move
-
-            // Equality operator for comparing Actions
-            bool operator==(const Actions& other) const {
-            return (this->moves == other.moves &&
-                    this->attacks == other.attacks &&
-                    this->promotion == other.promotion
-                    );
-            }
-
-            void reset() {
-                moves = {};
-                attacks = {};
-                promotion = false;
-            }
-
-            // Overloaded output stream operator for Actions
-            friend std::ostream& operator<<(std::ostream& out, const Actions& res);
-        };
-
         Actions possible_actions; // Stores the possible actions for the piece
 
         // Constructor

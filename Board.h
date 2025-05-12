@@ -81,16 +81,4 @@ class Board {
         // void print_possible_actions();
 };
 
-struct Notation {
-    int row;
-    char column;
-
-    Notation(std::string input_position);
-    Notation(int row, int col);
-
-    std::array<int, 2> parse_square_notation();
-
-    friend std::ostream& operator<<(std::ostream& out, const Notation& notation);
-};
-
 #endif

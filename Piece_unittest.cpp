@@ -5,12 +5,12 @@
 #include <iostream>
 
 namespace {
-    Piece::Actions create_expected_possible_actions(
+    Actions create_expected_possible_actions(
         std::vector<std::array<int, 2>> moves,
         std::vector<std::array<int, 2>> attacks,
         bool promotion
     ) {
-        Piece::Actions expected_result;
+        Actions expected_result;
 
         for (auto move : moves) {
             expected_result.moves.insert(move);

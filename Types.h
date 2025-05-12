@@ -27,5 +27,31 @@ using PositionMap = std::unordered_map<
 >;
 std::ostream& operator<<(std::ostream& out, const PositionMap& set);
 
+struct Actions {
+    PositionSet moves; // Set of valid move positions
+    PositionSet attacks; // Set of valid attack positions
+    bool promotion = false; // Indicates if a pawn promote in next move
+
+    // Equality operator for comparing Actions
+    bool operator==(const Actions& other) const;
+
+    void reset();
+
+    // Overloaded output stream operator for Actions
+    friend std::ostream& operator<<(std::ostream& out, const Actions& res);
+};
+
+struct Notation {
+    int row;
+    char column;
+
+    Notation(std::string input_position);
+    Notation(int row, int col);
+
+    std::array<int, 2> parse_square_notation();
+
+    friend std::ostream& operator<<(std::ostream& out, const Notation& notation);
+};
+
 
 #endif

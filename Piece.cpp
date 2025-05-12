@@ -41,35 +41,6 @@ std::ostream& operator<<(std::ostream& out, const Piece& piece) {
     return out;
 };
 
-// Overloaded output stream operator for Actions
-std::ostream& operator<<(std::ostream& out, const Piece::Actions& res) {
-    bool first = true;
-    out << "Moves: {";
-    for (auto move : res.moves) {
-        if (first) {
-            first = false;
-        } else {
-            out << ", ";}
-        out << "{" << move[0] << ", " << move[1] << "}";
-    }
-    out << "}, ";
-
-    first = true;
-    out << "Attacks: {";
-    for (auto attack : res.attacks) {
-        if (first) {
-            first = false;
-        } else {
-            out << ", ";}
-        out << "{" << attack[0] << ", " << attack[1] << "}, ";
-    }
-    out << "}, ";
-
-    out << "Promotion: " << (res.promotion ? "true":"false");
-
-    return out;
-};
-
 // Check if a position is within the board bounds
 bool Piece::is_valid_position(const Board& board, const int& row, const int& column) const{
     return row >= 0 && row < board.ROWS && column >= 0 && column < board.COLS;
