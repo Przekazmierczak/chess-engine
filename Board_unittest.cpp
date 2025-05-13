@@ -553,6 +553,59 @@ namespace {
         
         EXPECT_EQ(board.winner, "draw");
     }
+
+    TEST(CreateNotation1, Correct) {
+        Notation notation("2b");
+        
+        EXPECT_EQ(notation.row, 2);
+        EXPECT_EQ(notation.column, 'b');
+    }
+
+    TEST(CreateNotation2, Correct) {
+        Notation notation("6d");
+        
+        EXPECT_EQ(notation.row, 6);
+        EXPECT_EQ(notation.column, 'd');
+    }
+
+    TEST(CreateNotation3, Correct) {
+        Notation notation(1, 6);
+        
+        EXPECT_EQ(notation.row, 2);
+        EXPECT_EQ(notation.column, 'b');
+    }
+
+    TEST(CreateNotation4, Correct) {
+        Notation notation(5, 4);
+        
+        EXPECT_EQ(notation.row, 6);
+        EXPECT_EQ(notation.column, 'd');
+    }
+
+    TEST(ParseNotation1, Correct) {
+        Notation notation("2b");
+        std::array<int, 2> position = {1, 6};
+        EXPECT_EQ(notation.parse_square_notation(), position);
+    }
+
+    TEST(ParseNotation2, Correct) {
+        Notation notation("6d");
+        std::array<int, 2> position = {5, 4};
+        EXPECT_EQ(notation.parse_square_notation(), position);
+    }
+
+    TEST(ParseNotation3, Correct) {
+        Notation notation(1, 6);
+        std::array<int, 2> position = {1, 6};
+        EXPECT_EQ(notation.parse_square_notation(), position);
+    }
+
+    TEST(ParseNotation4, Correct) {
+        Notation notation(5, 4);
+        std::array<int, 2> position = {5, 4};
+        EXPECT_EQ(notation.parse_square_notation(), position);
+    }
+
 }
 
 // Main function for GoogleTest
