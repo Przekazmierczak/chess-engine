@@ -606,6 +606,35 @@ namespace {
         EXPECT_EQ(notation.parse_square_notation(), position);
     }
 
+    TEST(CheckMaterialRating, Correct) {
+        Board board("black", "KQkq", {{
+            {'R', 'N', 'B', 'K', 'Q', 'B', 'N', 'R'},
+            {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {'p', 'p', 'p', 'p', 'p', 'p', 'p', 'p'},
+            {'r', 'n', 'b', 'k', 'q', 'b', 'n', 'r'}
+        }});
+
+        int pawn = 1;
+        int rook = 5;
+        int knight = 3;
+        int bishop = 3;
+        int queen = 9;
+
+        EXPECT_EQ(
+            board.white_material_rating,
+            (8 * pawn + 2 * rook + 2 * knight + 2 * bishop + queen) * board.material_rating_weight
+        );
+
+        EXPECT_EQ(
+            board.black_material_rating,
+            (8 * pawn + 2 * rook + 2 * knight + 2 * bishop + queen) * board.material_rating_weight * -1
+        );
+    }
+
 }
 
 // Main function for GoogleTest
