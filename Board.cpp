@@ -187,11 +187,25 @@ void Board::get_possible_actions() {
     pinned_pieces = {};
     active_pieces = {};
 
+    white_material_rating = 0;
+    black_material_rating = 0;
+    white_attack_rating = 0;
+    black_attack_rating = 0;
+
     // Check moves for the opponent's pieces
     for (int row = 0; row < ROWS; row++) {
         for (int col = 0; col < COLS; col++) {
             if (board[row][col] && board[row][col]->player != turn) {
                 board[row][col]->check_piece_possible_moves(*this);
+                board[row][col]->update_rating(*this);
+
+                if (board[row][col]->piece != "king") {
+                    if (board[row][col]->player == "white") {
+                        white_material_rating += material_rating_weight * board[row][col]->get_value();
+                    } else {
+                        black_material_rating -= material_rating_weight * board[row][col]->get_value();
+                    }
+                }
             }
         }
     }
@@ -201,6 +215,15 @@ void Board::get_possible_actions() {
         for (int col = 0; col < COLS; col++) {
             if (board[row][col] && board[row][col]->player == turn) {
                 board[row][col]->check_piece_possible_moves(*this);
+                board[row][col]->update_rating(*this);
+                
+                if (board[row][col]->piece != "king") {
+                    if (board[row][col]->player == "white") {
+                        white_material_rating += material_rating_weight * board[row][col]->get_value();
+                    } else {
+                        black_material_rating -= material_rating_weight * board[row][col]->get_value();
+                    }
+                }
             }
         }
     }
@@ -212,6 +235,8 @@ void Board::get_possible_actions() {
             winner = "draw";
         }
     }
+
+    final_rating = white_material_rating + white_attack_rating + black_material_rating + black_attack_rating;
 }
 
 void Board::make_action(int old_row, int old_col, int new_row, int new_col) {

@@ -28,6 +28,18 @@ class Board {
         PositionMap pinned_pieces; // Pieces pinned to the king
         PositionSet active_pieces;
 
+        // Board ratings
+        const int material_rating_weight = 50;
+        const int attack_rating_weight = 3;
+        const int protecting_rating_weight = 2;
+
+        int white_material_rating;
+        int black_material_rating;
+        int white_attack_rating;
+        int black_attack_rating;
+
+        int final_rating;
+
         std::string winner;
 
         // Constructors

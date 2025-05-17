@@ -129,7 +129,7 @@ Queen::Queen(const char& input_symbol,
 ): Piece(input_symbol, input_piece, input_player, input_row, input_column) {}
 
 // Helper method for rook, bishop, and queen movement logic
-void Piece::rook_bishop_queen_template(
+void Piece::rook_bishop_queen_move_template(
     Board& board_class,
     const std::vector<std::array<int, 2>>& directions
 ) {
@@ -234,6 +234,62 @@ void Piece::rook_bishop_queen_template(
                         board_class.active_pieces.insert({row, column});
                     }
                 }
+                distance++;
+            }
+        }
+    }
+}
+
+void Piece::rook_bishop_queen_rating_template(
+    Board& board_class,
+    const std::vector<std::array<int, 2>>& directions
+) {
+    // Determine if the current piece belongs to the opponent
+    bool opponent = (player == board_class.turn) ? false : true;
+
+    // Flatten all the checking pieces for quick access
+    auto checking_positions = flatting_checkin_pieces(board_class.checkin_pieces);
+
+    if (opponent) {
+        // Handles opponent's turn: updates attacked positions and pins
+        for (auto direction : directions) {
+            int distance = 1; // Distance increment along a direction
+            bool absolute_pin_check = false; // Tracks if a piece is pinned
+
+            while (true) {
+                int new_row = row + distance * direction[0];
+                int new_column = column + distance * direction[1];
+
+                // Break if the position is invalid (outside the board)
+                if (!is_valid_position(board_class, new_row, new_column)) break;
+
+                update_move_rating_helping(board_class, player, new_row, new_column);
+
+                if (board_class.board[new_row][new_column]) break;
+
+                distance++;
+            }
+        }
+    } else {
+        // Handles current player's turn: adds valid moves and attacks
+        for (auto direction : directions) {
+            int distance = 1;
+            while (true) {
+                int new_row = row + distance * direction[0];
+                int new_column = column + distance * direction[1];
+
+                // Break if the position is invalid (outside the board)
+                if (!is_valid_position(board_class, new_row, new_column)) break;
+
+                // Checks for attacks
+                if (is_not_pinned({row, column}, {new_row, new_column}, board_class, board_class.pinned_pieces) &&
+                    (board_class.checkin_pieces.empty() || checking_positions.count({new_row, new_column}))
+                ) {
+                    update_move_rating_helping(board_class, player, new_row, new_column);
+                }
+
+                if (board_class.board[new_row][new_column]) break;
+
                 distance++;
             }
         }
@@ -356,6 +412,64 @@ void Pawn::check_piece_possible_moves (
     }
 }
 
+void Pawn::update_rating (
+    Board& board_class
+) {
+    // possible_actions.reset();
+
+    // Determine if the current piece belongs to the opponent
+    bool opponent = (player == board_class.turn) ? false : true;
+
+    // Flatten all the checking pieces for quick access
+    auto checking_positions = flatting_checkin_pieces(board_class.checkin_pieces);
+
+    // Determine movement direction based on the pawn's color
+    int direction_by_colour = player == "white" ? 1: -1;
+
+    // Initialize possible forward directions for pawn movement
+    std::vector<std::array<int, 2>> directions = {{direction_by_colour, 0}};
+
+    if (opponent) {
+        // For the opponent's turn, focus on attack and checking logic
+        directions = {{direction_by_colour, 1}, {direction_by_colour, -1}};
+        for (auto direction : directions) {
+            int new_row = row + direction[0];
+            int new_column = column + direction[1];
+            
+            // Mark the square as attacked, regardless of the target
+            if (is_valid_position(board_class, new_row, new_column)) {
+                update_move_rating_helping(board_class, player, new_row, new_column);
+            }
+        }
+    } else {
+        // Check attack directions
+        directions = {{direction_by_colour, 1}, {direction_by_colour, -1}};
+        for (auto direction : directions) {
+            int new_row = row + direction[0];
+            int new_column = column + direction[1];
+
+            if (is_valid_position(board_class, new_row, new_column) &&
+                is_not_pinned({row, column}, {new_row, new_column}, board_class, board_class.pinned_pieces)
+            ) {
+                if (!board_class.checkin_pieces.empty() && checking_positions.count({new_row, new_column})){
+                    if ((board_class.board[new_row][new_column] && board_class.board[new_row][new_column]->player != player)) {
+                        update_move_rating_helping(board_class, player, new_row, new_column);
+                    } else if (std::array<int, 2>{new_row, new_column} == board_class.enpassant) {
+                        update_move_rating_helping(board_class, player, new_row - direction_by_colour, new_column);
+                    }
+
+                } else if (board_class.checkin_pieces.empty() || checking_positions.count({new_row, new_column})) {
+                    if (std::array<int, 2>{new_row, new_column} == board_class.enpassant) {
+                        update_move_rating_helping(board_class, player, new_row - direction_by_colour, new_column);
+                    } else {
+                        update_move_rating_helping(board_class, player, new_row, new_column);
+                    }
+                }
+            }
+        }
+    }
+}
+
 void Knight::check_piece_possible_moves (
     Board& board_class
 ) {
@@ -414,6 +528,46 @@ void Knight::check_piece_possible_moves (
                         board_class.active_pieces.insert({row, column});
                     }
                 }
+            }
+        }
+    }
+}
+
+void Knight::update_rating (
+    Board& board_class
+) {
+    // Determine if the current piece belongs to the opponent
+    bool opponent = (player == board_class.turn) ? false : true;
+
+    // Flatten all the checking pieces for quick access
+    auto checking_positions = flatting_checkin_pieces(board_class.checkin_pieces);
+
+    // Define all possible moves for a knight relative to its current position
+    std::vector<std::array<int, 2>> directions = {{2, 1}, {-2, 1}, {2, -1}, {-2, -1}, {1, 2}, {-1, 2}, {1, -2}, {-1, -2}};
+
+    if (opponent) {
+        // If it is the opponent's turn, focus on marking attacked positions and checking pieces
+        for (auto direction : directions) {
+            int new_row = row + direction[0];
+            int new_column = column + direction[1];
+
+            // Check if the target square is valid
+            if (is_valid_position(board_class, new_row, new_column)) {
+                update_move_rating_helping(board_class, player, new_row, new_column);
+            }
+        }
+    } else {
+        // If it is the current player's turn, calculate valid moves and attacks
+        for (auto direction : directions) {
+            int new_row = row + direction[0];
+            int new_column = column + direction[1];
+
+            // Check if the target square is valid
+            if (is_valid_position(board_class, new_row, new_column) &&
+                is_not_pinned({row, column}, {new_row, new_column}, board_class, board_class.pinned_pieces) &&
+                (board_class.checkin_pieces.empty() || checking_positions.count({new_row, new_column}))
+            ) {
+                update_move_rating_helping(board_class, player, new_row, new_column);
             }
         }
     }
@@ -504,6 +658,48 @@ void King::check_piece_possible_moves (
     }
 }
 
+void King::update_rating (
+    Board& board_class
+) {
+    // Determine if the current piece belongs to the opponent
+    bool opponent = (player == board_class.turn) ? false : true;
+
+    // Define all possible moves for the king, including castling directions
+    std::vector<std::array<int, 2>> directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}, {0, -2}, {0, 2}};
+
+    if (opponent) {
+        // If it is the opponent's turn, focus on marking attacked positions
+        for (auto direction : directions) {
+            int new_row = row + direction[0];
+            int new_column = column + direction[1];
+
+            // Check if the target square is valid
+            if (is_valid_position(board_class, new_row, new_column)) {
+                // Skip castling directions as they are not valid attacks
+                if (direction == std::array<int, 2> {0, -2} || direction == std::array<int, 2> {0, 2}) {
+                    continue;
+                }
+                update_move_rating_helping(board_class, player, new_row, new_column);
+            }
+        }
+    } else {
+        // If it is the current player's turn, calculate valid moves and attacks
+        for (auto direction : directions) {
+            int new_row = row + direction[0];
+            int new_column = column + direction[1];
+
+            // Check if the target square is valid
+            if (is_valid_position(board_class, new_row, new_column) &&
+                direction != std::array<int, 2> {0, -2} &&
+                direction != std::array<int, 2> {0, 2} &&
+                !board_class.attacked_positions.count({new_row, new_column})
+            ) {
+                update_move_rating_helping(board_class, player, new_row, new_column);
+            }
+        }
+    }
+}
+
 void Rook::check_piece_possible_moves (
     Board& board_class
 ) {
@@ -511,7 +707,17 @@ void Rook::check_piece_possible_moves (
     std::vector<std::array<int, 2>> directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
 
     // Utilize the shared logic for rook, bishop, and queen movement
-    rook_bishop_queen_template(board_class, directions);
+    rook_bishop_queen_move_template(board_class, directions);
+}
+
+void Rook::update_rating (
+    Board& board_class
+) {
+    // Define all possible directions the rook can move (vertical and horizontal)
+    std::vector<std::array<int, 2>> directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+
+    // Utilize the shared logic for rook, bishop, and queen movement
+    rook_bishop_queen_rating_template(board_class, directions);
 }
 
 void Bishop::check_piece_possible_moves (
@@ -521,7 +727,17 @@ void Bishop::check_piece_possible_moves (
     std::vector<std::array<int, 2>> directions = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
 
     // Utilize the shared logic for rook, bishop, and queen movement
-    rook_bishop_queen_template(board_class, directions);
+    rook_bishop_queen_move_template(board_class, directions);
+}
+
+void Bishop::update_rating (
+    Board& board_class
+) {
+    // Define all possible directions the rook can move (vertical and horizontal)
+    std::vector<std::array<int, 2>> directions = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+
+    // Utilize the shared logic for rook, bishop, and queen movement
+    rook_bishop_queen_rating_template(board_class, directions);
 }
 
 void Queen::check_piece_possible_moves (
@@ -531,7 +747,17 @@ void Queen::check_piece_possible_moves (
     std::vector<std::array<int, 2>> directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
 
     // Utilize the shared logic for rook, bishop, and queen movement
-    rook_bishop_queen_template(board_class, directions);
+    rook_bishop_queen_move_template(board_class, directions);
+}
+
+void Queen::update_rating (
+    Board& board_class
+) {
+    // Define all possible directions the rook can move (vertical and horizontal)
+    std::vector<std::array<int, 2>> directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
+
+    // Utilize the shared logic for rook, bishop, and queen movement
+    rook_bishop_queen_rating_template(board_class, directions);
 }
 
 bool Piece::check_if_legal_action(int check_row, int check_col) {
@@ -539,4 +765,33 @@ bool Piece::check_if_legal_action(int check_row, int check_col) {
     if (possible_actions.moves.find(current) != possible_actions.moves.end()) return true;
     if (possible_actions.attacks.find(current) != possible_actions.attacks.end()) return true;
     return false;
+}
+
+void Piece::update_move_rating_helping(Board& board_class, std::string player, int row, int col) {
+    if (board_class.board[row][col]) {
+        if (board_class.board[row][col]->player == player) {
+            if (player == "white") {
+                // There is no benefit in covering own king
+                if (board_class.board[row][col]->piece != "king") {
+                    board_class.white_attack_rating += board_class.protecting_rating_weight * board_class.board[row][col]->get_value();
+                }
+            } else {
+                if (board_class.board[row][col]->piece != "king") {
+                    board_class.black_attack_rating -= board_class.protecting_rating_weight * board_class.board[row][col]->get_value();
+                }
+            }
+        } else {
+            if (player == "white") {
+                board_class.white_attack_rating += board_class.attack_rating_weight * board_class.board[row][col]->get_value();
+            } else {
+                board_class.black_attack_rating -= board_class.attack_rating_weight * board_class.board[row][col]->get_value();
+            }
+        }
+    } else {
+        if (player == "white") {
+            board_class.white_attack_rating += 1;
+        } else {
+            board_class.black_attack_rating -= 1;
+        }
+    }
 }

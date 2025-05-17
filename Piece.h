@@ -57,7 +57,12 @@ class Piece {
         ) const;
 
         // Helper method for rook, bishop, and queen movement logic
-        void rook_bishop_queen_template (
+        void rook_bishop_queen_move_template (
+            Board& board_class,
+            const std::vector<std::array<int, 2>>& directions
+        );
+
+        void rook_bishop_queen_rating_template (
             Board& board_class,
             const std::vector<std::array<int, 2>>& directions
         );
@@ -67,7 +72,20 @@ class Piece {
             Board& board_class
         ) = 0;
 
+        virtual int const get_value() const = 0;
+        
         bool check_if_legal_action(int check_row, int check_col);
+
+        virtual void update_rating (
+            Board& board_class
+        ) = 0;
+
+        void update_move_rating_helping(
+            Board& board_class,
+            std::string player,
+            int row,
+            int col
+        );
 };
 
 // Derived class representing a Pawn
@@ -83,6 +101,12 @@ class Pawn: public Piece {
         void check_piece_possible_moves (
             Board& board_class
         ) override;
+
+        void update_rating (
+            Board& board_class
+         ) override;
+
+        int const get_value() const override {return 1;};
 };
 
 // Derived class representing a Knight
@@ -98,6 +122,12 @@ class Knight: public Piece {
         void check_piece_possible_moves (
             Board& board_class
         ) override;
+
+        void update_rating (
+            Board& board_class
+         ) override;
+
+        int const get_value() const override {return 3;};
 };
 
 // Derived class representing a King
@@ -113,6 +143,12 @@ class King: public Piece {
         void check_piece_possible_moves (
             Board& board_class
         ) override;
+
+        void update_rating (
+            Board& board_class
+         ) override;
+
+        int const get_value() const override {return 50;};
 };
 
 // Derived class representing a Rook
@@ -128,6 +164,12 @@ class Rook: public Piece {
         void check_piece_possible_moves (
             Board& board_class
         ) override;
+
+        void update_rating (
+            Board& board_class
+         ) override;
+
+        int const get_value() const override {return 5;};
 };
 
 // Derived class representing a Bishop
@@ -143,6 +185,12 @@ class Bishop: public Piece {
         void check_piece_possible_moves (
             Board& board_class
         ) override;
+
+        void update_rating (
+            Board& board_class
+         ) override;
+
+        int const get_value() const override {return 3;};
 };
 
 // Derived class representing a Queen
@@ -158,6 +206,12 @@ class Queen: public Piece {
         void check_piece_possible_moves (
             Board& board_class
         ) override;
+
+        void update_rating (
+            Board& board_class
+         ) override;
+
+        int const get_value() const override {return 9;};
 };
 
 #endif
