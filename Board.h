@@ -78,6 +78,11 @@ class Board {
         // Initialize the board with a custom configuration
         std::array<std::array<std::unique_ptr<Piece>, 8>, 8> create_board(const std::array<std::array<char, 8>, 8>& simplify_board);
 
+        // Flattens all checking positions into an unordered set for faster lookups
+        PositionSet flatting_checkin_pieces(
+            const PositionMap& checkin_pieces
+        ) const;
+
         // Calculate possible moves for the current player
         void get_possible_actions();
 

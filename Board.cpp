@@ -180,6 +180,23 @@ std::array<std::array<std::unique_ptr<Piece>, 8>, 8> Board::create_board(const s
     return board;
 }
 
+// Flattens all checking positions into an unordered set for faster lookups
+PositionSet Board::flatting_checkin_pieces(
+    const PositionMap& checkin_pieces
+) const {
+    PositionSet checking_positions;
+    // Check if only one piece checking the king, if more moving the king is the only solution
+    if (checkin_pieces.size() == 1) {
+        for (auto key : checkin_pieces) {
+            checking_positions.insert(key.first);
+            for (auto value : key.second) {
+                checking_positions.insert(value);
+            }
+        }
+    }
+    return checking_positions;
+}
+
 // Calculate possible moves for the current player
 void Board::get_possible_actions() {
     attacked_positions = {};
@@ -196,8 +213,9 @@ void Board::get_possible_actions() {
     for (int row = 0; row < ROWS; row++) {
         for (int col = 0; col < COLS; col++) {
             if (board[row][col] && board[row][col]->player != turn) {
-                board[row][col]->check_piece_possible_moves(*this);
-                board[row][col]->update_rating(*this);
+                board[row][col]->possible_actions.reset();
+                board[row][col]->check_piece_possible_moves_opponent(*this);
+                board[row][col]->update_rating_opponent(*this);
 
                 if (board[row][col]->piece != "king") {
                     if (board[row][col]->player == "white") {
@@ -210,12 +228,15 @@ void Board::get_possible_actions() {
         }
     }
 
+    PositionSet checking_positions = flatting_checkin_pieces(checkin_pieces);
+
     // Check moves for the current player's pieces
     for (int row = 0; row < ROWS; row++) {
         for (int col = 0; col < COLS; col++) {
             if (board[row][col] && board[row][col]->player == turn) {
-                board[row][col]->check_piece_possible_moves(*this);
-                board[row][col]->update_rating(*this);
+                board[row][col]->possible_actions.reset();
+                board[row][col]->check_piece_possible_moves_active_player(*this, checking_positions);
+                board[row][col]->update_rating_active_player(*this, checking_positions);
                 
                 if (board[row][col]->piece != "king") {
                     if (board[row][col]->player == "white") {

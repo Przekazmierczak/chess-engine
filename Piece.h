@@ -51,33 +51,50 @@ class Piece {
             const PositionMap& pinned_pieces
         ) const;
 
-        // Flattens all checking positions into an unordered set for faster lookups
-        PositionSet flatting_checkin_pieces(
-            const PositionMap& checkin_pieces
-        ) const;
-
         // Helper method for rook, bishop, and queen movement logic
-        void rook_bishop_queen_move_template (
+        void rook_bishop_queen_move_template_active_player (
             Board& board_class,
             const std::vector<std::array<int, 2>>& directions
         );
 
-        void rook_bishop_queen_rating_template (
+        void rook_bishop_queen_move_template_opponent (
+            Board& board_class,
+            const std::vector<std::array<int, 2>>& directions,
+            PositionSet checking_positions
+        );
+
+        void rook_bishop_queen_rating_template_active_player (
             Board& board_class,
             const std::vector<std::array<int, 2>>& directions
+        );
+
+        void rook_bishop_queen_rating_template_opponent (
+            Board& board_class,
+            const std::vector<std::array<int, 2>>& directions,
+            PositionSet checking_positions
         );
 
         // Pure virtual function to determine piece-specific possible moves
-        virtual void check_piece_possible_moves (
+        virtual void check_piece_possible_moves_opponent (
             Board& board_class
+        ) = 0;
+
+        virtual void check_piece_possible_moves_active_player (
+            Board& board_class,
+            PositionSet checking_positions
         ) = 0;
 
         virtual int const get_value() const = 0;
         
         bool check_if_legal_action(int check_row, int check_col);
 
-        virtual void update_rating (
+        virtual void update_rating_opponent (
             Board& board_class
+        ) = 0;
+
+        virtual void update_rating_active_player (
+            Board& board_class,
+            PositionSet checking_positions
         ) = 0;
 
         void update_move_rating_helping(
@@ -98,12 +115,22 @@ class Pawn: public Piece {
             const int& input_column
         );
 
-        void check_piece_possible_moves (
+        void check_piece_possible_moves_opponent (
             Board& board_class
         ) override;
 
-        void update_rating (
+        void check_piece_possible_moves_active_player (
+            Board& board_class,
+            PositionSet checking_positions
+        ) override;
+
+        void update_rating_opponent (
             Board& board_class
+        ) override;
+
+        void update_rating_active_player (
+            Board& board_class,
+            PositionSet checking_positions
          ) override;
 
         int const get_value() const override {return 1;};
@@ -119,13 +146,23 @@ class Knight: public Piece {
             const int& input_column
         );
 
-        void check_piece_possible_moves (
+        void check_piece_possible_moves_opponent (
             Board& board_class
         ) override;
 
-        void update_rating (
+        void check_piece_possible_moves_active_player (
+            Board& board_class,
+            PositionSet checking_positions
+        ) override;
+
+        void update_rating_opponent (
             Board& board_class
-         ) override;
+        ) override;
+
+        void update_rating_active_player (
+            Board& board_class,
+            PositionSet checking_positions
+        ) override;
 
         int const get_value() const override {return 3;};
 };
@@ -140,13 +177,23 @@ class King: public Piece {
             const int& input_column
         );
 
-        void check_piece_possible_moves (
+        void check_piece_possible_moves_opponent (
             Board& board_class
         ) override;
 
-        void update_rating (
+        void check_piece_possible_moves_active_player (
+            Board& board_class,
+            PositionSet checking_positions
+        ) override;
+
+        void update_rating_opponent (
             Board& board_class
-         ) override;
+        ) override;
+
+        void update_rating_active_player (
+            Board& board_class,
+            PositionSet checking_positions
+        ) override;
 
         int const get_value() const override {return 50;};
 };
@@ -161,13 +208,23 @@ class Rook: public Piece {
             const int& input_column
         );
 
-        void check_piece_possible_moves (
+        void check_piece_possible_moves_opponent (
             Board& board_class
         ) override;
 
-        void update_rating (
+        void check_piece_possible_moves_active_player (
+            Board& board_class,
+            PositionSet checking_positions
+        ) override;
+
+        void update_rating_opponent (
             Board& board_class
-         ) override;
+        ) override;
+
+        void update_rating_active_player (
+            Board& board_class,
+            PositionSet checking_positions
+        ) override;
 
         int const get_value() const override {return 5;};
 };
@@ -182,13 +239,23 @@ class Bishop: public Piece {
             const int& input_column
         );
 
-        void check_piece_possible_moves (
+        void check_piece_possible_moves_opponent (
             Board& board_class
         ) override;
 
-        void update_rating (
+        void check_piece_possible_moves_active_player (
+            Board& board_class,
+            PositionSet checking_positions
+        ) override;
+
+        void update_rating_opponent (
             Board& board_class
-         ) override;
+        ) override;
+
+        void update_rating_active_player (
+            Board& board_class,
+            PositionSet checking_positions
+        ) override;
 
         int const get_value() const override {return 3;};
 };
@@ -203,13 +270,23 @@ class Queen: public Piece {
             const int& input_column
         );
 
-        void check_piece_possible_moves (
+        void check_piece_possible_moves_opponent (
             Board& board_class
         ) override;
 
-        void update_rating (
+        void check_piece_possible_moves_active_player (
+            Board& board_class,
+            PositionSet checking_positions
+        ) override;
+
+        void update_rating_opponent (
             Board& board_class
-         ) override;
+        ) override;
+
+        void update_rating_active_player (
+            Board& board_class,
+            PositionSet checking_positions
+        ) override;
 
         int const get_value() const override {return 9;};
 };
