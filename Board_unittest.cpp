@@ -5,6 +5,24 @@
 #include <iostream>
 
 namespace {
+    Actions create_expected_possible_actions(
+        std::vector<std::array<int, 2>> moves,
+        std::vector<std::array<int, 2>> attacks,
+        bool promotion
+    ) {
+        Actions expected_result;
+
+        for (auto move : moves) {
+            expected_result.moves.insert(move);
+        }
+        for (auto attack : attacks) {
+            expected_result.attacks.insert(attack);
+        }
+        expected_result.promotion = promotion;
+        
+        return expected_result;
+    }
+
     TEST(CreateBoardMethod, Correct) {
         Board board;
         auto actual_board = board.create_board();
@@ -237,7 +255,7 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
 
-        board.make_action(7, 1, 6, 1);
+        board.make_action(7, 1, 6, 1, ' ');
 
         EXPECT_EQ(board, expected_board);
     }
@@ -265,7 +283,7 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
         
-        board.make_action(7, 1, 5, 1);
+        board.make_action(7, 1, 5, 1, ' ');
         
         EXPECT_NE(board, expected_board);
     }
@@ -293,7 +311,7 @@ namespace {
             {' ', ' ', ' ', ' ', 'k', ' ', ' ', ' '}
         }});
 
-        board.make_action(1, 1, 3, 1);
+        board.make_action(1, 1, 3, 1, ' ');
 
         EXPECT_EQ(board, expected_board);
     }
@@ -321,7 +339,7 @@ namespace {
             {' ', ' ', ' ', ' ', 'k', ' ', ' ', ' '}
         }});
 
-        board.make_action(1, 1, 3, 1);
+        board.make_action(1, 1, 3, 1, ' ');
 
         EXPECT_NE(board, expected_board);
     }
@@ -349,7 +367,7 @@ namespace {
             {'r', ' ', ' ', 'k', ' ', ' ', ' ', 'r'}
         }});
 
-        board.make_action(0, 0, 2, 0);
+        board.make_action(0, 0, 2, 0, ' ');
 
         EXPECT_EQ(board, expected_board);
     }
@@ -377,7 +395,7 @@ namespace {
             {'r', ' ', ' ', 'k', ' ', ' ', ' ', 'r'}
         }});
 
-        board.make_action(0, 7, 2, 7);
+        board.make_action(0, 7, 2, 7, ' ');
 
         EXPECT_EQ(board, expected_board);
     }
@@ -405,7 +423,7 @@ namespace {
             {'r', ' ', ' ', 'k', ' ', ' ', ' ', 'r'}
         }});
 
-        board.make_action(0, 3, 1, 3);
+        board.make_action(0, 3, 1, 3, ' ');
 
         EXPECT_EQ(board, expected_board);
     }
@@ -433,7 +451,7 @@ namespace {
             {' ', ' ', 'r', 'k', ' ', ' ', ' ', 'r'}
         }});
 
-        board.make_action(7, 0, 7, 2);
+        board.make_action(7, 0, 7, 2, ' ');
 
         EXPECT_EQ(board, expected_board);
     }
@@ -461,7 +479,7 @@ namespace {
             {'r', ' ', ' ', 'k', 'r', ' ', ' ', ' '}
         }});
 
-        board.make_action(7, 7, 7, 4);
+        board.make_action(7, 7, 7, 4, ' ');
 
         EXPECT_EQ(board, expected_board);
     }
@@ -489,9 +507,101 @@ namespace {
             {'r', ' ', ' ', ' ', ' ', ' ', ' ', 'r'}
         }});
 
-        board.make_action(7, 3, 6, 4);
+        board.make_action(7, 3, 6, 4, ' ');
 
         EXPECT_EQ(board, expected_board);
+    }
+
+    TEST(TwoMovesPawn, Correct) {
+        Board board("black", "____", {{
+            {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', 'p', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
+            {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'k'}
+        }});
+
+        EXPECT_EQ(
+            board.board[3][4]->possible_actions,
+            create_expected_possible_actions(
+                {{2, 4}},
+                {},
+                false
+            )
+        );
+
+        EXPECT_EQ(
+            board.board[0][0]->possible_actions,
+            create_expected_possible_actions(
+                {},
+                {},
+                false
+            )
+        );
+
+        board.make_action(3, 4, 2, 4, ' ');
+
+        EXPECT_EQ(
+            board.board[2][4]->possible_actions,
+            create_expected_possible_actions(
+                {},
+                {},
+                false
+            )
+        );
+
+        EXPECT_EQ(
+            board.board[0][0]->possible_actions,
+            create_expected_possible_actions(
+                {{1, 0}, {1, 1}, {0, 1}},
+                {},
+                false
+            )
+        );
+        
+        board.make_action(0, 0, 1, 0, ' ');
+
+        EXPECT_EQ(
+            board.board[2][4]->possible_actions,
+            create_expected_possible_actions(
+                {{1, 4}},
+                {},
+                false
+            )
+        );
+
+        EXPECT_EQ(
+            board.board[1][0]->possible_actions,
+            create_expected_possible_actions(
+                {},
+                {},
+                false
+            )
+        );
+
+        board.make_action(2, 4, 1, 4, ' ');
+
+        EXPECT_EQ(
+            board.board[1][4]->possible_actions,
+            create_expected_possible_actions(
+                {},
+                {},
+                true
+            )
+        );
+
+        EXPECT_EQ(
+            board.board[1][0]->possible_actions,
+            create_expected_possible_actions(
+                {{0, 0}, {0, 1}, {1, 1}, {2, 0}, {2, 1}},
+                {},
+                false
+            )
+        );
+
     }
 
     TEST(NoWinner, Correct) {
