@@ -234,6 +234,38 @@ void Board::get_possible_actions() {
     pinned_pieces = {};
     active_pieces = {};
 
+    // Check moves for the opponent's pieces
+    for (int row = 0; row < ROWS; row++) {
+        for (int col = 0; col < COLS; col++) {
+            if (board[row][col] && board[row][col]->player != turn) {
+                board[row][col]->possible_actions.reset();
+                board[row][col]->check_piece_possible_moves_opponent(*this);
+            }
+        }
+    }
+
+    PositionSet checking_positions = flatting_checkin_pieces(checkin_pieces);
+
+    // Check moves for the current player's pieces
+    for (int row = 0; row < ROWS; row++) {
+        for (int col = 0; col < COLS; col++) {
+            if (board[row][col] && board[row][col]->player == turn) {
+                board[row][col]->possible_actions.reset();
+                board[row][col]->check_piece_possible_moves_active_player(*this, checking_positions);
+            }
+        }
+    }
+
+    if (!active_pieces.size()) {
+        if (checkin_pieces.size()) {
+            winner = (turn == "white") ? "black" : "white";
+        } else {
+            winner = "draw";
+        }
+    }
+}
+
+void Board::get_rating() {
     white_material_rating = 0;
     black_material_rating = 0;
     white_attack_rating = 0;
@@ -243,8 +275,6 @@ void Board::get_possible_actions() {
     for (int row = 0; row < ROWS; row++) {
         for (int col = 0; col < COLS; col++) {
             if (board[row][col] && board[row][col]->player != turn) {
-                board[row][col]->possible_actions.reset();
-                board[row][col]->check_piece_possible_moves_opponent(*this);
                 board[row][col]->update_rating_opponent(*this);
 
                 if (board[row][col]->piece != "king") {
@@ -264,8 +294,6 @@ void Board::get_possible_actions() {
     for (int row = 0; row < ROWS; row++) {
         for (int col = 0; col < COLS; col++) {
             if (board[row][col] && board[row][col]->player == turn) {
-                board[row][col]->possible_actions.reset();
-                board[row][col]->check_piece_possible_moves_active_player(*this, checking_positions);
                 board[row][col]->update_rating_active_player(*this, checking_positions);
                 
                 if (board[row][col]->piece != "king") {
@@ -276,14 +304,6 @@ void Board::get_possible_actions() {
                     }
                 }
             }
-        }
-    }
-
-    if (!active_pieces.size()) {
-        if (checkin_pieces.size()) {
-            winner = (turn == "white") ? "black" : "white";
-        } else {
-            winner = "draw";
         }
     }
 
@@ -362,7 +382,7 @@ void Board::computer_action() {
     std::vector<char> symbols;
 
     for (auto position : active_pieces) {
-        for (auto move : board[position[0]][position[1]]->possible_actions.moves) {
+        for (auto move : board[position[0]][position[1]]->possible_actions) {
             if (board[position[0]][position[1]]->possible_actions.promotion) {
                 if (turn == "white") {
                     symbols = {'Q', 'N', 'R', 'B'};
@@ -379,30 +399,7 @@ void Board::computer_action() {
                     {position[0], position[1]},
                     {move[0], move[1]},
                     curr_symbol,
-                    min_max(*this, position[0], position[1], move[0], move[1], curr_symbol, 2)
-                );
-
-                actions.push_back(curr_action);
-            }
-        }
-        for (auto attack : board[position[0]][position[1]]->possible_actions.attacks) {
-            if (board[position[0]][position[1]]->possible_actions.promotion) {
-                if (turn == "white") {
-                    symbols = {'Q', 'N', 'R', 'B'};
-                } else {
-                    symbols = {'q', 'n', 'r', 'b'};
-                }
-
-            } else {
-                symbols = {' '};
-            }
-            
-            for (char curr_symbol : symbols) {
-                Action curr_action(
-                    {position[0], position[1]},
-                    {attack[0], attack[1]},
-                    curr_symbol,
-                    min_max(*this, position[0], position[1], attack[0], attack[1], curr_symbol, 2)
+                    minimax(*this, position[0], position[1], move[0], move[1], curr_symbol, 2)
                 );
 
                 actions.push_back(curr_action);
@@ -419,21 +416,23 @@ void Board::computer_action() {
     for (auto action : actions) {
         std::cout << action;
     }
+
     std::cout << std::endl;
     make_action(actions[0].old_position[0], actions[0].old_position[1], actions[0].new_position[0], actions[0].new_position[1], actions[0].symbol);
 }
 
-int Board::min_max(Board board, int old_row, int old_col, int new_row, int new_col, char symbol, int depth) {
+int Board::minimax(Board board, int old_row, int old_col, int new_row, int new_col, char symbol, int depth) {
     board.make_action(old_row, old_col, new_row, new_col, symbol);
 
     if (depth == 0) {
+        board.get_rating();
         return board.final_rating;
-    } else if (!board.active_pieces.size()) {
-        if (board.checkin_pieces.size()) {
+    } else if (board.active_pieces.empty()) {
+        if (!board.checkin_pieces.empty()) {
             if (board.turn == "white") {
-                return -100000;
+                return -100000 - depth;
             } else {
-                return 100000;
+                return 100000 + depth;
             }
         } else {
             return 0;
@@ -443,17 +442,17 @@ int Board::min_max(Board board, int old_row, int old_col, int new_row, int new_c
         int curr_min_max = (board.turn == "white") ? -100000 : 100000;
 
         for (auto position : board.active_pieces) {
-            for (auto move : board.board[position[0]][position[1]]->possible_actions.moves) {
+            for (auto move : board.board[position[0]][position[1]]->possible_actions) {
                 if (board.turn == "white") {
                     if (board.board[position[0]][position[1]]->possible_actions.promotion) {
                         res = std::max({
-                            min_max(board, position[0], position[1], move[0], move[1], 'Q', depth - 1),
-                            min_max(board, position[0], position[1], move[0], move[1], 'N', depth - 1),
-                            min_max(board, position[0], position[1], move[0], move[1], 'B', depth - 1),
-                            min_max(board, position[0], position[1], move[0], move[1], 'R', depth - 1)
+                            minimax(board, position[0], position[1], move[0], move[1], 'Q', depth - 1),
+                            minimax(board, position[0], position[1], move[0], move[1], 'N', depth - 1),
+                            minimax(board, position[0], position[1], move[0], move[1], 'B', depth - 1),
+                            minimax(board, position[0], position[1], move[0], move[1], 'R', depth - 1)
                         });
                     } else {
-                        res = min_max(board, position[0], position[1], move[0], move[1], ' ', depth - 1);
+                        res = minimax(board, position[0], position[1], move[0], move[1], ' ', depth - 1);
                     }
                     if (res > curr_min_max) {
                         curr_min_max = res;
@@ -461,45 +460,13 @@ int Board::min_max(Board board, int old_row, int old_col, int new_row, int new_c
                 } else {
                     if (board.board[position[0]][position[1]]->possible_actions.promotion) {
                         res = std::min({
-                            min_max(board, position[0], position[1], move[0], move[1], 'q', depth - 1),
-                            min_max(board, position[0], position[1], move[0], move[1], 'n', depth - 1),
-                            min_max(board, position[0], position[1], move[0], move[1], 'b', depth - 1),
-                            min_max(board, position[0], position[1], move[0], move[1], 'r', depth - 1)
+                            minimax(board, position[0], position[1], move[0], move[1], 'q', depth - 1),
+                            minimax(board, position[0], position[1], move[0], move[1], 'n', depth - 1),
+                            minimax(board, position[0], position[1], move[0], move[1], 'b', depth - 1),
+                            minimax(board, position[0], position[1], move[0], move[1], 'r', depth - 1)
                         });
                     } else {
-                        res = min_max(board, position[0], position[1], move[0], move[1], ' ', depth - 1);
-                    }
-                    if (res < curr_min_max) {
-                        curr_min_max = res;
-                    }
-                }
-            }
-    
-            for (auto attack : board.board[position[0]][position[1]]->possible_actions.attacks) {
-                if (board.turn == "white") {
-                    if (board.board[position[0]][position[1]]->possible_actions.promotion) {
-                        res = std::max({
-                            min_max(board, position[0], position[1], attack[0], attack[1], 'Q', depth - 1),
-                            min_max(board, position[0], position[1], attack[0], attack[1], 'N', depth - 1),
-                            min_max(board, position[0], position[1], attack[0], attack[1], 'B', depth - 1),
-                            min_max(board, position[0], position[1], attack[0], attack[1], 'R', depth - 1)
-                        });
-                    } else {
-                        res = min_max(board, position[0], position[1], attack[0], attack[1], ' ', depth - 1);
-                    }
-                    if (res > curr_min_max) {
-                        curr_min_max = res;
-                    }
-                } else {
-                    if (board.board[position[0]][position[1]]->possible_actions.promotion) {
-                        res = std::min({
-                            min_max(board, position[0], position[1], attack[0], attack[1], 'q', depth - 1),
-                            min_max(board, position[0], position[1], attack[0], attack[1], 'n', depth - 1),
-                            min_max(board, position[0], position[1], attack[0], attack[1], 'b', depth - 1),
-                            min_max(board, position[0], position[1], attack[0], attack[1], 'r', depth - 1)
-                        });
-                    } else {
-                        res = min_max(board, position[0], position[1], attack[0], attack[1], ' ', depth - 1);
+                        res = minimax(board, position[0], position[1], move[0], move[1], ' ', depth - 1);
                     }
                     if (res < curr_min_max) {
                         curr_min_max = res;

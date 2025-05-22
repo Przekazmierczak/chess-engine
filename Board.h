@@ -92,6 +92,8 @@ class Board {
         // Calculate possible moves for the current player
         void get_possible_actions();
 
+        void get_rating();
+
         void make_action(int old_row, int old_col, int new_row, int new_col, char symbol);
 
         void check_enpassant(int old_row, int old_col, int new_row);
@@ -102,7 +104,7 @@ class Board {
 
         void computer_action();
 
-        int min_max(
+        int minimax(
             Board board,
             int old_row,
             int old_col,
