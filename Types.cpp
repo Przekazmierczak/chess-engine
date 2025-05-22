@@ -87,6 +87,27 @@ std::ostream& operator<<(std::ostream& out, const Actions& res) {
     return out;
 };
 
+Action::Action(std::array<int, 2> input_old_position, std::array<int, 2> input_new_position, char input_symbol, int input_rating) {
+    old_position = input_old_position;
+    new_position = input_new_position;
+    rating = input_rating;
+}
+
+bool Action::operator<(const Action& other) const {
+    return rating < other.rating;
+}
+
+bool Action::operator>(const Action& other) const {
+    return rating > other.rating;
+}
+
+std::ostream& operator<<(std::ostream& out, const Action& action) {
+    out << "[" << action.rating << ": {("
+               << action.old_position[0] << "," << action.old_position[1] << "), ("
+               << action.new_position[0] << "," << action.new_position[1] << ")}], ";
+    return out;
+}
+
 Notation::Notation(std:: string position)
     : row(int(position[0]) - 48),
       column(position[1]) {

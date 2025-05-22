@@ -41,6 +41,20 @@ struct Actions {
     friend std::ostream& operator<<(std::ostream& out, const Actions& res);
 };
 
+struct Action {
+    std::array<int, 2> old_position;
+    std::array<int, 2> new_position;
+    char symbol;
+    int rating;
+
+    Action(std::array<int, 2> input_old_position, std::array<int, 2> input_new_position, char input_symbol, int input_rating);
+
+    bool operator<(const Action& other) const;
+    bool operator>(const Action& other) const;
+
+    friend std::ostream& operator<<(std::ostream& out, const Action& action);
+};
+
 struct Notation {
     int row;
     char column;
