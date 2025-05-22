@@ -36,6 +36,36 @@ Board::Board(
     get_possible_actions();
 }
 
+Board::Board(const Board& other_board) {
+    turn = other_board.turn;
+    castling = other_board.castling;
+    enpassant = other_board.enpassant;
+
+    for (int row = 0; row < ROWS; row++) {
+        for (int col = 0; col < COLS; col++) {
+            if (other_board.board[row][col]) {
+                board[row][col] = create_piece(other_board.board[row][col]->symbol, row, col);
+            }
+        }
+    }
+    get_possible_actions();
+}
+
+// Board& Board::operator=(const Board& other_board) {
+//     if (this == &other_board) return *this;
+
+//     turn = other_board.turn;
+//     castling = other_board.castling;
+//     enpassant = other_board.enpassant;
+
+//     for (int row = 0; row < ROWS; row++) {
+//         for (int col = 0; col < COLS; col++) {
+//             board[row][col] = create_piece(other_board.board[row][col]->symbol, row, col);
+//         }
+//     }
+//     get_possible_actions();
+// }
+
 // Compare two boards for equality
 bool Board::operator==(const Board& other) const {
     if (this->turn != other.turn) return false;
@@ -260,7 +290,7 @@ void Board::get_possible_actions() {
     final_rating = white_material_rating + white_attack_rating + black_material_rating + black_attack_rating;
 }
 
-void Board::make_action(int old_row, int old_col, int new_row, int new_col) {
+void Board::make_action(int old_row, int old_col, int new_row, int new_col, char symbol) {
     if (board[old_row][old_col] &&
         board[old_row][old_col]->check_if_legal_action(new_row, new_col)
     ) {
@@ -270,8 +300,9 @@ void Board::make_action(int old_row, int old_col, int new_row, int new_col) {
             check_castling(old_row, old_col);
         }
 
-        if (board[old_row][old_col]->possible_actions.promotion) {
-            board[old_row][old_col] = create_promoted_piece_player(old_row, old_col);
+        if (board[old_row][old_col]->possible_actions.promotion &&
+            symbol != ' ') {
+            board[old_row][old_col] = Board::create_piece(symbol, old_row, old_col);
         }
         
         board[new_row][new_col] = std::move(board[old_row][old_col]);
@@ -281,12 +312,12 @@ void Board::make_action(int old_row, int old_col, int new_row, int new_col) {
         
         turn = (turn == "white") ? "black" : "white";
         
-        std::cout << "Correct action" << std::endl;
+        get_possible_actions();
+        // std::cout << "Correct action" << std::endl;
     } else {
-        std::cout << "Wrong action" << std::endl;
+        // std::cout << "Wrong action" << std::endl;
     }
     
-    get_possible_actions();
 }
 
 void Board::check_enpassant(int old_row, int old_col, int new_row) {
@@ -327,21 +358,157 @@ std::unique_ptr<Piece> Board::create_promoted_piece_player(int row, int col) {
 }
 
 void Board::computer_action() {
-    std::array<int, 2> old_position = get_random_element(active_pieces);
-    std::cout << "attacks: " << board[old_position[0]][old_position[1]]->possible_actions.attacks.size() << std::endl;
-    std::cout << "moves: " << board[old_position[0]][old_position[1]]->possible_actions.moves.size() << std::endl;
-    if (board[old_position[0]][old_position[1]]->possible_actions.attacks.size()) {
-        std::array<int, 2> new_position = get_random_element(board[old_position[0]][old_position[1]]->possible_actions.attacks);
-        make_action(old_position[0], old_position[1], new_position[0], new_position[1]);
-        return;
+    std::vector<Action> actions;
+    std::vector<char> symbols;
+
+    for (auto position : active_pieces) {
+        for (auto move : board[position[0]][position[1]]->possible_actions.moves) {
+            if (board[position[0]][position[1]]->possible_actions.promotion) {
+                if (turn == "white") {
+                    symbols = {'Q', 'N', 'R', 'B'};
+                } else {
+                    symbols = {'q', 'n', 'r', 'b'};
+                }
+
+            } else {
+                symbols = {' '};
+            }
+            
+            for (char curr_symbol : symbols) {
+                Action curr_action(
+                    {position[0], position[1]},
+                    {move[0], move[1]},
+                    curr_symbol,
+                    min_max(*this, position[0], position[1], move[0], move[1], curr_symbol, 2)
+                );
+
+                actions.push_back(curr_action);
+            }
+        }
+        for (auto attack : board[position[0]][position[1]]->possible_actions.attacks) {
+            if (board[position[0]][position[1]]->possible_actions.promotion) {
+                if (turn == "white") {
+                    symbols = {'Q', 'N', 'R', 'B'};
+                } else {
+                    symbols = {'q', 'n', 'r', 'b'};
+                }
+
+            } else {
+                symbols = {' '};
+            }
+            
+            for (char curr_symbol : symbols) {
+                Action curr_action(
+                    {position[0], position[1]},
+                    {attack[0], attack[1]},
+                    curr_symbol,
+                    min_max(*this, position[0], position[1], attack[0], attack[1], curr_symbol, 2)
+                );
+
+                actions.push_back(curr_action);
+            }
+        }
     }
 
-    if (board[old_position[0]][old_position[1]]->possible_actions.moves.size()) {
-        std::array<int, 2> new_position = get_random_element(board[old_position[0]][old_position[1]]->possible_actions.moves);
-        make_action(old_position[0], old_position[1], new_position[0], new_position[1]);
-        return;
+    if (turn == "white") {
+        std::sort(actions.begin(), actions.end(), std::greater<Action>());
+    } else {
+        std::sort(actions.begin(), actions.end());
     }
-    std::cerr << "Error: No valid moves or attacks for piece at position [" << old_position[0] << ", " << old_position[1] << "]." << std::endl;
+
+    for (auto action : actions) {
+        std::cout << action;
+    }
+    std::cout << std::endl;
+    make_action(actions[0].old_position[0], actions[0].old_position[1], actions[0].new_position[0], actions[0].new_position[1], actions[0].symbol);
+}
+
+int Board::min_max(Board board, int old_row, int old_col, int new_row, int new_col, char symbol, int depth) {
+    board.make_action(old_row, old_col, new_row, new_col, symbol);
+
+    if (depth == 0) {
+        return board.final_rating;
+    } else if (!board.active_pieces.size()) {
+        if (board.checkin_pieces.size()) {
+            if (board.turn == "white") {
+                return -100000;
+            } else {
+                return 100000;
+            }
+        } else {
+            return 0;
+        }
+    } else {
+        int res;
+        int curr_min_max = (board.turn == "white") ? -100000 : 100000;
+
+        for (auto position : board.active_pieces) {
+            for (auto move : board.board[position[0]][position[1]]->possible_actions.moves) {
+                if (board.turn == "white") {
+                    if (board.board[position[0]][position[1]]->possible_actions.promotion) {
+                        res = std::max({
+                            min_max(board, position[0], position[1], move[0], move[1], 'Q', depth - 1),
+                            min_max(board, position[0], position[1], move[0], move[1], 'N', depth - 1),
+                            min_max(board, position[0], position[1], move[0], move[1], 'B', depth - 1),
+                            min_max(board, position[0], position[1], move[0], move[1], 'R', depth - 1)
+                        });
+                    } else {
+                        res = min_max(board, position[0], position[1], move[0], move[1], ' ', depth - 1);
+                    }
+                    if (res > curr_min_max) {
+                        curr_min_max = res;
+                    }
+                } else {
+                    if (board.board[position[0]][position[1]]->possible_actions.promotion) {
+                        res = std::min({
+                            min_max(board, position[0], position[1], move[0], move[1], 'q', depth - 1),
+                            min_max(board, position[0], position[1], move[0], move[1], 'n', depth - 1),
+                            min_max(board, position[0], position[1], move[0], move[1], 'b', depth - 1),
+                            min_max(board, position[0], position[1], move[0], move[1], 'r', depth - 1)
+                        });
+                    } else {
+                        res = min_max(board, position[0], position[1], move[0], move[1], ' ', depth - 1);
+                    }
+                    if (res < curr_min_max) {
+                        curr_min_max = res;
+                    }
+                }
+            }
+    
+            for (auto attack : board.board[position[0]][position[1]]->possible_actions.attacks) {
+                if (board.turn == "white") {
+                    if (board.board[position[0]][position[1]]->possible_actions.promotion) {
+                        res = std::max({
+                            min_max(board, position[0], position[1], attack[0], attack[1], 'Q', depth - 1),
+                            min_max(board, position[0], position[1], attack[0], attack[1], 'N', depth - 1),
+                            min_max(board, position[0], position[1], attack[0], attack[1], 'B', depth - 1),
+                            min_max(board, position[0], position[1], attack[0], attack[1], 'R', depth - 1)
+                        });
+                    } else {
+                        res = min_max(board, position[0], position[1], attack[0], attack[1], ' ', depth - 1);
+                    }
+                    if (res > curr_min_max) {
+                        curr_min_max = res;
+                    }
+                } else {
+                    if (board.board[position[0]][position[1]]->possible_actions.promotion) {
+                        res = std::min({
+                            min_max(board, position[0], position[1], attack[0], attack[1], 'q', depth - 1),
+                            min_max(board, position[0], position[1], attack[0], attack[1], 'n', depth - 1),
+                            min_max(board, position[0], position[1], attack[0], attack[1], 'b', depth - 1),
+                            min_max(board, position[0], position[1], attack[0], attack[1], 'r', depth - 1)
+                        });
+                    } else {
+                        res = min_max(board, position[0], position[1], attack[0], attack[1], ' ', depth - 1);
+                    }
+                    if (res < curr_min_max) {
+                        curr_min_max = res;
+                    }
+                }
+            }
+        }
+        return curr_min_max;
+    }
 }
 
 // void Board::print_possible_actions() {

@@ -3,6 +3,8 @@
 
 #include <iostream>
 #include <array>
+#include <algorithm>
+#include <functional>
 
 #include "Types.h"
 
@@ -56,6 +58,10 @@ class Board {
             const std::array<std::array<char, 8>, 8>& simplify_board
         );
 
+        Board(const Board& other_board);
+
+        // Board& operator=(const Board& other_board);
+
         // Comparison operators for equality and inequality'
         bool operator==(const Board& other) const;
         bool operator!=(const Board& other) const;
@@ -86,7 +92,7 @@ class Board {
         // Calculate possible moves for the current player
         void get_possible_actions();
 
-        void make_action(int old_row, int old_col, int new_row, int new_col);
+        void make_action(int old_row, int old_col, int new_row, int new_col, char symbol);
 
         void check_enpassant(int old_row, int old_col, int new_row);
 
@@ -95,6 +101,16 @@ class Board {
         std::unique_ptr<Piece> create_promoted_piece_player(int row, int col);
 
         void computer_action();
+
+        int min_max(
+            Board board,
+            int old_row,
+            int old_col,
+            int new_row,
+            int new_col,
+            char symbol,
+            int depth
+        );
 
         // void print_possible_actions();
 };
