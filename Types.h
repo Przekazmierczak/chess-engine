@@ -39,6 +39,37 @@ struct Actions {
 
     // Overloaded output stream operator for Actions
     friend std::ostream& operator<<(std::ostream& out, const Actions& res);
+
+    class Iterator{
+    private:
+        const Actions& container;
+        PositionSet::iterator current;
+        bool in_attacks;
+
+    public:
+        Iterator(
+            const Actions& c,
+            PositionSet::iterator it,
+            bool attacks_flag
+        );
+
+        const std::array<int, 2>& operator*() const;
+        Iterator& operator++();
+        bool operator==(const Iterator& other) const;
+        bool operator!=(const Iterator& other) const;
+    };
+
+    Iterator begin() const {
+        if (!attacks.empty()) {
+            return Iterator(*this, attacks.begin(), true);
+        } else {
+            return Iterator(*this, moves.begin(), false);
+        }
+    }
+
+    Iterator end() const {
+        return Iterator(*this, moves.end(), false);
+    }
 };
 
 struct Action {

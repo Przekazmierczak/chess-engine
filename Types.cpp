@@ -87,6 +87,37 @@ std::ostream& operator<<(std::ostream& out, const Actions& res) {
     return out;
 };
 
+
+Actions::Iterator::Iterator(
+    const Actions& c,
+    PositionSet::iterator it,
+    bool attacks_flag)
+    : container(c),
+      current(it),
+      in_attacks(attacks_flag) {
+}
+
+const std::array<int, 2>& Actions::Iterator::operator*() const {
+    return *current;
+}
+
+Actions::Iterator& Actions::Iterator::operator++() {
+    ++current;
+    if (in_attacks && current == container.attacks.end()) {
+        current = container.moves.begin();
+        in_attacks = false;
+    }
+    return *this;
+}
+
+bool Actions::Iterator::operator==(const Iterator& other) const {
+    return current == other.current && in_attacks == other.in_attacks;
+}
+
+bool Actions::Iterator::operator!=(const Iterator& other) const {
+    return !(*this == other);
+}
+
 Action::Action(std::array<int, 2> input_old_position, std::array<int, 2> input_new_position, char input_symbol, int input_rating) {
     old_position = input_old_position;
     new_position = input_new_position;
