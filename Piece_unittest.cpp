@@ -668,6 +668,9 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'k'}
         }});
 
+        board_white.get_rating();
+        board_black.get_rating();
+
         EXPECT_EQ(board_white.white_attack_rating, 3);
         EXPECT_EQ(board_white.black_attack_rating, -3);
 
@@ -697,6 +700,9 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
+
+        board_white.get_rating();
+        board_black.get_rating();
 
         EXPECT_EQ(board_white.white_attack_rating, 25);
         EXPECT_EQ(board_white.black_attack_rating, -25);
@@ -728,6 +734,9 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
 
+        board_white.get_rating();
+        board_black.get_rating();
+
         EXPECT_EQ(board_white.white_attack_rating, 14);
         EXPECT_EQ(board_white.black_attack_rating, -14);
 
@@ -757,6 +766,9 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
+
+        board_white.get_rating();
+        board_black.get_rating();
 
         EXPECT_EQ(board_white.white_attack_rating, 11);
         EXPECT_EQ(board_white.black_attack_rating, -11);
@@ -788,6 +800,9 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
 
+        board_white.get_rating();
+        board_black.get_rating();
+
         EXPECT_EQ(board_white.white_attack_rating, 8);
         EXPECT_EQ(board_white.black_attack_rating, -8);
 
@@ -817,6 +832,9 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
+
+        board_white.get_rating();
+        board_black.get_rating();
 
         EXPECT_EQ(board_white.white_attack_rating, 2);
         EXPECT_EQ(board_white.black_attack_rating, -2);
@@ -848,6 +866,9 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
 
+        board_white.get_rating();
+        board_black.get_rating();
+
         EXPECT_EQ(board_white.white_attack_rating, 12);
         EXPECT_EQ(board_white.black_attack_rating, -12);
 
@@ -877,6 +898,9 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', 'p', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
+
+        board_white.get_rating();
+        board_black.get_rating();
 
         EXPECT_EQ(board_white.white_attack_rating, 10);
         EXPECT_EQ(board_white.black_attack_rating, -10);
@@ -908,6 +932,9 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
 
+        board_white.get_rating();
+        board_black.get_rating();
+
         EXPECT_EQ(board_white.white_attack_rating, 50);
         EXPECT_EQ(board_white.black_attack_rating, -50);
 
@@ -937,6 +964,9 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', 'p', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
+
+        board_white.get_rating();
+        board_black.get_rating();
 
         EXPECT_EQ(board_white.white_attack_rating, 40);
         EXPECT_EQ(board_white.black_attack_rating, -40);
@@ -968,6 +998,9 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
 
+        board_white.get_rating();
+        board_black.get_rating();
+
         EXPECT_EQ(board_white.white_attack_rating, 32);
         EXPECT_EQ(board_white.black_attack_rating, -32);
 
@@ -997,6 +1030,9 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
+
+        board_white.get_rating();
+        board_black.get_rating();
 
         EXPECT_EQ(board_white.white_attack_rating, 29);
         EXPECT_EQ(board_white.black_attack_rating, -29);
@@ -1028,6 +1064,9 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
 
+        board_white.get_rating();
+        board_black.get_rating();
+
         EXPECT_EQ(board_white.white_attack_rating, 37);
         EXPECT_EQ(board_white.black_attack_rating, -37);
 
@@ -1057,6 +1096,9 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'r'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
+
+        board_white.get_rating();
+        board_black.get_rating();
 
         EXPECT_EQ(board_white.white_attack_rating, 32);
         EXPECT_EQ(board_white.black_attack_rating, -32);
@@ -1088,6 +1130,9 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
 
+        board_white.get_rating();
+        board_black.get_rating();
+
         EXPECT_EQ(board_white.white_attack_rating, 22);
         EXPECT_EQ(board_white.black_attack_rating, -22);
 
@@ -1117,6 +1162,9 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
+
+        board_white.get_rating();
+        board_black.get_rating();
 
         EXPECT_EQ(board_white.white_attack_rating, 19);
         EXPECT_EQ(board_white.black_attack_rating, -19);
@@ -1148,6 +1196,9 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'K'}
         }});
 
+        board_white.get_rating();
+        board_black.get_rating();
+
         EXPECT_EQ(board_white.white_attack_rating, 3);
         EXPECT_EQ(board_white.black_attack_rating, -158);
 
@@ -1177,6 +1228,9 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
+
+        board_white.get_rating();
+        board_black.get_rating();
 
         EXPECT_EQ(board_white.white_attack_rating, 11);
         EXPECT_EQ(board_white.black_attack_rating, -11);
@@ -1208,6 +1262,9 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'k'}
         }});
 
+        board_white.get_rating();
+        board_black.get_rating();
+
         EXPECT_EQ(board_white.white_attack_rating, 8);
         EXPECT_EQ(board_white.black_attack_rating, -22);
 
@@ -1237,6 +1294,9 @@ namespace {
             {' ', ' ', 'r', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'k'}
         }});
+
+        board_white.get_rating();
+        board_black.get_rating();
 
         EXPECT_EQ(board_white.white_attack_rating, 8);
         EXPECT_EQ(board_white.black_attack_rating, -21);
@@ -1268,6 +1328,9 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'k'}
         }});
 
+        board_white.get_rating();
+        board_black.get_rating();
+
         EXPECT_EQ(board_white.white_attack_rating, 8);
         EXPECT_EQ(board_white.black_attack_rating, -16);
 
@@ -1297,6 +1360,9 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'k'}
         }});
+
+        board_white.get_rating();
+        board_black.get_rating();
 
 
         EXPECT_EQ(board_white.white_attack_rating, 2);
@@ -1329,6 +1395,9 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
 
+        board_white.get_rating();
+        board_black.get_rating();
+
         EXPECT_EQ(board_white.black_attack_rating, -16);
 
         EXPECT_EQ(board_black.black_attack_rating, -1);
@@ -1346,6 +1415,8 @@ namespace {
             {' ', ' ', ' ', 'r', ' ', ' ', ' ', 'k'}
         }});
 
+        board_white.get_rating();
+
         EXPECT_EQ(board_white.white_attack_rating, 6);
         EXPECT_EQ(board_white.black_attack_rating, -160);
     }
@@ -1362,6 +1433,8 @@ namespace {
             {' ', 'q', ' ', ' ', ' ', 'r', ' ', ' '}
         }});
 
+        board_black.get_rating();
+
         EXPECT_EQ(board_black.white_attack_rating, 217);
         EXPECT_EQ(board_black.black_attack_rating, -145);
     }
@@ -1377,6 +1450,8 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', 'q', ' ', ' ', ' ', 'r', ' ', ' '}
         }});
+
+        board_black.get_rating();
 
         EXPECT_EQ(board_black.white_attack_rating, 374);
         EXPECT_EQ(board_black.black_attack_rating, -4);
@@ -1415,6 +1490,10 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
+
+        board_24.get_rating();
+        board_NN.get_rating();
+        board_24_check.get_rating();
 
         EXPECT_EQ(board_24.black_attack_rating, -7);
 
