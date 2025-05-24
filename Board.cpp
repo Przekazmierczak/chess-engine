@@ -48,7 +48,6 @@ Board::Board(const Board& other_board) {
             }
         }
     }
-    get_possible_actions();
 }
 
 // Board& Board::operator=(const Board& other_board) {
@@ -333,11 +332,38 @@ void Board::make_action(int old_row, int old_col, int new_row, int new_col, char
         turn = (turn == "white") ? "black" : "white";
         
         get_possible_actions();
-        // std::cout << "Correct action" << std::endl;
     } else {
         // std::cout << "Wrong action" << std::endl;
     }
     
+}
+
+Board Board::make_action_board(int old_row, int old_col, int new_row, int new_col, char symbol) {
+    Board new_board(*this);
+    if (board[old_row][old_col] &&
+        board[old_row][old_col]->check_if_legal_action(new_row, new_col)
+    ) {
+        new_board.check_enpassant(old_row, old_col, new_row);
+
+        if (castling != "____") {
+            new_board.check_castling(old_row, old_col);
+        }
+
+        if (board[old_row][old_col]->possible_actions.promotion &&
+            symbol != ' ') {
+            new_board.board[old_row][old_col] = Board::create_piece(symbol, old_row, old_col);
+        }
+        
+        new_board.board[new_row][new_col] = std::move(new_board.board[old_row][old_col]);
+        
+        new_board.board[new_row][new_col]->row = new_row;
+        new_board.board[new_row][new_col]->column = new_col;
+        
+        new_board.turn = (new_board.turn == "white") ? "black" : "white";
+    } else {
+        std::cout << "Wrong action" << std::endl;
+    }
+    return new_board;
 }
 
 void Board::check_enpassant(int old_row, int old_col, int new_row) {
@@ -399,7 +425,7 @@ void Board::computer_action() {
                     {position[0], position[1]},
                     {move[0], move[1]},
                     curr_symbol,
-                    minimax(*this, position[0], position[1], move[0], move[1], curr_symbol, 2)
+                    minimax(make_action_board(position[0], position[1], move[0], move[1], curr_symbol), 2)
                 );
 
                 actions.push_back(curr_action);
@@ -421,9 +447,8 @@ void Board::computer_action() {
     make_action(actions[0].old_position[0], actions[0].old_position[1], actions[0].new_position[0], actions[0].new_position[1], actions[0].symbol);
 }
 
-int Board::minimax(Board board, int old_row, int old_col, int new_row, int new_col, char symbol, int depth) {
-    board.make_action(old_row, old_col, new_row, new_col, symbol);
-
+int Board::minimax(Board board, int depth) {
+    board.get_possible_actions();
     if (depth == 0) {
         board.get_rating();
         return board.final_rating;
@@ -443,16 +468,20 @@ int Board::minimax(Board board, int old_row, int old_col, int new_row, int new_c
 
         for (auto position : board.active_pieces) {
             for (auto move : board.board[position[0]][position[1]]->possible_actions) {
+                auto make_and_minimax = [&](char promotion) {
+                    return minimax(board.make_action_board(position[0], position[1], move[0], move[1], promotion), depth - 1);
+                };
+
                 if (board.turn == "white") {
                     if (board.board[position[0]][position[1]]->possible_actions.promotion) {
                         res = std::max({
-                            minimax(board, position[0], position[1], move[0], move[1], 'Q', depth - 1),
-                            minimax(board, position[0], position[1], move[0], move[1], 'N', depth - 1),
-                            minimax(board, position[0], position[1], move[0], move[1], 'B', depth - 1),
-                            minimax(board, position[0], position[1], move[0], move[1], 'R', depth - 1)
+                            make_and_minimax('Q'),
+                            make_and_minimax('N'),
+                            make_and_minimax('B'),
+                            make_and_minimax('R'),
                         });
                     } else {
-                        res = minimax(board, position[0], position[1], move[0], move[1], ' ', depth - 1);
+                        res = make_and_minimax(' ');
                     }
                     if (res > curr_min_max) {
                         curr_min_max = res;
@@ -460,13 +489,13 @@ int Board::minimax(Board board, int old_row, int old_col, int new_row, int new_c
                 } else {
                     if (board.board[position[0]][position[1]]->possible_actions.promotion) {
                         res = std::min({
-                            minimax(board, position[0], position[1], move[0], move[1], 'q', depth - 1),
-                            minimax(board, position[0], position[1], move[0], move[1], 'n', depth - 1),
-                            minimax(board, position[0], position[1], move[0], move[1], 'b', depth - 1),
-                            minimax(board, position[0], position[1], move[0], move[1], 'r', depth - 1)
+                            make_and_minimax('q'),
+                            make_and_minimax('n'),
+                            make_and_minimax('b'),
+                            make_and_minimax('r')
                         });
                     } else {
-                        res = minimax(board, position[0], position[1], move[0], move[1], ' ', depth - 1);
+                        res = make_and_minimax(' ');
                     }
                     if (res < curr_min_max) {
                         curr_min_max = res;
