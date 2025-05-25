@@ -121,6 +121,7 @@ bool Actions::Iterator::operator!=(const Iterator& other) const {
 Action::Action(std::array<int, 2> input_old_position, std::array<int, 2> input_new_position, char input_symbol, int input_rating) {
     old_position = input_old_position;
     new_position = input_new_position;
+    symbol = input_symbol;
     rating = input_rating;
 }
 
@@ -135,7 +136,8 @@ bool Action::operator>(const Action& other) const {
 std::ostream& operator<<(std::ostream& out, const Action& action) {
     out << "[" << action.rating << ": {("
                << action.old_position[0] << "," << action.old_position[1] << "), ("
-               << action.new_position[0] << "," << action.new_position[1] << ")}], ";
+               << action.new_position[0] << "," << action.new_position[1] << ") "
+               << action.symbol << "}], ";
     return out;
 }
 

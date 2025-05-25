@@ -96,6 +96,8 @@ class Board {
 
         void make_action(int old_row, int old_col, int new_row, int new_col, char symbol);
 
+        Board make_action_board(int old_row, int old_col, int new_row, int new_col, char symbol);
+
         void check_enpassant(int old_row, int old_col, int new_row);
 
         void check_castling(int old_row, int old_col);
@@ -104,15 +106,7 @@ class Board {
 
         void computer_action();
 
-        int minimax(
-            Board board,
-            int old_row,
-            int old_col,
-            int new_row,
-            int new_col,
-            char symbol,
-            int depth
-        );
+        int minimax(Board board, int depth);
 
         // void print_possible_actions();
 };

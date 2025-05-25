@@ -361,7 +361,7 @@ Board Board::make_action_board(int old_row, int old_col, int new_row, int new_co
         
         new_board.turn = (new_board.turn == "white") ? "black" : "white";
     } else {
-        std::cout << "Wrong action" << std::endl;
+        // std::cout << "Wrong action" << std::endl;
     }
     return new_board;
 }
@@ -439,11 +439,6 @@ void Board::computer_action() {
         std::sort(actions.begin(), actions.end());
     }
 
-    for (auto action : actions) {
-        std::cout << action;
-    }
-
-    std::cout << std::endl;
     make_action(actions[0].old_position[0], actions[0].old_position[1], actions[0].new_position[0], actions[0].new_position[1], actions[0].symbol);
 }
 
