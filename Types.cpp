@@ -125,12 +125,8 @@ Action::Action(std::array<int, 2> input_old_position, std::array<int, 2> input_n
     rating = input_rating;
 }
 
-bool Action::operator<(const Action& other) const {
-    return rating < other.rating;
-}
-
-bool Action::operator>(const Action& other) const {
-    return rating > other.rating;
+std::strong_ordering Action::operator<=>(const Action& other) const {
+    return rating <=> other.rating;
 }
 
 std::ostream& operator<<(std::ostream& out, const Action& action) {

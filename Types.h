@@ -5,6 +5,7 @@
 #include <unordered_map>
 #include <array>
 #include <unordered_set>
+#include <compare>
 
 struct PositionHash {
     std::size_t operator()(const std::array<int, 2>& arr) const {
@@ -80,8 +81,8 @@ struct Action {
 
     Action(std::array<int, 2> input_old_position, std::array<int, 2> input_new_position, char input_symbol, int input_rating);
 
-    bool operator<(const Action& other) const;
-    bool operator>(const Action& other) const;
+    std::strong_ordering operator<=>(const Action& other) const;
+    bool operator==(const Action& other) const = default;
 
     friend std::ostream& operator<<(std::ostream& out, const Action& action);
 };
