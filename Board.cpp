@@ -150,19 +150,16 @@ std::unique_ptr<Piece> Board::create_piece(
     // Determine player color
     std:: string player = isupper(symbol) ? "white" : "black";
 
+    char upperSymbol = toupper(symbol);
+
     // Create the appropriate piece based on the symbol
-    if (toupper(symbol) == 'R') {
-        return std::make_unique<Rook>(symbol, "rook", player, row, col);
-    } else if (toupper(symbol) == 'N') {
-        return std::make_unique<Knight>(symbol, "knight", player, row, col);
-    } else if (toupper(symbol) == 'B') {
-        return std::make_unique<Bishop>(symbol, "bishop", player, row, col);
-    } else if (toupper(symbol) == 'K') {
-        return std::make_unique<King>(symbol, "king", player, row, col);
-    } else if (toupper(symbol) == 'Q') {
-        return std::make_unique<Queen>(symbol, "queen", player, row, col);
-    } else {
-        return std::make_unique<Pawn>(symbol, "pawn", player, row, col);
+    switch (upperSymbol) {
+        case 'R': return std::make_unique<Rook>(symbol, "rook", player, row, col);
+        case 'N': return std::make_unique<Knight>(symbol, "knight", player, row, col);
+        case 'B': return std::make_unique<Bishop>(symbol, "bishop", player, row, col);
+        case 'K': return std::make_unique<King>(symbol, "king", player, row, col);
+        case 'Q': return std::make_unique<Queen>(symbol, "queen", player, row, col);
+        default:  return std::make_unique<Pawn>(symbol, "pawn", player, row, col);
     }
 }
 
@@ -234,11 +231,11 @@ void Board::get_possible_actions() {
     active_pieces = {};
 
     // Check moves for the opponent's pieces
-    for (int row = 0; row < ROWS; row++) {
-        for (int col = 0; col < COLS; col++) {
-            if (board[row][col] && board[row][col]->player != turn) {
-                board[row][col]->possible_actions.reset();
-                board[row][col]->check_piece_possible_moves_opponent(*this);
+    for (auto &current_row : board) {
+        for (auto &current_piece : current_row) {
+            if (current_piece && current_piece->player != turn) {
+                current_piece->possible_actions.reset();
+                current_piece->check_piece_possible_moves_opponent(*this);
             }
         }
     }
@@ -246,11 +243,11 @@ void Board::get_possible_actions() {
     PositionSet checking_positions = flatting_checkin_pieces(checkin_pieces);
 
     // Check moves for the current player's pieces
-    for (int row = 0; row < ROWS; row++) {
-        for (int col = 0; col < COLS; col++) {
-            if (board[row][col] && board[row][col]->player == turn) {
-                board[row][col]->possible_actions.reset();
-                board[row][col]->check_piece_possible_moves_active_player(*this, checking_positions);
+    for (auto &current_row : board) {
+        for (auto &current_piece : current_row) {
+            if (current_piece && current_piece->player == turn) {
+                current_piece->possible_actions.reset();
+                current_piece->check_piece_possible_moves_active_player(*this, checking_positions);
             }
         }
     }
@@ -271,16 +268,16 @@ void Board::get_rating() {
     black_attack_rating = 0;
 
     // Check moves for the opponent's pieces
-    for (int row = 0; row < ROWS; row++) {
-        for (int col = 0; col < COLS; col++) {
-            if (board[row][col] && board[row][col]->player != turn) {
-                board[row][col]->update_rating_opponent(*this);
+    for (auto &current_row : board) {
+        for (auto &current_piece : current_row) {
+            if (current_piece && current_piece->player != turn) {
+                current_piece->update_rating_opponent(*this);
 
-                if (board[row][col]->piece != "king") {
-                    if (board[row][col]->player == "white") {
-                        white_material_rating += material_rating_weight * board[row][col]->get_value();
+                if (current_piece->piece != "king") {
+                    if (current_piece->player == "white") {
+                        white_material_rating += material_rating_weight * current_piece->get_value();
                     } else {
-                        black_material_rating -= material_rating_weight * board[row][col]->get_value();
+                        black_material_rating -= material_rating_weight * current_piece->get_value();
                     }
                 }
             }
@@ -290,16 +287,16 @@ void Board::get_rating() {
     PositionSet checking_positions = flatting_checkin_pieces(checkin_pieces);
 
     // Check moves for the current player's pieces
-    for (int row = 0; row < ROWS; row++) {
-        for (int col = 0; col < COLS; col++) {
-            if (board[row][col] && board[row][col]->player == turn) {
-                board[row][col]->update_rating_active_player(*this, checking_positions);
+    for (auto &current_row : board) {
+        for (auto &current_piece : current_row) {
+            if (current_piece && current_piece->player == turn) {
+                current_piece->update_rating_active_player(*this, checking_positions);
                 
-                if (board[row][col]->piece != "king") {
-                    if (board[row][col]->player == "white") {
-                        white_material_rating += material_rating_weight * board[row][col]->get_value();
+                if (current_piece->piece != "king") {
+                    if (current_piece->player == "white") {
+                        white_material_rating += material_rating_weight * current_piece->get_value();
                     } else {
-                        black_material_rating -= material_rating_weight * board[row][col]->get_value();
+                        black_material_rating -= material_rating_weight * current_piece->get_value();
                     }
                 }
             }
@@ -371,6 +368,8 @@ void Board::check_enpassant(int old_row, int old_col, int new_row) {
         (old_row == 1 && new_row == 3) ||
         (old_row == 6 && new_row == 4)) {
             enpassant = {(old_row + new_row) / 2, old_col};
+    } else {
+        enpassant = {NULL, NULL};
     }
 }
 
