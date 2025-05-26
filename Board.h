@@ -106,7 +106,7 @@ class Board {
 
         void computer_action();
 
-        int minimax(Board board, int depth);
+        int alfa_beta_pruning(Board board, int depth ,int alpha, int beta);
 
         // void print_possible_actions();
 };

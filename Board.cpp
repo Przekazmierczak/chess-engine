@@ -428,7 +428,7 @@ void Board::computer_action() {
                     {position[0], position[1]},
                     {move[0], move[1]},
                     curr_symbol,
-                    minimax(make_action_board(position[0], position[1], move[0], move[1], curr_symbol), 2)
+                    alfa_beta_pruning(make_action_board(position[0], position[1], move[0], move[1], curr_symbol), 2, -100000, 100000)
                 );
 
                 actions.push_back(curr_action);
@@ -445,7 +445,7 @@ void Board::computer_action() {
     make_action(actions[0].old_position[0], actions[0].old_position[1], actions[0].new_position[0], actions[0].new_position[1], actions[0].symbol);
 }
 
-int Board::minimax(Board board, int depth) {
+int Board::alfa_beta_pruning(Board board, int depth, int alpha, int beta) {
     board.get_possible_actions();
     if (depth == 0) {
         board.get_rating();
@@ -467,7 +467,7 @@ int Board::minimax(Board board, int depth) {
         for (auto position : board.active_pieces) {
             for (auto move : board.board[position[0]][position[1]]->possible_actions) {
                 auto make_and_minimax = [&](char promotion) {
-                    return minimax(board.make_action_board(position[0], position[1], move[0], move[1], promotion), depth - 1);
+                    return alfa_beta_pruning(board.make_action_board(position[0], position[1], move[0], move[1], promotion), depth - 1, alpha, beta);
                 };
 
                 if (board.turn == white) {
@@ -481,9 +481,9 @@ int Board::minimax(Board board, int depth) {
                     } else {
                         res = make_and_minimax(' ');
                     }
-                    if (res > curr_min_max) {
-                        curr_min_max = res;
-                    }
+                    curr_min_max = std::max(curr_min_max, res);
+                    alpha = std::max(alpha, res);
+
                 } else {
                     if (board.board[position[0]][position[1]]->possible_actions.promotion) {
                         res = std::min({
@@ -495,9 +495,13 @@ int Board::minimax(Board board, int depth) {
                     } else {
                         res = make_and_minimax(' ');
                     }
-                    if (res < curr_min_max) {
-                        curr_min_max = res;
-                    }
+                    curr_min_max = std::min(curr_min_max, res);
+                    beta = std::min(beta, res);
+
+                }
+
+                if (beta <= alpha) {
+                    return curr_min_max;
                 }
             }
         }

@@ -1053,7 +1053,7 @@ namespace {
         }});
         
         EXPECT_EQ(
-            board.minimax(board.make_action_board(6, 1, 7, 1, 'Q'), 2),
+            board.alfa_beta_pruning(board.make_action_board(6, 1, 7, 1, 'Q'), 2, -100000, 100000),
             100002
         );
     }
@@ -1071,7 +1071,7 @@ namespace {
         }});
 
         EXPECT_EQ(
-            board.minimax(board.make_action_board(5, 1, 0, 1, ' '), 2),
+            board.alfa_beta_pruning(board.make_action_board(5, 1, 0, 1, ' '), 2, -100000, 100000),
             -100002
         );
     }
@@ -1089,7 +1089,7 @@ namespace {
         }});
 
         EXPECT_EQ(
-            board.minimax(board.make_action_board(7, 5, 7, 6, ' '), 2),
+            board.alfa_beta_pruning(board.make_action_board(7, 5, 7, 6, ' '), 2, -100000, 100000),
             0
         );
     }
@@ -1107,7 +1107,7 @@ namespace {
         }});
 
         EXPECT_EQ(
-            board.minimax(board.make_action_board(3, 5, 2, 5, ' '), 2),
+            board.alfa_beta_pruning(board.make_action_board(3, 5, 2, 5, ' '), 2, -100000, 100000),
             0
         );
     }
@@ -1138,7 +1138,7 @@ namespace {
         expected_board.get_rating();
 
         EXPECT_EQ(
-            board.minimax(board.make_action_board(2, 0, 2, 7, ' '), 1),
+            board.alfa_beta_pruning(board.make_action_board(2, 0, 2, 7, ' '), 1, -100000, 100000),
             expected_board.final_rating
         );
     }
