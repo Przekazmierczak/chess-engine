@@ -16,8 +16,8 @@ class Board;
 class Piece {
     public:
         char symbol; // Character symbol representing the piece (e.g., 'P' for pawn)
-        std::string piece; // Name of the piece (e.g., "pawn")
-        std::string player; // Player owning the piece ("white" or "black")
+        PieceType piece; // Name of the piece (e.g., "pawn")
+        PlayerColor player; // Player owning the piece ("white" or "black")
         int row; // Row position of the piece on the board
         int column; // Column position of the piece on the board
 
@@ -25,8 +25,8 @@ class Piece {
 
         // Constructor
         Piece(const char& input_symbol,
-            const std::string& input_piece,
-            const std::string& input_player,
+            const PieceType& input_piece,
+            const PlayerColor& input_player,
             const int& input_row,
             const int& input_column
         );
@@ -99,7 +99,7 @@ class Piece {
 
         void update_move_rating_helping(
             Board& board_class,
-            std::string player,
+            PlayerColor player,
             int row,
             int col
         );
@@ -109,8 +109,8 @@ class Piece {
 class Pawn: public Piece {
     public:
         Pawn(const char& input_symbol,
-            const std::string& input_piece,
-            const std::string& input_player,
+            const PieceType& input_piece,
+            const PlayerColor& input_player,
             const int& input_row,
             const int& input_column
         );
@@ -140,8 +140,8 @@ class Pawn: public Piece {
 class Knight: public Piece {
     public:
         Knight(const char& input_symbol,
-            const std::string& input_piece,
-            const std::string& input_player,
+            const PieceType& input_piece,
+            const PlayerColor& input_player,
             const int& input_row,
             const int& input_column
         );
@@ -171,8 +171,8 @@ class Knight: public Piece {
 class King: public Piece {
     public:
         King(const char& input_symbol,
-            const std::string& input_piece,
-            const std::string& input_player,
+            const PieceType& input_piece,
+            const PlayerColor& input_player,
             const int& input_row,
             const int& input_column
         );
@@ -202,8 +202,8 @@ class King: public Piece {
 class Rook: public Piece {
     public:
         Rook(const char& input_symbol,
-            const std::string& input_piece,
-            const std::string& input_player,
+            const PieceType& input_piece,
+            const PlayerColor& input_player,
             const int& input_row,
             const int& input_column
         );
@@ -233,8 +233,8 @@ class Rook: public Piece {
 class Bishop: public Piece {
     public:
         Bishop(const char& input_symbol,
-            const std::string& input_piece,
-            const std::string& input_player,
+            const PieceType& input_piece,
+            const PlayerColor& input_player,
             const int& input_row,
             const int& input_column
         );
@@ -264,8 +264,8 @@ class Bishop: public Piece {
 class Queen: public Piece {
     public:
         Queen(const char& input_symbol,
-            const std::string& input_piece,
-            const std::string& input_player,
+            const PieceType& input_piece,
+            const PlayerColor& input_player,
             const int& input_row,
             const int& input_column
         );

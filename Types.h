@@ -28,6 +28,27 @@ using PositionMap = std::unordered_map<
 >;
 std::ostream& operator<<(std::ostream& out, const PositionMap& set);
 
+enum PlayerColor {
+    white,
+    black
+};
+
+enum PieceType {
+    pawn,
+    rook,
+    knight,
+    bishop,
+    queen,
+    king
+};
+
+enum Winner {
+    whiteWin,
+    blackWin,
+    draw,
+    notFinished
+};
+
 struct Actions {
     PositionSet moves; // Set of valid move positions
     PositionSet attacks; // Set of valid attack positions

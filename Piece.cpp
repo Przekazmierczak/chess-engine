@@ -5,8 +5,8 @@
 // Constructor
 Piece::Piece(
     const char& input_symbol,
-    const std::string& input_piece,
-    const std::string& input_player,
+    const PieceType& input_piece,
+    const PlayerColor& input_player,
     const int& input_row,
     const int& input_column)
     : symbol(input_symbol),
@@ -65,48 +65,48 @@ bool Piece::is_not_pinned(
 
 // Derived class representing a Pawn
 Pawn::Pawn(const char& input_symbol,
-    const std::string& input_piece,
-    const std::string& input_player,
+    const PieceType& input_piece,
+    const PlayerColor& input_player,
     const int& input_row,
     const int& input_column
 ): Piece(input_symbol, input_piece, input_player, input_row, input_column) {}
 
 // Derived class representing a Knight
 Knight::Knight(const char& input_symbol,
-    const std::string& input_piece,
-    const std::string& input_player,
+    const PieceType& input_piece,
+    const PlayerColor& input_player,
     const int& input_row,
     const int& input_column
 ): Piece(input_symbol, input_piece, input_player, input_row, input_column) {}
 
 // Derived class representing a King
 King::King(const char& input_symbol,
-    const std::string& input_piece,
-    const std::string& input_player,
+    const PieceType& input_piece,
+    const PlayerColor& input_player,
     const int& input_row,
     const int& input_column
 ): Piece(input_symbol, input_piece, input_player, input_row, input_column) {}
 
 // Derived class representing a Rook
 Rook::Rook(const char& input_symbol,
-    const std::string& input_piece,
-    const std::string& input_player,
+    const PieceType& input_piece,
+    const PlayerColor& input_player,
     const int& input_row,
     const int& input_column
 ): Piece(input_symbol, input_piece, input_player, input_row, input_column) {}
 
 // Derived class representing a Bishop
 Bishop::Bishop(const char& input_symbol,
-    const std::string& input_piece,
-    const std::string& input_player,
+    const PieceType& input_piece,
+    const PlayerColor& input_player,
     const int& input_row,
     const int& input_column
 ): Piece(input_symbol, input_piece, input_player, input_row, input_column) {}
 
 // Derived class representing a Queen
 Queen::Queen(const char& input_symbol,
-    const std::string& input_piece,
-    const std::string& input_player,
+    const PieceType& input_piece,
+    const PlayerColor& input_player,
     const int& input_row,
     const int& input_column
 ): Piece(input_symbol, input_piece, input_player, input_row, input_column) {}
@@ -137,7 +137,7 @@ void Piece::rook_bishop_queen_move_template_active_player(
                     board_class.attacked_positions.insert({new_row, new_column});
 
                     // Special handling for interaction with the king
-                    if (board_class.board[new_row][new_column]->piece == "king" &&
+                    if (board_class.board[new_row][new_column]->piece == king &&
                         board_class.board[new_row][new_column]->player != player
                     ) {
                         board_class.checkin_pieces[{row, column}] = current_direction;
@@ -158,7 +158,7 @@ void Piece::rook_bishop_queen_move_template_active_player(
                     break;
                 } else if (absolute_pin_check) {
                     // If the pinned piece is the king, update pin data
-                    if (board_class.board[new_row][new_column]->piece == "king" &&
+                    if (board_class.board[new_row][new_column]->piece == king &&
                         board_class.board[new_row][new_column]->player != player
                     ) {
                         board_class.pinned_pieces[pinned_piece].insert({row, column});
@@ -277,18 +277,18 @@ void Pawn::check_piece_possible_moves_opponent (
     Board& board_class
 ) {
     // Determine movement direction based on the pawn's color
-    int direction_by_colour = player == "white" ? 1: -1;
+    int direction_by_colour = player == white ? 1: -1;
 
     // Initialize possible forward directions for pawn movement
     std::vector<std::array<int, 2>> directions = {{direction_by_colour, 0}};
 
     // Add double move direction if the pawn is in its starting position
-    if ((player == "white" && row == 1) || (player == "black" && row == 6)) {
+    if ((player == white && row == 1) || (player == black && row == 6)) {
         directions.push_back({direction_by_colour * 2, 0});
     }
 
     // Check for promotion condition if the pawn is one move away from promotion
-    if ((player == "white" && row == 6) || (player == "black" && row == 1)){
+    if ((player == white && row == 6) || (player == black && row == 1)){
         possible_actions.promotion = true;
     }
 
@@ -307,7 +307,7 @@ void Pawn::check_piece_possible_moves_opponent (
             possible_actions.attacks.insert({new_row, new_column});
 
             // If the piece is the opponent's king, mark it as a checking piece
-            if (board_class.board[new_row][new_column]->piece == "king") {
+            if (board_class.board[new_row][new_column]->piece == king) {
                 board_class.checkin_pieces[{row, column}];
             }
         }
@@ -324,18 +324,18 @@ void Pawn::check_piece_possible_moves_active_player (
     PositionSet checking_positions
 ) {
     // Determine movement direction based on the pawn's color
-    int direction_by_colour = player == "white" ? 1: -1;
+    int direction_by_colour = player == white ? 1: -1;
 
     // Initialize possible forward directions for pawn movement
     std::vector<std::array<int, 2>> directions = {{direction_by_colour, 0}};
 
     // Add double move direction if the pawn is in its starting position
-    if ((player == "white" && row == 1) || (player == "black" && row == 6)) {
+    if ((player == white && row == 1) || (player == black && row == 6)) {
         directions.push_back({direction_by_colour * 2, 0});
     }
 
     // Check for promotion condition if the pawn is one move away from promotion
-    if ((player == "white" && row == 6) || (player == "black" && row == 1)){
+    if ((player == white && row == 6) || (player == black && row == 1)){
         possible_actions.promotion = true;
     }
 
@@ -404,7 +404,7 @@ void Pawn::update_rating_opponent (
     Board& board_class
 ) {
     // Determine movement direction based on the pawn's color
-    int direction_by_colour = player == "white" ? 1: -1;
+    int direction_by_colour = player == white ? 1: -1;
 
     // Initialize possible forward directions for pawn movement
     std::vector<std::array<int, 2>> directions = {{direction_by_colour, 0}};
@@ -427,7 +427,7 @@ void Pawn::update_rating_active_player (
     PositionSet checking_positions
 ) {
     // Determine movement direction based on the pawn's color
-    int direction_by_colour = player == "white" ? 1: -1;
+    int direction_by_colour = player == white ? 1: -1;
 
     // Initialize possible forward directions for pawn movement
     std::vector<std::array<int, 2>> directions = {{direction_by_colour, 0}};
@@ -476,7 +476,7 @@ void Knight::check_piece_possible_moves_opponent (
 
             // If the target square contains the opponent's king, mark the knight as a checking piece
             if (board_class.board[new_row][new_column] &&
-                board_class.board[new_row][new_column]->piece == "king" &&
+                board_class.board[new_row][new_column]->piece == king &&
                 board_class.board[new_row][new_column]->player != player
             ) {
                 board_class.checkin_pieces[{row, column}];
@@ -599,8 +599,8 @@ void King::check_piece_possible_moves_active_player (
         if (is_valid_position(board_class, new_row, new_column)) {
             if (direction == std::array<int, 2> {0, -2}) {
                 // Check for castling to the queenside
-                if (((player == "white" && board_class.castling[0] == 'K') ||
-                        (player == "black" && board_class.castling[2] == 'k')) &&
+                if (((player == white && board_class.castling[0] == 'K') ||
+                        (player == black && board_class.castling[2] == 'k')) &&
                     checking_positions.empty() &&
                     !board_class.board[row][1] &&
                     !board_class.board[row][2] &&
@@ -613,8 +613,8 @@ void King::check_piece_possible_moves_active_player (
                 }
             } else if (direction == std::array<int, 2> {0, 2}) {
                     // Check for castling to the kingside
-                    if (((player == "white" && board_class.castling[1] == 'Q') ||
-                            (player == "black" && board_class.castling[3] == 'q')) &&
+                    if (((player == white && board_class.castling[1] == 'Q') ||
+                            (player == black && board_class.castling[3] == 'q')) &&
                         checking_positions.empty() &&
                         !board_class.board[row][4] &&
                         !board_class.board[row][5] &&
@@ -821,28 +821,28 @@ bool Piece::check_if_legal_action(int check_row, int check_col) {
     return false;
 }
 
-void Piece::update_move_rating_helping(Board& board_class, std::string player, int row, int col) {
+void Piece::update_move_rating_helping(Board& board_class, PlayerColor player, int row, int col) {
     if (board_class.board[row][col]) {
         if (board_class.board[row][col]->player == player) {
-            if (player == "white") {
+            if (player == white) {
                 // There is no benefit in covering own king
-                if (board_class.board[row][col]->piece != "king") {
+                if (board_class.board[row][col]->piece != king) {
                     board_class.white_attack_rating += board_class.protecting_rating_weight * board_class.board[row][col]->get_value();
                 }
             } else {
-                if (board_class.board[row][col]->piece != "king") {
+                if (board_class.board[row][col]->piece != king) {
                     board_class.black_attack_rating -= board_class.protecting_rating_weight * board_class.board[row][col]->get_value();
                 }
             }
         } else {
-            if (player == "white") {
+            if (player == white) {
                 board_class.white_attack_rating += board_class.attack_rating_weight * board_class.board[row][col]->get_value();
             } else {
                 board_class.black_attack_rating -= board_class.attack_rating_weight * board_class.board[row][col]->get_value();
             }
         }
     } else {
-        if (player == "white") {
+        if (player == white) {
             board_class.white_attack_rating += 1;
         } else {
             board_class.black_attack_rating -= 1;

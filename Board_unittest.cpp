@@ -29,41 +29,41 @@ namespace {
         
         std::array<std::array<std::unique_ptr<Piece>, 8>, 8> expected_board;
 
-        expected_board[0][0] = std::make_unique<Rook>('R', "rook", "white", 0, 0);
-        expected_board[0][1] = std::make_unique<Knight>('N', "knight", "white", 0, 1);
-        expected_board[0][2] = std::make_unique<Bishop>('B', "bishop", "white", 0, 2);
-        expected_board[0][3] = std::make_unique<King>('K', "king", "white", 0, 3);
-        expected_board[0][4] = std::make_unique<Queen>('Q', "queen", "white", 0, 4);
-        expected_board[0][5] = std::make_unique<Bishop>('B', "bishop", "white", 0, 5);
-        expected_board[0][6] = std::make_unique<Knight>('N', "knight", "white", 0, 6);
-        expected_board[0][7] = std::make_unique<Rook>('R', "rook", "white", 0, 7);
+        expected_board[0][0] = std::make_unique<Rook>('R', rook, white, 0, 0);
+        expected_board[0][1] = std::make_unique<Knight>('N', knight, white, 0, 1);
+        expected_board[0][2] = std::make_unique<Bishop>('B', bishop, white, 0, 2);
+        expected_board[0][3] = std::make_unique<King>('K', king, white, 0, 3);
+        expected_board[0][4] = std::make_unique<Queen>('Q', queen, white, 0, 4);
+        expected_board[0][5] = std::make_unique<Bishop>('B', bishop, white, 0, 5);
+        expected_board[0][6] = std::make_unique<Knight>('N', knight, white, 0, 6);
+        expected_board[0][7] = std::make_unique<Rook>('R', rook, white, 0, 7);
 
-        expected_board[1][0] = std::make_unique<Pawn>('P', "pawn", "white", 1, 0);
-        expected_board[1][1] = std::make_unique<Pawn>('P', "pawn", "white", 1, 1);
-        expected_board[1][2] = std::make_unique<Pawn>('P', "pawn", "white", 1, 2);
-        expected_board[1][3] = std::make_unique<Pawn>('P', "pawn", "white", 1, 3);
-        expected_board[1][4] = std::make_unique<Pawn>('P', "pawn", "white", 1, 4);
-        expected_board[1][5] = std::make_unique<Pawn>('P', "pawn", "white", 1, 5);
-        expected_board[1][6] = std::make_unique<Pawn>('P', "pawn", "white", 1, 6);
-        expected_board[1][7] = std::make_unique<Pawn>('P', "pawn", "white", 1, 7);
+        expected_board[1][0] = std::make_unique<Pawn>('P', pawn, white, 1, 0);
+        expected_board[1][1] = std::make_unique<Pawn>('P', pawn, white, 1, 1);
+        expected_board[1][2] = std::make_unique<Pawn>('P', pawn, white, 1, 2);
+        expected_board[1][3] = std::make_unique<Pawn>('P', pawn, white, 1, 3);
+        expected_board[1][4] = std::make_unique<Pawn>('P', pawn, white, 1, 4);
+        expected_board[1][5] = std::make_unique<Pawn>('P', pawn, white, 1, 5);
+        expected_board[1][6] = std::make_unique<Pawn>('P', pawn, white, 1, 6);
+        expected_board[1][7] = std::make_unique<Pawn>('P', pawn, white, 1, 7);
 
-        expected_board[6][0] = std::make_unique<Pawn>('p', "pawn", "black", 6, 0);
-        expected_board[6][1] = std::make_unique<Pawn>('p', "pawn", "black", 6, 1);
-        expected_board[6][2] = std::make_unique<Pawn>('p', "pawn", "black", 6, 2);
-        expected_board[6][3] = std::make_unique<Pawn>('p', "pawn", "black", 6, 3);
-        expected_board[6][4] = std::make_unique<Pawn>('p', "pawn", "black", 6, 4);
-        expected_board[6][5] = std::make_unique<Pawn>('p', "pawn", "black", 6, 5);
-        expected_board[6][6] = std::make_unique<Pawn>('p', "pawn", "black", 6, 6);
-        expected_board[6][7] = std::make_unique<Pawn>('p', "pawn", "black", 6, 7);
+        expected_board[6][0] = std::make_unique<Pawn>('p', pawn, black, 6, 0);
+        expected_board[6][1] = std::make_unique<Pawn>('p', pawn, black, 6, 1);
+        expected_board[6][2] = std::make_unique<Pawn>('p', pawn, black, 6, 2);
+        expected_board[6][3] = std::make_unique<Pawn>('p', pawn, black, 6, 3);
+        expected_board[6][4] = std::make_unique<Pawn>('p', pawn, black, 6, 4);
+        expected_board[6][5] = std::make_unique<Pawn>('p', pawn, black, 6, 5);
+        expected_board[6][6] = std::make_unique<Pawn>('p', pawn, black, 6, 6);
+        expected_board[6][7] = std::make_unique<Pawn>('p', pawn, black, 6, 7);
 
-        expected_board[7][0] = std::make_unique<Rook>('r', "rook", "black", 7, 0);
-        expected_board[7][1] = std::make_unique<Knight>('n', "knight", "black", 7, 1);
-        expected_board[7][2] = std::make_unique<Bishop>('b', "bishop", "black", 7, 2);
-        expected_board[7][3] = std::make_unique<King>('k', "king", "black", 7, 3);
-        expected_board[7][4] = std::make_unique<Queen>('q', "queen", "black", 7, 4);
-        expected_board[7][5] = std::make_unique<Bishop>('b', "bishop", "black", 7, 5);
-        expected_board[7][6] = std::make_unique<Knight>('n', "knight", "black", 7, 6);
-        expected_board[7][7] = std::make_unique<Rook>('r', "rook", "black", 7, 7);
+        expected_board[7][0] = std::make_unique<Rook>('r', rook, black, 7, 0);
+        expected_board[7][1] = std::make_unique<Knight>('n', knight, black, 7, 1);
+        expected_board[7][2] = std::make_unique<Bishop>('b', bishop, black, 7, 2);
+        expected_board[7][3] = std::make_unique<King>('k', king, black, 7, 3);
+        expected_board[7][4] = std::make_unique<Queen>('q', queen, black, 7, 4);
+        expected_board[7][5] = std::make_unique<Bishop>('b', bishop, black, 7, 5);
+        expected_board[7][6] = std::make_unique<Knight>('n', knight, black, 7, 6);
+        expected_board[7][7] = std::make_unique<Rook>('r', rook, black, 7, 7);
 
         // Compare each element in the board manually
         for (int i = 0; i < 8; i++) {
@@ -92,27 +92,27 @@ namespace {
         
         std::array<std::array<std::unique_ptr<Piece>, 8>, 8> expected_board;
 
-        expected_board[0][0] = std::make_unique<Rook>('R', "rook", "white", 0, 0);
-        expected_board[0][2] = std::make_unique<Bishop>('B', "bishop", "white", 0, 2);
-        expected_board[0][3] = std::make_unique<King>('K', "king", "white", 0, 3);
-        expected_board[0][4] = std::make_unique<Queen>('Q', "queen", "white", 0, 4);
-        expected_board[0][6] = std::make_unique<Knight>('N', "knight", "white", 0, 6);
+        expected_board[0][0] = std::make_unique<Rook>('R', rook, white, 0, 0);
+        expected_board[0][2] = std::make_unique<Bishop>('B', bishop, white, 0, 2);
+        expected_board[0][3] = std::make_unique<King>('K', king, white, 0, 3);
+        expected_board[0][4] = std::make_unique<Queen>('Q', queen, white, 0, 4);
+        expected_board[0][6] = std::make_unique<Knight>('N', knight, white, 0, 6);
 
-        expected_board[1][0] = std::make_unique<Pawn>('P', "pawn", "white", 1, 0);
-        expected_board[1][2] = std::make_unique<Pawn>('P', "pawn", "white",  1, 2);
-        expected_board[1][4] = std::make_unique<Pawn>('P', "pawn", "white",  1, 4);
-        expected_board[1][6] = std::make_unique<Pawn>('P', "pawn", "white",  1, 6);
+        expected_board[1][0] = std::make_unique<Pawn>('P', pawn, white, 1, 0);
+        expected_board[1][2] = std::make_unique<Pawn>('P', pawn, white,  1, 2);
+        expected_board[1][4] = std::make_unique<Pawn>('P', pawn, white,  1, 4);
+        expected_board[1][6] = std::make_unique<Pawn>('P', pawn, white,  1, 6);
 
-        expected_board[4][4] = std::make_unique<Pawn>('p', "pawn", "black", 4, 4);
-        expected_board[6][1] = std::make_unique<Pawn>('p', "pawn", "black",  6, 1);
-        expected_board[6][3] = std::make_unique<Pawn>('p', "pawn", "black",  6, 3);
-        expected_board[6][5] = std::make_unique<Pawn>('p', "pawn", "black",  6, 5);
-        expected_board[6][7] = std::make_unique<Pawn>('p', "pawn", "black",  6, 7);
+        expected_board[4][4] = std::make_unique<Pawn>('p', pawn, black, 4, 4);
+        expected_board[6][1] = std::make_unique<Pawn>('p', pawn, black,  6, 1);
+        expected_board[6][3] = std::make_unique<Pawn>('p', pawn, black,  6, 3);
+        expected_board[6][5] = std::make_unique<Pawn>('p', pawn, black,  6, 5);
+        expected_board[6][7] = std::make_unique<Pawn>('p', pawn, black,  6, 7);
 
-        expected_board[7][1] = std::make_unique<Knight>('n', "knight", "black",  7, 1);
-        expected_board[7][3] = std::make_unique<King>('k', "king", "black",  7, 3);
-        expected_board[7][5] = std::make_unique<Bishop>('b', "bishop", "black",  7, 5);
-        expected_board[7][7] = std::make_unique<Rook>('r', "rook", "black",  7, 7);
+        expected_board[7][1] = std::make_unique<Knight>('n', knight, black,  7, 1);
+        expected_board[7][3] = std::make_unique<King>('k', king, black,  7, 3);
+        expected_board[7][5] = std::make_unique<Bishop>('b', bishop, black,  7, 5);
+        expected_board[7][7] = std::make_unique<Rook>('r', rook, black,  7, 7);
 
         // Compare each element in the board manually
         for (int i = 0; i < 8; i++) {
@@ -139,7 +139,7 @@ namespace {
             {'r', 'n', 'b', 'k', 'q', 'b', 'n', 'r'}
         }});
 
-        EXPECT_EQ(board.turn, "white");
+        EXPECT_EQ(board.turn, white);
         EXPECT_EQ(board.castling, "KQkq");
 
         // Compare each element in the board manually
@@ -153,7 +153,7 @@ namespace {
     }
 
     TEST(CreateBoardClassWithArgs, Correct) {
-        Board board("black", "KQkq", {{
+        Board board(black, "KQkq", {{
             {'R', ' ', 'B', 'K', 'Q', ' ', 'N', ' '},
             {'P', ' ', 'P', ' ', 'P', ' ', 'P', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -176,7 +176,7 @@ namespace {
             {' ', 'n', ' ', 'k', ' ', 'b', ' ', 'r'}
         }});
 
-        EXPECT_EQ(board.turn, "black");
+        EXPECT_EQ(board.turn, black);
         EXPECT_EQ(board.castling, "KQkq");
 
         std::array<int, 2> enpassant = {NULL, NULL};
@@ -193,7 +193,7 @@ namespace {
     }
 
     TEST(CreateBoardClassWithArgs2, Correct) {
-        Board board("black", "KQ__", {2, 2}, {{
+        Board board(black, "KQ__", {2, 2}, {{
             {'R', ' ', 'B', 'K', 'Q', ' ', 'N', ' '},
             {'P', ' ', 'P', ' ', 'P', ' ', 'P', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -216,7 +216,7 @@ namespace {
             {' ', 'n', ' ', 'k', ' ', 'b', ' ', 'r'}
         }});
 
-        EXPECT_EQ(board.turn, "black");
+        EXPECT_EQ(board.turn, black);
         EXPECT_EQ(board.castling, "KQ__");
 
         std::array<int, 2> enpassant = {2, 2};
@@ -233,7 +233,7 @@ namespace {
     }
 
     TEST(Move1, Correct) {
-        Board board("black", "____", {{
+        Board board(black, "____", {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -244,7 +244,7 @@ namespace {
             {' ', 'k', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
 
-        Board expected_board("white", "____", {{
+        Board expected_board(white, "____", {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -261,7 +261,7 @@ namespace {
     }
     
     TEST(Move2, Incorrect) {
-        Board board("black", "____", {{
+        Board board(black, "____", {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -272,7 +272,7 @@ namespace {
             {' ', 'k', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
         
-        Board expected_board("white", "____", {{
+        Board expected_board(white, "____", {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -289,7 +289,7 @@ namespace {
     }
 
     TEST(MoveEnpassant1, Correct) {
-        Board board("white", "____", {}, {{
+        Board board(white, "____", {}, {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', 'P', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -300,7 +300,7 @@ namespace {
             {' ', ' ', ' ', ' ', 'k', ' ', ' ', ' '}
         }});
 
-        Board expected_board("black", "____", {2, 1}, {{
+        Board expected_board(black, "____", {2, 1}, {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -317,7 +317,7 @@ namespace {
     }
 
     TEST(MoveBoardEnpassant1, Correct) {
-        Board board("white", "____", {}, {{
+        Board board(white, "____", {}, {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', 'P', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -328,7 +328,7 @@ namespace {
             {' ', ' ', ' ', ' ', 'k', ' ', ' ', ' '}
         }});
 
-        Board expected_board("black", "____", {2, 1}, {{
+        Board expected_board(black, "____", {2, 1}, {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -347,7 +347,7 @@ namespace {
     }
 
     TEST(MoveEnpassant2, Incorrect) {
-        Board board("white", "____", {}, {{
+        Board board(white, "____", {}, {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', 'P', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -358,7 +358,7 @@ namespace {
             {' ', ' ', ' ', ' ', 'k', ' ', ' ', ' '}
         }});
 
-        Board expected_board("black", "____", {}, {{
+        Board expected_board(black, "____", {}, {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -375,7 +375,7 @@ namespace {
     }
 
     TEST(MoveBoardEnpassant2, Incorrect) {
-        Board board("white", "____", {}, {{
+        Board board(white, "____", {}, {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', 'P', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -386,7 +386,7 @@ namespace {
             {' ', ' ', ' ', ' ', 'k', ' ', ' ', ' '}
         }});
 
-        Board expected_board("black", "____", {}, {{
+        Board expected_board(black, "____", {}, {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -405,7 +405,7 @@ namespace {
     }
 
     TEST(DoubleMoveEnpassant, Correct) {
-        Board board("white", "____", {}, {{
+        Board board(white, "____", {}, {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', 'P', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -416,7 +416,7 @@ namespace {
             {' ', ' ', ' ', ' ', 'k', ' ', ' ', ' '}
         }});
 
-        Board expected_board("white", "____", {}, {{
+        Board expected_board(white, "____", {}, {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -435,7 +435,7 @@ namespace {
     }
 
     TEST(MoveCastling1, Correct) {
-        Board board("white", "KQkq", {{
+        Board board(white, "KQkq", {{
             {'R', ' ', ' ', 'K', ' ', ' ', ' ', 'R'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -446,7 +446,7 @@ namespace {
             {'r', ' ', ' ', 'k', ' ', ' ', ' ', 'r'}
         }});
 
-        Board expected_board("black", "_Qkq", {{
+        Board expected_board(black, "_Qkq", {{
             {' ', ' ', ' ', 'K', ' ', ' ', ' ', 'R'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {'R', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -463,7 +463,7 @@ namespace {
     }
 
     TEST(MoveBoardCastling1, Correct) {
-        Board board("white", "KQkq", {{
+        Board board(white, "KQkq", {{
             {'R', ' ', ' ', 'K', ' ', ' ', ' ', 'R'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -474,7 +474,7 @@ namespace {
             {'r', ' ', ' ', 'k', ' ', ' ', ' ', 'r'}
         }});
 
-        Board expected_board("black", "_Qkq", {{
+        Board expected_board(black, "_Qkq", {{
             {' ', ' ', ' ', 'K', ' ', ' ', ' ', 'R'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {'R', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -493,7 +493,7 @@ namespace {
     }
 
     TEST(MoveCastling2, Correct) {
-        Board board("white", "KQkq", {{
+        Board board(white, "KQkq", {{
             {'R', ' ', ' ', 'K', ' ', ' ', ' ', 'R'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -504,7 +504,7 @@ namespace {
             {'r', ' ', ' ', 'k', ' ', ' ', ' ', 'r'}
         }});
 
-        Board expected_board("black", "K_kq", {{
+        Board expected_board(black, "K_kq", {{
             {'R', ' ', ' ', 'K', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'R'},
@@ -521,7 +521,7 @@ namespace {
     }
 
     TEST(MoveBoardCastling2, Correct) {
-        Board board("white", "KQkq", {{
+        Board board(white, "KQkq", {{
             {'R', ' ', ' ', 'K', ' ', ' ', ' ', 'R'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -532,7 +532,7 @@ namespace {
             {'r', ' ', ' ', 'k', ' ', ' ', ' ', 'r'}
         }});
 
-        Board expected_board("black", "K_kq", {{
+        Board expected_board(black, "K_kq", {{
             {'R', ' ', ' ', 'K', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'R'},
@@ -551,7 +551,7 @@ namespace {
     }
 
     TEST(MoveCastling3, Correct) {
-        Board board("white", "KQkq", {{
+        Board board(white, "KQkq", {{
             {'R', ' ', ' ', 'K', ' ', ' ', ' ', 'R'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -562,7 +562,7 @@ namespace {
             {'r', ' ', ' ', 'k', ' ', ' ', ' ', 'r'}
         }});
 
-        Board expected_board("black", "__kq", {{
+        Board expected_board(black, "__kq", {{
             {'R', ' ', ' ', ' ', ' ', ' ', ' ', 'R'},
             {' ', ' ', ' ', 'K', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -579,7 +579,7 @@ namespace {
     }
 
     TEST(MoveBoardCastling3, Correct) {
-        Board board("white", "KQkq", {{
+        Board board(white, "KQkq", {{
             {'R', ' ', ' ', 'K', ' ', ' ', ' ', 'R'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -590,7 +590,7 @@ namespace {
             {'r', ' ', ' ', 'k', ' ', ' ', ' ', 'r'}
         }});
 
-        Board expected_board("black", "__kq", {{
+        Board expected_board(black, "__kq", {{
             {'R', ' ', ' ', ' ', ' ', ' ', ' ', 'R'},
             {' ', ' ', ' ', 'K', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -609,7 +609,7 @@ namespace {
     }
 
     TEST(MoveCastling4, Correct) {
-        Board board("black", "KQkq", {{
+        Board board(black, "KQkq", {{
             {'R', ' ', ' ', 'K', ' ', ' ', ' ', 'R'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -620,7 +620,7 @@ namespace {
             {'r', ' ', ' ', 'k', ' ', ' ', ' ', 'r'}
         }});
 
-        Board expected_board("white", "KQ_q", {{
+        Board expected_board(white, "KQ_q", {{
             {'R', ' ', ' ', 'K', ' ', ' ', ' ', 'R'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -637,7 +637,7 @@ namespace {
     }
 
     TEST(MoveBoardCastling4, Correct) {
-        Board board("black", "KQkq", {{
+        Board board(black, "KQkq", {{
             {'R', ' ', ' ', 'K', ' ', ' ', ' ', 'R'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -648,7 +648,7 @@ namespace {
             {'r', ' ', ' ', 'k', ' ', ' ', ' ', 'r'}
         }});
 
-        Board expected_board("white", "KQ_q", {{
+        Board expected_board(white, "KQ_q", {{
             {'R', ' ', ' ', 'K', ' ', ' ', ' ', 'R'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -667,7 +667,7 @@ namespace {
     }
 
     TEST(MoveCastling5, Correct) {
-        Board board("black", "KQkq", {{
+        Board board(black, "KQkq", {{
             {'R', ' ', ' ', 'K', ' ', ' ', ' ', 'R'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -678,7 +678,7 @@ namespace {
             {'r', ' ', ' ', 'k', ' ', ' ', ' ', 'r'}
         }});
 
-        Board expected_board("white", "KQk_", {{
+        Board expected_board(white, "KQk_", {{
             {'R', ' ', ' ', 'K', ' ', ' ', ' ', 'R'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -695,7 +695,7 @@ namespace {
     }
 
     TEST(MoveBoardCastling5, Correct) {
-        Board board("black", "KQkq", {{
+        Board board(black, "KQkq", {{
             {'R', ' ', ' ', 'K', ' ', ' ', ' ', 'R'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -706,7 +706,7 @@ namespace {
             {'r', ' ', ' ', 'k', ' ', ' ', ' ', 'r'}
         }});
 
-        Board expected_board("white", "KQk_", {{
+        Board expected_board(white, "KQk_", {{
             {'R', ' ', ' ', 'K', ' ', ' ', ' ', 'R'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -725,7 +725,7 @@ namespace {
     }
 
     TEST(MoveCastling6, Correct) {
-        Board board("black", "KQkq", {{
+        Board board(black, "KQkq", {{
             {'R', ' ', ' ', 'K', ' ', ' ', ' ', 'R'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -736,7 +736,7 @@ namespace {
             {'r', ' ', ' ', 'k', ' ', ' ', ' ', 'r'}
         }});
 
-        Board expected_board("white", "KQ__", {{
+        Board expected_board(white, "KQ__", {{
             {'R', ' ', ' ', 'K', ' ', ' ', ' ', 'R'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -753,7 +753,7 @@ namespace {
     }
 
     TEST(MoveBoardCastling6, Correct) {
-        Board board("black", "KQkq", {{
+        Board board(black, "KQkq", {{
             {'R', ' ', ' ', 'K', ' ', ' ', ' ', 'R'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -764,7 +764,7 @@ namespace {
             {'r', ' ', ' ', 'k', ' ', ' ', ' ', 'r'}
         }});
 
-        Board expected_board("white", "KQ__", {{
+        Board expected_board(white, "KQ__", {{
             {'R', ' ', ' ', 'K', ' ', ' ', ' ', 'R'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -783,7 +783,7 @@ namespace {
     }
 
     TEST(TwoMovesPawn, Correct) {
-        Board board("black", "____", {{
+        Board board(black, "____", {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -875,7 +875,7 @@ namespace {
     }
 
     TEST(NoWinner, Correct) {
-        Board board("black", "____", {{
+        Board board(black, "____", {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -886,11 +886,11 @@ namespace {
             {' ', 'k', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
         
-        EXPECT_EQ(board.winner, "");
+        EXPECT_EQ(board.winner, notFinished);
     }
 
     TEST(WhiteWinner, Correct) {
-        Board board("black", "____", {{
+        Board board(black, "____", {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -901,11 +901,11 @@ namespace {
             {' ', 'k', ' ', ' ', ' ', ' ', 'R', ' '}
         }});
         
-        EXPECT_EQ(board.winner, "white");
+        EXPECT_EQ(board.winner, whiteWin);
     }
 
     TEST(BlackWinner, Correct) {
-        Board board("white", "____", {{
+        Board board(white, "____", {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', 'r'},
             {' ', ' ', ' ', ' ', ' ', ' ', 'r', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -916,11 +916,11 @@ namespace {
             {' ', 'k', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
         
-        EXPECT_EQ(board.winner, "black");
+        EXPECT_EQ(board.winner, blackWin);
     }
 
     TEST(Draw, Correct) {
-        Board board("black", "____", {{
+        Board board(black, "____", {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -931,7 +931,7 @@ namespace {
             {'k', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
         
-        EXPECT_EQ(board.winner, "draw");
+        EXPECT_EQ(board.winner, draw);
     }
 
     TEST(CreateNotation1, Correct) {
@@ -987,7 +987,7 @@ namespace {
     }
 
     TEST(CheckMaterialRating, Correct) {
-        Board board("black", "KQkq", {{
+        Board board(black, "KQkq", {{
             {'R', 'N', 'B', 'K', 'Q', 'B', 'N', 'R'},
             {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1018,7 +1018,7 @@ namespace {
     }
 
     TEST(MakeActionAndBoard, Correct) {
-        Board board("black", "____", {{
+        Board board(black, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'K'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1041,7 +1041,7 @@ namespace {
     }
 
     TEST(MinimaxWhiteMate, Correct) {
-        Board board("white", "____", {{
+        Board board(white, "____", {{
             {' ', ' ', ' ', 'K', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1059,7 +1059,7 @@ namespace {
     }
 
     TEST(MinimaxBlackMate, Correct) {
-        Board board("black", "____", {{
+        Board board(black, "____", {{
             {' ', ' ', ' ', 'K', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'r'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1077,7 +1077,7 @@ namespace {
     }
 
     TEST(MinimaxPat, Correct) {
-        Board board("black", "____", {{
+        Board board(black, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'K'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'b'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1095,7 +1095,7 @@ namespace {
     }
 
     TEST(MinimaxPat2, Correct) {
-        Board board("black", "____", {{
+        Board board(black, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'K'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'b'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1113,7 +1113,7 @@ namespace {
     }
 
     TEST(MinimaxOnlyMove, Correct) {
-        Board board("black", "____", {{
+        Board board(black, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'K'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {'q', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1124,7 +1124,7 @@ namespace {
             {' ', ' ', ' ', ' ', 'k', ' ', ' ', ' '}
         }});
 
-        Board expected_board("black", "____", {{
+        Board expected_board(black, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', 'K', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'q'},

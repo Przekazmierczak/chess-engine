@@ -17,7 +17,7 @@ class Board {
         const int COLS = 8;
 
         // Board state attributes
-        std::string turn; // Current player's turn ("white" or "black")
+        PlayerColor turn; // Current player's turn (white = 0 or black = 1)
         std::string castling; // Castling rights (e.g., "KQkq")
         std::array<int, 2> enpassant; // Coordinates for en passant, if available
 
@@ -42,17 +42,17 @@ class Board {
 
         int final_rating;
 
-        std::string winner;
+        Winner winner;
 
         // Constructors
         Board();
         Board(
-            const std::string& input_turn,
+            const PlayerColor& input_turn,
             const std::string& input_castling,
             const std::array<std::array<char, 8>, 8>& simplify_board
         );
         Board(
-            const std::string& input_turn,
+            const PlayerColor& input_turn,
             const std::string& input_castling,
             const std::array<int, 2>& input_enpassant,
             const std::array<std::array<char, 8>, 8>& simplify_board

@@ -4,35 +4,38 @@
 
 // Default constructor initializes the board to the standard starting position
 Board::Board()
-    : turn("white"),
+    : turn(white),
       castling("KQkq"),
       enpassant({NULL, NULL}),
-      board(create_board()) {
+      board(create_board()),
+      winner(notFinished) {
     get_possible_actions();
 }
 
 // Constructor to initialize board with a given turn, castling rights, and custom board state
 Board::Board(
-    const std::string& input_turn,
+    const PlayerColor& input_turn,
     const std::string& input_castling,
     const std::array<std::array<char, 8>, 8>& simplify_board)
     : turn(input_turn),
       castling(input_castling),
       enpassant({NULL, NULL}),
-      board(create_board(simplify_board)) {
+      board(create_board(simplify_board)),
+      winner(notFinished) {
     get_possible_actions();
 }
 
 // Constructor to initialize board with custom en passant state and board state
 Board::Board(
-    const std::string& input_turn,
+    const PlayerColor& input_turn,
     const std::string& input_castling,
     const std::array<int, 2>& input_enpassant,
     const std::array<std::array<char, 8>, 8>& simplify_board)
     : turn(input_turn),
       castling(input_castling),
       enpassant(input_enpassant),
-      board(create_board(simplify_board)) {
+      board(create_board(simplify_board)),
+      winner(notFinished) {
     get_possible_actions();
 }
 
@@ -40,6 +43,7 @@ Board::Board(const Board& other_board) {
     turn = other_board.turn;
     castling = other_board.castling;
     enpassant = other_board.enpassant;
+    winner = other_board.winner;
 
     for (int row = 0; row < ROWS; row++) {
         for (int col = 0; col < COLS; col++) {
@@ -148,18 +152,18 @@ std::unique_ptr<Piece> Board::create_piece(
     const int& col
 ) {
     // Determine player color
-    std:: string player = isupper(symbol) ? "white" : "black";
+    PlayerColor player = isupper(symbol) ? white : black;
 
     char upperSymbol = toupper(symbol);
 
     // Create the appropriate piece based on the symbol
     switch (upperSymbol) {
-        case 'R': return std::make_unique<Rook>(symbol, "rook", player, row, col);
-        case 'N': return std::make_unique<Knight>(symbol, "knight", player, row, col);
-        case 'B': return std::make_unique<Bishop>(symbol, "bishop", player, row, col);
-        case 'K': return std::make_unique<King>(symbol, "king", player, row, col);
-        case 'Q': return std::make_unique<Queen>(symbol, "queen", player, row, col);
-        default:  return std::make_unique<Pawn>(symbol, "pawn", player, row, col);
+        case 'R': return std::make_unique<Rook>(symbol, rook, player, row, col);
+        case 'N': return std::make_unique<Knight>(symbol, knight, player, row, col);
+        case 'B': return std::make_unique<Bishop>(symbol, bishop, player, row, col);
+        case 'K': return std::make_unique<King>(symbol, king, player, row, col);
+        case 'Q': return std::make_unique<Queen>(symbol, queen, player, row, col);
+        default:  return std::make_unique<Pawn>(symbol, pawn, player, row, col);
     }
 }
 
@@ -254,9 +258,9 @@ void Board::get_possible_actions() {
 
     if (!active_pieces.size()) {
         if (checkin_pieces.size()) {
-            winner = (turn == "white") ? "black" : "white";
+            winner = (turn == white) ? blackWin : whiteWin;
         } else {
-            winner = "draw";
+            winner = draw;
         }
     }
 }
@@ -273,8 +277,8 @@ void Board::get_rating() {
             if (current_piece && current_piece->player != turn) {
                 current_piece->update_rating_opponent(*this);
 
-                if (current_piece->piece != "king") {
-                    if (current_piece->player == "white") {
+                if (current_piece->piece != king) {
+                    if (current_piece->player == white) {
                         white_material_rating += material_rating_weight * current_piece->get_value();
                     } else {
                         black_material_rating -= material_rating_weight * current_piece->get_value();
@@ -292,8 +296,8 @@ void Board::get_rating() {
             if (current_piece && current_piece->player == turn) {
                 current_piece->update_rating_active_player(*this, checking_positions);
                 
-                if (current_piece->piece != "king") {
-                    if (current_piece->player == "white") {
+                if (current_piece->piece != king) {
+                    if (current_piece->player == white) {
                         white_material_rating += material_rating_weight * current_piece->get_value();
                     } else {
                         black_material_rating -= material_rating_weight * current_piece->get_value();
@@ -326,7 +330,7 @@ void Board::make_action(int old_row, int old_col, int new_row, int new_col, char
         board[new_row][new_col]->row = new_row;
         board[new_row][new_col]->column = new_col;
         
-        turn = (turn == "white") ? "black" : "white";
+        turn = (turn == white) ? black : white;
         
         get_possible_actions();
     } else {
@@ -356,7 +360,7 @@ Board Board::make_action_board(int old_row, int old_col, int new_row, int new_co
         new_board.board[new_row][new_col]->row = new_row;
         new_board.board[new_row][new_col]->column = new_col;
         
-        new_board.turn = (new_board.turn == "white") ? "black" : "white";
+        new_board.turn = (new_board.turn == white) ? black : white;
     } else {
         // std::cout << "Wrong action" << std::endl;
     }
@@ -364,7 +368,7 @@ Board Board::make_action_board(int old_row, int old_col, int new_row, int new_co
 }
 
 void Board::check_enpassant(int old_row, int old_col, int new_row) {
-    if (board[old_row][old_col]->piece == "pawn" &&
+    if (board[old_row][old_col]->piece == pawn &&
         (old_row == 1 && new_row == 3) ||
         (old_row == 6 && new_row == 4)) {
             enpassant = {(old_row + new_row) / 2, old_col};
@@ -409,7 +413,7 @@ void Board::computer_action() {
     for (auto position : active_pieces) {
         for (auto move : board[position[0]][position[1]]->possible_actions) {
             if (board[position[0]][position[1]]->possible_actions.promotion) {
-                if (turn == "white") {
+                if (turn == white) {
                     symbols = {'Q', 'N', 'R', 'B'};
                 } else {
                     symbols = {'q', 'n', 'r', 'b'};
@@ -432,7 +436,7 @@ void Board::computer_action() {
         }
     }
 
-    if (turn == "white") {
+    if (turn == white) {
         std::sort(actions.begin(), actions.end(), std::greater<Action>());
     } else {
         std::sort(actions.begin(), actions.end());
@@ -448,7 +452,7 @@ int Board::minimax(Board board, int depth) {
         return board.final_rating;
     } else if (board.active_pieces.empty()) {
         if (!board.checkin_pieces.empty()) {
-            if (board.turn == "white") {
+            if (board.turn == white) {
                 return -100000 - depth;
             } else {
                 return 100000 + depth;
@@ -458,7 +462,7 @@ int Board::minimax(Board board, int depth) {
         }
     } else {
         int res;
-        int curr_min_max = (board.turn == "white") ? -100000 : 100000;
+        int curr_min_max = (board.turn == white) ? -100000 : 100000;
 
         for (auto position : board.active_pieces) {
             for (auto move : board.board[position[0]][position[1]]->possible_actions) {
@@ -466,7 +470,7 @@ int Board::minimax(Board board, int depth) {
                     return minimax(board.make_action_board(position[0], position[1], move[0], move[1], promotion), depth - 1);
                 };
 
-                if (board.turn == "white") {
+                if (board.turn == white) {
                     if (board.board[position[0]][position[1]]->possible_actions.promotion) {
                         res = std::max({
                             make_and_minimax('Q'),

@@ -24,7 +24,7 @@ namespace {
     }
 
     TEST(TestBasicMovements, Correct) {
-        Board board_white("white", "____", {{
+        Board board_white(white, "____", {{
             {'R', ' ', ' ', ' ', 'K', ' ', ' ', ' '},
             {'P', ' ', ' ', ' ', ' ', ' ', 'P', ' '},
             {'N', ' ', ' ', ' ', 'P', ' ', ' ', ' '},
@@ -35,7 +35,7 @@ namespace {
             {'r', 'n', 'b', 'k', 'r', ' ', ' ', ' '}
         }});
 
-        Board board_black("black", "____", {{
+        Board board_black(black, "____", {{
             {'R', ' ', ' ', ' ', 'K', ' ', ' ', ' '},
             {'P', ' ', ' ', ' ', ' ', ' ', 'P', ' '},
             {'N', ' ', ' ', ' ', 'P', ' ', ' ', ' '},
@@ -222,7 +222,7 @@ namespace {
     }
 
     TEST(BlockTheKingMove, Correct) {
-        Board board("black", "____", {{
+        Board board(black, "____", {{
             {'K', ' ', ' ', ' ', ' ', 'N', ' ', ' '},
             {' ', ' ', 'P', ' ', ' ', 'R', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', 'B', ' '},
@@ -244,7 +244,7 @@ namespace {
     }
 
     TEST(BlockTheKingAttack, Correct) {
-        Board board("black", "____", {{
+        Board board(black, "____", {{
             {'K', ' ', ' ', ' ', 'R', ' ', 'N', ' '},
             {' ', ' ', 'B', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', 'P', ' ', ' '},
@@ -266,7 +266,7 @@ namespace {
     }
 
     TEST(AbsolutePin, Correct) {
-        Board board("black", "____", {{
+        Board board(black, "____", {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', 'B', ' '},
             {' ', ' ', ' ', ' ', ' ', 'p', ' ', ' '},
@@ -306,7 +306,7 @@ namespace {
     }
 
     TEST(Check, Correct) {
-        Board board("black", "____", {{
+        Board board(black, "____", {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', 'n', 'b', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -391,7 +391,7 @@ namespace {
     }
 
     TEST(DoubleCheck, Correct) {
-        Board board("black", "____", {{
+        Board board(black, "____", {{
             {'K', ' ', ' ', ' ', ' ', ' ', 'R', ' '},
             {' ', ' ', 'n', 'b', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -476,7 +476,7 @@ namespace {
     }
 
     TEST(Castling12, Correct) {
-        Board board_q("black", "___q", {{
+        Board board_q(black, "___q", {{
             {' ', ' ', ' ', 'K', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -487,7 +487,7 @@ namespace {
             {'r', ' ', ' ', 'k', ' ', ' ', ' ', 'r'}
         }});
 
-        Board board_k("black", "__k_", {{
+        Board board_k(black, "__k_", {{
             {' ', ' ', ' ', 'K', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -518,7 +518,7 @@ namespace {
     }
 
     TEST(Castling3, Correct) {
-        Board board("black", "KQkq", {{
+        Board board(black, "KQkq", {{
             {' ', ' ', ' ', 'K', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -540,7 +540,7 @@ namespace {
     }
 
     TEST(Castling4, Correct) {
-        Board board("black", "KQkq", {{
+        Board board(black, "KQkq", {{
             {' ', ' ', ' ', 'K', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -562,7 +562,7 @@ namespace {
     }
 
     TEST(Castling5, Correct) {
-        Board board("black", "KQkq", {{
+        Board board(black, "KQkq", {{
             {' ', ' ', ' ', 'K', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -584,7 +584,7 @@ namespace {
     }
 
     TEST(Enpassant12, Correct) {
-        Board board_24("black", "KQkq", {2, 4}, {{
+        Board board_24(black, "KQkq", {2, 4}, {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -595,7 +595,7 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'k'}
         }});
 
-        Board board_NN("black", "KQkq", {NULL, NULL}, {{
+        Board board_NN(black, "KQkq", {NULL, NULL}, {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -606,7 +606,7 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'k'}
         }});
 
-        Board board_24_check("black", "KQkq", {2, 4}, {{
+        Board board_24_check(black, "KQkq", {2, 4}, {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {'R', ' ', ' ', ' ', ' ', ' ', ' ', 'k'},
@@ -646,7 +646,7 @@ namespace {
     }
 
     TEST(AttackRatingKing, Correct) {
-        Board board_white("white", "____", {{
+        Board board_white(white, "____", {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -657,7 +657,7 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'k'}
         }});
 
-        Board board_black("black", "____", {{
+        Board board_black(black, "____", {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -679,7 +679,7 @@ namespace {
     }
 
     TEST(AttackRatingQueen, Correct) {
-        Board board_white("white", "____", {{
+        Board board_white(white, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', 'Q', ' ', ' ', ' ', ' ', ' '},
@@ -690,7 +690,7 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
 
-        Board board_black("black", "____", {{
+        Board board_black(black, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', 'Q', ' ', ' ', ' ', ' ', ' '},
@@ -712,7 +712,7 @@ namespace {
     }
 
     TEST(AttackRatingRook, Correct) {
-        Board board_white("white", "____", {{
+        Board board_white(white, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', 'R', ' ', ' ', ' ', ' ', ' '},
@@ -723,7 +723,7 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
 
-        Board board_black("black", "____", {{
+        Board board_black(black, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', 'R', ' ', ' ', ' ', ' ', ' '},
@@ -745,7 +745,7 @@ namespace {
     }
 
     TEST(AttackRatingBishop, Correct) {
-        Board board_white("white", "____", {{
+        Board board_white(white, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', 'B', ' ', ' ', ' ', ' ', ' '},
@@ -756,7 +756,7 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
 
-        Board board_black("black", "____", {{
+        Board board_black(black, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', 'B', ' ', ' ', ' ', ' ', ' '},
@@ -778,7 +778,7 @@ namespace {
     }
     
     TEST(AttackRatingKnight, Correct) {
-        Board board_white("white", "____", {{
+        Board board_white(white, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', 'N', ' ', ' ', ' ', ' ', ' '},
@@ -789,7 +789,7 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
 
-        Board board_black("black", "____", {{
+        Board board_black(black, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', 'N', ' ', ' ', ' ', ' ', ' '},
@@ -811,7 +811,7 @@ namespace {
     }
 
     TEST(AttackRatingPawn, Correct) {
-        Board board_white("white", "____", {{
+        Board board_white(white, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', 'P', ' ', ' ', ' ', ' ', ' '},
@@ -822,7 +822,7 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
 
-        Board board_black("black", "____", {{
+        Board board_black(black, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', 'P', ' ', ' ', ' ', ' ', ' '},
@@ -844,7 +844,7 @@ namespace {
     }
 
     TEST(AttackRatingKingPawnAttack, Correct) {
-        Board board_white("white", "____", {{
+        Board board_white(white, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', 'p', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', 'K', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -855,7 +855,7 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
 
-        Board board_black("black", "____", {{
+        Board board_black(black, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', 'p', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', 'K', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -877,7 +877,7 @@ namespace {
     }
 
     TEST(AttackRatingKingPawnCover, Correct) {
-        Board board_white("white", "____", {{
+        Board board_white(white, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', 'P', ' ', ' ', ' ', ' ', ' '},
             {' ', 'K', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -888,7 +888,7 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
 
-        Board board_black("black", "____", {{
+        Board board_black(black, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', 'P', ' ', ' ', ' ', ' ', ' '},
             {' ', 'K', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -910,7 +910,7 @@ namespace {
     }
 
     TEST(AttackRatingPawnAttackQueen, Correct) {
-        Board board_white("white", "____", {{
+        Board board_white(white, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', 'P', ' ', ' ', ' ', ' ', ' ', ' '},
             {'q', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -921,7 +921,7 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
 
-        Board board_black("black", "____", {{
+        Board board_black(black, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', 'P', ' ', ' ', ' ', ' ', ' ', ' '},
             {'q', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -943,7 +943,7 @@ namespace {
     }
 
     TEST(AttackRatingPawnCoverQueen, Correct) {
-        Board board_white("white", "____", {{
+        Board board_white(white, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', 'P', ' ', ' ', ' ', ' ', ' ', ' '},
             {'Q', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -954,7 +954,7 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
 
-        Board board_black("black", "____", {{
+        Board board_black(black, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', 'P', ' ', ' ', ' ', ' ', ' ', ' '},
             {'Q', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -976,7 +976,7 @@ namespace {
     }
 
     TEST(AttackRatingQueenAttackBishop, Correct) {
-        Board board_white("white", "____", {{
+        Board board_white(white, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {'Q', 'b', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -987,7 +987,7 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
 
-        Board board_black("black", "____", {{
+        Board board_black(black, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {'Q', 'b', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1009,7 +1009,7 @@ namespace {
     }
 
     TEST(AttackRatingQueenCoverBishop, Correct) {
-        Board board_white("white", "____", {{
+        Board board_white(white, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {'Q', 'B', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1020,7 +1020,7 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
 
-        Board board_black("black", "____", {{
+        Board board_black(black, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {'Q', 'B', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1042,7 +1042,7 @@ namespace {
     }
 
     TEST(AttackRatingBishopAttackRook, Correct) {
-        Board board_white("white", "____", {{
+        Board board_white(white, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {'r', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', 'B', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1053,7 +1053,7 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
 
-        Board board_black("black", "____", {{
+        Board board_black(black, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {'r', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', 'B', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1075,7 +1075,7 @@ namespace {
     }
 
     TEST(AttackRatingBishopCoverRook, Correct) {
-        Board board_white("white", "____", {{
+        Board board_white(white, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {'R', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', 'B', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1086,7 +1086,7 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
 
-        Board board_black("black", "____", {{
+        Board board_black(black, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {'R', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', 'B', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1108,7 +1108,7 @@ namespace {
     }
 
     TEST(AttackRatingRookAttackKnight, Correct) {
-        Board board_white("white", "____", {{
+        Board board_white(white, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {'R', 'n', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1119,7 +1119,7 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
 
-        Board board_black("black", "____", {{
+        Board board_black(black, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {'R', 'n', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1141,7 +1141,7 @@ namespace {
     }
 
     TEST(AttackRatingRookCoverKnight, Correct) {
-        Board board_white("white", "____", {{
+        Board board_white(white, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {'R', 'N', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1152,7 +1152,7 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
 
-        Board board_black("black", "____", {{
+        Board board_black(black, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {'R', 'N', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1174,7 +1174,7 @@ namespace {
     }
 
     TEST(AttackRatingKnightAttackKing, Correct) {
-        Board board_white("white", "____", {{
+        Board board_white(white, "____", {{
             {'k', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', 'N', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1185,7 +1185,7 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'K'}
         }});
 
-        Board board_black("black", "____", {{
+        Board board_black(black, "____", {{
             {'k', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', 'N', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1207,7 +1207,7 @@ namespace {
     }
 
     TEST(AttackRatingKnightCoverKing, Correct) {
-        Board board_white("white", "____", {{
+        Board board_white(white, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {'N', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1218,7 +1218,7 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
 
-        Board board_black("black", "____", {{
+        Board board_black(black, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {'N', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1240,7 +1240,7 @@ namespace {
     }
 
     TEST(AttackRatingKnightPin, Correct) {
-        Board board_white("white", "____", {{
+        Board board_white(white, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', 'K', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1251,7 +1251,7 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'k'}
         }});
 
-        Board board_black("black", "____", {{
+        Board board_black(black, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', 'K', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1273,7 +1273,7 @@ namespace {
     }
 
     TEST(AttackRatingBishopPin, Correct) {
-        Board board_white("white", "____", {{
+        Board board_white(white, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', 'K', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1284,7 +1284,7 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'k'}
         }});
 
-        Board board_black("black", "____", {{
+        Board board_black(black, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', 'K', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1306,7 +1306,7 @@ namespace {
     }
 
     TEST(AttackRatingPawnPin, Correct) {
-        Board board_white("white", "____", {{
+        Board board_white(white, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', 'K', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1317,7 +1317,7 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'k'}
         }});
 
-        Board board_black("black", "____", {{
+        Board board_black(black, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', 'K', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1339,7 +1339,7 @@ namespace {
     }
 
     TEST(AttackRatingBlockKingMove, Correct) {
-        Board board_white("white", "____", {{
+        Board board_white(white, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', 'K', ' ', 'p', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1350,7 +1350,7 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'k'}
         }});
 
-        Board board_black("black", "____", {{
+        Board board_black(black, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', 'K', ' ', 'p', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1373,7 +1373,7 @@ namespace {
     }
 
     TEST(AttackRatingBlockKingAttack, Correct) {
-        Board board_white("white", "____", {{
+        Board board_white(white, "____", {{
             {'K', ' ', ' ', ' ', 'R', ' ', 'N', ' '},
             {' ', ' ', 'B', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', 'P', ' ', ' '},
@@ -1384,7 +1384,7 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '}
         }});
 
-        Board board_black("black", "____", {{
+        Board board_black(black, "____", {{
             {'K', ' ', ' ', ' ', 'R', ' ', 'N', ' '},
             {' ', ' ', 'B', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', 'P', ' ', ' '},
@@ -1404,7 +1404,7 @@ namespace {
     }
 
     TEST(AttackRatingCheck, Correct) {
-        Board board_white("white", "____", {{
+        Board board_white(white, "____", {{
             {'Q', ' ', ' ', ' ', ' ', ' ', ' ', 'R'},
             {' ', 'P', ' ', 'B', ' ', 'N', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1422,7 +1422,7 @@ namespace {
     }
 
     TEST(AttackRatingCheck2, Correct) {
-        Board board_black("black", "____", {{
+        Board board_black(black, "____", {{
             {' ', 'K', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', 'n', 'b', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1440,7 +1440,7 @@ namespace {
     }
 
     TEST(AttackRatingDoubleCheck, Correct) {
-        Board board_black("black", "____", {{
+        Board board_black(black, "____", {{
             {' ', 'K', ' ', ' ', ' ', ' ', 'R', ' '},
             {' ', ' ', 'n', 'b', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1458,7 +1458,7 @@ namespace {
     }
 
     TEST(AttackRatingEnpassant, Correct) {
-        Board board_24("black", "____", {2, 4}, {{
+        Board board_24(black, "____", {2, 4}, {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1469,7 +1469,7 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'k'}
         }});
 
-        Board board_NN("black", "____", {NULL, NULL}, {{
+        Board board_NN(black, "____", {NULL, NULL}, {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1480,7 +1480,7 @@ namespace {
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'k'}
         }});
 
-        Board board_24_check("black", "____", {2, 4}, {{
+        Board board_24_check(black, "____", {2, 4}, {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {'R', ' ', ' ', ' ', ' ', ' ', ' ', 'k'},
