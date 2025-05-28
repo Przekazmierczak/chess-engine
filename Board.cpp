@@ -125,25 +125,123 @@ std::ostream& operator<<(std::ostream& out, const Board& board_class) {
 };
 
 void Board::print_white_perspective() {
-    std::cout << "Turn: " << turn << ", ";
-    std::cout << "State: " << std::endl;
-
+    auto print_square = [](std::string piece_color, std::string background_color, char mark, char piece) {
+        std::cout << "\033[1;" << piece_color << ";" << background_color << "m " << mark << piece << "  \033[0m";
+    };
+    
+    auto get_colors = [](bool has_piece, bool is_white_piece, bool is_light_square) {
+        std::string piece_color = is_white_piece ? "34" : "35"; // Blue for white, magenta for black
+        std::string background_color;
+        
+        if (has_piece) {
+            background_color = is_light_square ? "47" : "100"; // Default light or dark square
+        } else {
+            background_color = is_light_square ? "47" : "100";
+        }
+        return std::make_pair(piece_color, background_color);
+    };
+    
     for (int row = ROWS - 1; row >= 0; row--) {
         // Print row numbers
-        std::cout << row + 1 << " ";
+        std::cout << row + 1 << "  ";
         for (int col = COLS - 1; col >= 0; col--) {
-            if (board[row][col]) {
-                // Display piece symbol
-                std::cout << "[" << board[row][col]->symbol << "]";
+            bool is_light_square = (row + col) % 2 == 0;
+            bool has_piece = (board[row][col] != nullptr);
+            char piece_symbol = has_piece ? board[row][col]->symbol : ' ';
+            bool is_white_piece = has_piece && board[row][col]->player == white;
+    
+            auto [piece_color, background_color] = get_colors(has_piece, is_white_piece, is_light_square);
+            if (has_piece) {
+                print_square(piece_color, background_color, is_white_piece ? '^' : ' ', piece_symbol);
             } else {
-                // Empty square
-                std::cout << "[ ]";
+                print_square("", background_color, ' ', ' ');
             }
+        }
+        std::cout << std::endl << "   ";
+    
+        for (int col = COLS - 1; col >= 0; col--) {
+            bool is_light_square = (row + col) % 2 == 0;
+    
+            std::string background_color = (is_light_square ? "47" : "100");
+    
+            print_square("", background_color, ' ', ' ');
         }
         std::cout << std::endl;
     }
+    
     // Column labels
-    std::cout << "   a  b  c  d  e  f  g  h " << std::endl;
+    std::cout << "     a    b    c    d    e    f    g    h  " << std::endl;
+};
+
+void Board::print_white_perspective(std::array<int, 2> current_piece, Actions possible_actions) {
+    auto print_square = [](std::string piece_color, std::string background_color, char mark, char piece) {
+        std::cout << "\033[1;" << piece_color << ";" << background_color << "m " << mark << piece << "  \033[0m";
+    };
+    
+    auto get_colors = [](bool has_piece, bool is_white_piece, bool is_selected, bool is_move, bool is_attack, bool is_light_square) {
+        std::string piece_color = is_white_piece ? "34" : "35"; // Blue for white, magenta for black
+        std::string background_color;
+        
+        if (has_piece) {
+            if (is_selected) {
+                background_color = is_light_square ? "103" : "43"; // Light or dark selected square
+            } else if (is_attack) {
+                background_color = is_light_square ? "101" : "41"; // Light or dark attack square
+            } else {
+                background_color = is_light_square ? "47" : "100"; // Default light or dark square
+            }
+        } else {
+            if (is_move) {
+                background_color = is_light_square ? "102" : "42";
+            } else {
+                background_color = is_light_square ? "47" : "100";
+            }
+        }
+        return std::make_pair(piece_color, background_color);
+    };
+    
+    for (int row = ROWS - 1; row >= 0; row--) {
+        // Print row numbers
+        std::cout << row + 1 << "  ";
+        for (int col = COLS - 1; col >= 0; col--) {
+            bool is_light_square = (row + col) % 2 == 0;
+            bool is_selected = (row == current_piece[0] && col == current_piece[1]);
+            bool is_attack = possible_actions.attacks.count({row, col});
+            bool is_move = possible_actions.moves.count({row, col});
+            bool has_piece = (board[row][col] != nullptr);
+            char piece_symbol = has_piece ? board[row][col]->symbol : ' ';
+            bool is_white_piece = has_piece && board[row][col]->player == white;
+    
+            auto [piece_color, background_color] = get_colors(has_piece, is_white_piece, is_selected, is_move, is_attack, is_light_square);
+            if (has_piece) {
+                print_square(piece_color, background_color, is_white_piece ? '^' : ' ', piece_symbol);
+            } else {
+                print_square("", background_color, ' ', ' ');
+            }
+        }
+        std::cout << std::endl << "   ";
+    
+        for (int col = COLS - 1; col >= 0; col--) {
+            bool is_light_square = (row + col) % 2 == 0;
+            bool is_selected = (row == current_piece[0] && col == current_piece[1]);
+            bool is_attack = possible_actions.attacks.count({row, col});
+            bool is_move = possible_actions.moves.count({row, col});
+    
+            std::string background_color = is_move
+                ? (is_light_square ? "102" : "42")
+                : is_attack
+                    ? (is_light_square ? "101" : "41")
+                    : is_selected
+                        ? (is_light_square ? "103" : "43")
+                        : (is_light_square ? "47" : "100");
+    
+            print_square("", background_color, ' ', ' ');
+        }
+        std::cout << std::endl;
+    }
+    
+    // Column labels
+    std::cout << "     a    b    c    d    e    f    g    h  " << std::endl;
 };
 
 std::unique_ptr<Piece> Board::create_piece(

@@ -71,6 +71,8 @@ class Board {
 
         void print_white_perspective();
 
+        void print_white_perspective(std::array<int, 2> current_piece, Actions possible_actions);
+
         // Helper functions for managing the board
         std::unique_ptr<Piece> create_piece(
             const char& symbol, // Character representing the piece (e.g., 'K', 'p')
