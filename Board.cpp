@@ -54,20 +54,33 @@ Board::Board(const Board& other_board) {
     }
 }
 
-// Board& Board::operator=(const Board& other_board) {
-//     if (this == &other_board) return *this;
+Board& Board::operator=(const Board& other_board) {
+    if (this == &other_board) return *this;
 
-//     turn = other_board.turn;
-//     castling = other_board.castling;
-//     enpassant = other_board.enpassant;
+    for (int row = 0; row < ROWS; ++row) {
+        for (int col = 0; col < COLS; ++col) {
+            board[row][col].reset();
+        }
+    }
 
-//     for (int row = 0; row < ROWS; row++) {
-//         for (int col = 0; col < COLS; col++) {
-//             board[row][col] = create_piece(other_board.board[row][col]->symbol, row, col);
-//         }
-//     }
-//     get_possible_actions();
-// }
+    turn = other_board.turn;
+    castling = other_board.castling;
+    enpassant = other_board.enpassant;
+    winner = other_board.winner;
+
+    for (int row = 0; row < ROWS; row++) {
+        for (int col = 0; col < COLS; col++) {
+            if (other_board.board[row][col]) {
+                board[row][col] = create_piece(other_board.board[row][col]->symbol, row, col);
+            } else {
+                board[row][col] = nullptr;
+            }
+        }
+    }
+    get_possible_actions();
+
+    return *this;
+}
 
 // Compare two boards for equality
 bool Board::operator==(const Board& other) const {
@@ -124,19 +137,26 @@ std::ostream& operator<<(std::ostream& out, const Board& board_class) {
     return out;
 };
 
-void Board::print_white_perspective() {
+void Board::print_white_perspective(
+    std::array<int, 2>& last_move_starting,
+    std::array<int, 2>& last_move_ending
+) {
     auto print_square = [](std::string piece_color, std::string background_color, char mark, char piece) {
         std::cout << "\033[1;" << piece_color << ";" << background_color << "m " << mark << piece << "  \033[0m";
     };
     
-    auto get_colors = [](bool has_piece, bool is_white_piece, bool is_light_square) {
+    auto get_colors = [](bool has_piece, bool is_white_piece, bool is_light_square, bool is_last_move) {
         std::string piece_color = is_white_piece ? "34" : "35"; // Blue for white, magenta for black
         std::string background_color;
         
-        if (has_piece) {
-            background_color = is_light_square ? "47" : "100"; // Default light or dark square
+        if (is_last_move) {
+            background_color = is_light_square ? "106" : "46";
         } else {
-            background_color = is_light_square ? "47" : "100";
+            if (has_piece) {
+                background_color = is_light_square ? "47" : "100"; // Default light or dark square
+            } else {
+                background_color = is_light_square ? "47" : "100";
+            }
         }
         return std::make_pair(piece_color, background_color);
     };
@@ -149,8 +169,12 @@ void Board::print_white_perspective() {
             bool has_piece = (board[row][col] != nullptr);
             char piece_symbol = has_piece ? board[row][col]->symbol : ' ';
             bool is_white_piece = has_piece && board[row][col]->player == white;
+            bool is_last_move = (
+                std::array<int, 2>{row, col} == last_move_starting ||
+                std::array<int, 2>{row, col} == last_move_ending
+            );
     
-            auto [piece_color, background_color] = get_colors(has_piece, is_white_piece, is_light_square);
+            auto [piece_color, background_color] = get_colors(has_piece, is_white_piece, is_light_square, is_last_move);
             if (has_piece) {
                 print_square(piece_color, background_color, is_white_piece ? '^' : ' ', piece_symbol);
             } else {
@@ -161,8 +185,16 @@ void Board::print_white_perspective() {
     
         for (int col = COLS - 1; col >= 0; col--) {
             bool is_light_square = (row + col) % 2 == 0;
-    
-            std::string background_color = (is_light_square ? "47" : "100");
+            bool is_last_move = (
+                std::array<int, 2>{row, col} == last_move_starting ||
+                std::array<int, 2>{row, col} == last_move_ending
+            );
+            std::string background_color;
+            if (is_last_move) {
+                background_color = is_light_square ? "106" : "46";
+            } else {
+                background_color = (is_light_square ? "47" : "100");
+            }
     
             print_square("", background_color, ' ', ' ');
         }
@@ -173,12 +205,17 @@ void Board::print_white_perspective() {
     std::cout << "     a    b    c    d    e    f    g    h  " << std::endl;
 };
 
-void Board::print_white_perspective(std::array<int, 2> current_piece, Actions possible_actions) {
+void Board::print_white_perspective(
+    std::array<int, 2>& last_move_starting,
+    std::array<int, 2>& last_move_ending,
+    std::array<int, 2> current_piece,
+    Actions possible_actions
+) {
     auto print_square = [](std::string piece_color, std::string background_color, char mark, char piece) {
         std::cout << "\033[1;" << piece_color << ";" << background_color << "m " << mark << piece << "  \033[0m";
     };
     
-    auto get_colors = [](bool has_piece, bool is_white_piece, bool is_selected, bool is_move, bool is_attack, bool is_light_square) {
+    auto get_colors = [](bool has_piece, bool is_white_piece, bool is_selected, bool is_move, bool is_attack, bool is_light_square, bool is_last_move) {
         std::string piece_color = is_white_piece ? "34" : "35"; // Blue for white, magenta for black
         std::string background_color;
         
@@ -187,12 +224,16 @@ void Board::print_white_perspective(std::array<int, 2> current_piece, Actions po
                 background_color = is_light_square ? "103" : "43"; // Light or dark selected square
             } else if (is_attack) {
                 background_color = is_light_square ? "101" : "41"; // Light or dark attack square
+            } else if (is_last_move) {
+                background_color = is_light_square ? "106" : "46";
             } else {
                 background_color = is_light_square ? "47" : "100"; // Default light or dark square
             }
         } else {
             if (is_move) {
                 background_color = is_light_square ? "102" : "42";
+            } else if (is_last_move) {
+                background_color = is_light_square ? "106" : "46";
             } else {
                 background_color = is_light_square ? "47" : "100";
             }
@@ -211,8 +252,12 @@ void Board::print_white_perspective(std::array<int, 2> current_piece, Actions po
             bool has_piece = (board[row][col] != nullptr);
             char piece_symbol = has_piece ? board[row][col]->symbol : ' ';
             bool is_white_piece = has_piece && board[row][col]->player == white;
+            bool is_last_move = (
+                std::array<int, 2>{row, col} == last_move_starting ||
+                std::array<int, 2>{row, col} == last_move_ending
+            );
     
-            auto [piece_color, background_color] = get_colors(has_piece, is_white_piece, is_selected, is_move, is_attack, is_light_square);
+            auto [piece_color, background_color] = get_colors(has_piece, is_white_piece, is_selected, is_move, is_attack, is_light_square, is_last_move);
             if (has_piece) {
                 print_square(piece_color, background_color, is_white_piece ? '^' : ' ', piece_symbol);
             } else {
@@ -226,6 +271,10 @@ void Board::print_white_perspective(std::array<int, 2> current_piece, Actions po
             bool is_selected = (row == current_piece[0] && col == current_piece[1]);
             bool is_attack = possible_actions.attacks.count({row, col});
             bool is_move = possible_actions.moves.count({row, col});
+            bool is_last_move = (
+                std::array<int, 2>{row, col} == last_move_starting ||
+                std::array<int, 2>{row, col} == last_move_ending
+            );
     
             std::string background_color = is_move
                 ? (is_light_square ? "102" : "42")
@@ -233,7 +282,9 @@ void Board::print_white_perspective(std::array<int, 2> current_piece, Actions po
                     ? (is_light_square ? "101" : "41")
                     : is_selected
                         ? (is_light_square ? "103" : "43")
-                        : (is_light_square ? "47" : "100");
+                        : is_last_move
+                            ? (is_light_square ? "106" : "46")
+                            : (is_light_square ? "47" : "100");
     
             print_square("", background_color, ' ', ' ');
         }
@@ -504,7 +555,7 @@ std::unique_ptr<Piece> Board::create_promoted_piece_player(int row, int col) {
     return Board::create_piece(symbol, row, col);
 }
 
-void Board::computer_action() {
+void Board::computer_action(std::array<int, 2>& last_move_starting, std::array<int, 2>& last_move_ending) {
     std::vector<Action> actions;
     std::vector<char> symbols;
 
@@ -539,6 +590,8 @@ void Board::computer_action() {
     } else {
         std::sort(actions.begin(), actions.end());
     }
+    last_move_starting = {actions[0].old_position[0], actions[0].old_position[1]};
+    last_move_ending = {actions[0].new_position[0], actions[0].new_position[1]};
 
     make_action(actions[0].old_position[0], actions[0].old_position[1], actions[0].new_position[0], actions[0].new_position[1], actions[0].symbol);
 }
@@ -606,36 +659,3 @@ int Board::alfa_beta_pruning(Board board, int depth, int alpha, int beta) {
         return curr_min_max;
     }
 }
-
-// void Board::print_possible_actions() {
-//     for (int row = 0; row < ROWS; row++) {
-//         for (int col = 0; col < COLS; col++) {
-//             if (board[row][col] && board[row][col]->player == turn) {
-//                 print_position(row, col);
-//                 std::cout << ": ";
-
-//                 bool first = true;
-//                 for (auto move : board[row][col]->possible_actions.moves) {
-//                     if (first) {
-//                         first = false;
-//                     } else {
-//                         std::cout << ", ";
-//                     }
-
-//                     print_position(move[0], move[1]);
-//                 }
-
-//                 for (auto move : board[row][col]->possible_actions.attacks) {
-//                     if (first) {
-//                         first = false;
-//                     } else {
-//                         std::cout << ", ";
-//                     }
-
-//                     print_position(move[0], move[1]);
-//                 }
-//                 std::cout << std::endl;
-//             }
-//         }
-//     }
-// }

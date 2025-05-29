@@ -7,7 +7,9 @@
 
 Game::Game() 
     : current_board(),
-      valid_format("[1-8][A-Ha-h]") {
+      valid_format("[1-8][A-Ha-h]"),
+      last_move_starting({8, 8}),
+      last_move_ending({8, 8}) {
 }
 
 int Game::menu() {
@@ -17,7 +19,7 @@ int Game::menu() {
         std::cout << "MENU" << std::endl;
         std::cout << "Pick an option:" << std::endl;
         std::cout << "1. New game" << std::endl;
-        std::cout << "2. Load a game" << std::endl;
+        std::cout << "2. Continue game" << std::endl;
         std::cout << "3. Exit" << std::endl;
 
         if (message.has_value()) {
@@ -41,8 +43,16 @@ int Game::menu() {
                 case 1:
                     game_options();
                     break;
-                case 2:
+                case 2: {
+                    auto load = load_board();
+                    if (load) {
+                        current_board = load.value();
+                        game_simulator_player();
+                    } else {
+                        message = load.error();
+                    }
                     break;
+                }
                 case 3:
                     return 0;
             }
@@ -101,7 +111,7 @@ void Game::game_simulator_player() {
     while (true) {
         clear_screen();
 
-        current_board.print_white_perspective();
+        current_board.print_white_perspective(last_move_starting, last_move_ending);
 
         if (message.has_value()) {
             std::cout << message.value() << std::endl;
@@ -139,8 +149,9 @@ void Game::game_simulator_player() {
             }
 
         } else {
-            current_board.computer_action();
+            current_board.computer_action(last_move_starting, last_move_ending);
         }
+        save_board();
     }
 }
 
@@ -154,7 +165,7 @@ void Game::player_pick_destination(
     std::array<int, 2> curr_row_col = curr_notation.parse_square_notation();
 
     if (current_board.board[curr_row_col[0]][curr_row_col[1]] && current_board.board[curr_row_col[0]][curr_row_col[1]]->player == white) {
-        current_board.print_white_perspective(curr_row_col, current_board.board[curr_row_col[0]][curr_row_col[1]]->possible_actions);
+        current_board.print_white_perspective(last_move_starting, last_move_ending, curr_row_col, current_board.board[curr_row_col[0]][curr_row_col[1]]->possible_actions);
     } else {
         message = "You need to pick your own piece!";
         return;
@@ -181,6 +192,9 @@ void Game::player_pick_destination(
         current_board.board[curr_row_col[0]][curr_row_col[1]]->possible_actions.attacks.count({next_row_col[0], next_row_col[1]})) {
             auto symbol = get_symbol(curr_row_col);
             if (symbol) {
+                last_move_starting = {curr_row_col[0], curr_row_col[1]};
+                last_move_ending = {next_row_col[0], next_row_col[1]};
+
                 current_board.make_action(curr_row_col[0], curr_row_col[1], next_row_col[0], next_row_col[1], symbol.value());
             } else {
                 message = symbol.error();
@@ -221,7 +235,7 @@ void Game::game_simulator_AI() {
     while (true) {
         clear_screen();
 
-        current_board.print_white_perspective();
+        current_board.print_white_perspective(last_move_starting, last_move_ending);
         
         if (current_board.winner != notFinished) {
             if (current_board.winner == draw) {
@@ -233,7 +247,7 @@ void Game::game_simulator_AI() {
         }
         // std::this_thread::sleep_for(std::chrono::seconds(1));
 
-        current_board.computer_action();
+        current_board.computer_action(last_move_starting, last_move_ending);
     }
 }
 
@@ -252,6 +266,62 @@ void Game::print_logo() {
     std::cout << "   [_______]                              " << std::endl;
     std::cout << "                                          " << std::endl;
 }
+
+void Game::save_board() {
+    std::ofstream SaveFile("save.txt");
+
+    for (auto &current_row : current_board.board) {
+        for (auto &piece : current_row) {
+            if (piece) {
+                SaveFile << piece->symbol;
+            } else {
+                SaveFile << ' ';
+            }
+        }
+        SaveFile << std::endl;
+    }
+
+    SaveFile << current_board.turn << std::endl;
+    SaveFile << current_board.castling << std::endl;
+    SaveFile << current_board.enpassant[0] << current_board.enpassant[1] << std::endl;
+
+    SaveFile.close();
+}
+
+std::expected<Board, std::string> Game::load_board() {
+    std::ifstream SaveFile("save.txt");
+
+    if (SaveFile.is_open()) {
+        std::string currect_line;
+        std::array<std::array<char, 8>, 8> simplify_board;
+        
+        for (auto &current_row : simplify_board) {
+            getline(SaveFile, currect_line);
+            for (std::size_t i = 0; i < 8; i++) {
+                current_row[i] = currect_line[i];
+            }
+        }
+    
+        getline(SaveFile, currect_line);
+        PlayerColor turn = (PlayerColor)(std::stoi(currect_line));
+    
+        getline(SaveFile, currect_line);
+        std::string castling = currect_line;
+    
+        getline(SaveFile, currect_line);
+        std::array<int, 2> enpassant;
+        int row = ((int)currect_line[0]) ? (int)currect_line[0] : NULL;
+        int col = ((int)currect_line[1]) ? (int)currect_line[1] : NULL;
+        enpassant = {row, col};
+        
+        SaveFile.close();
+    
+        return Board(turn, castling, enpassant, simplify_board);
+    } else {
+        return std::unexpected("No save file is available.");
+    }
+}
+
 
 std::expected<int, std::string> Game::validate_menu_input(size_t option, size_t first, size_t last) {
     if (option >= first && option <= last) {

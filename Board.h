@@ -60,7 +60,7 @@ class Board {
 
         Board(const Board& other_board);
 
-        // Board& operator=(const Board& other_board);
+        Board& operator=(const Board& other_board);
 
         // Comparison operators for equality and inequality'
         bool operator==(const Board& other) const;
@@ -69,9 +69,16 @@ class Board {
         // Overloaded output stream operator for the board
         friend std::ostream& operator<<(std::ostream& out, const Board& board_class);
 
-        void print_white_perspective();
+        void print_white_perspective(
+            std::array<int, 2>& last_move_starting,
+            std::array<int, 2>& last_move_ending
+        );
 
-        void print_white_perspective(std::array<int, 2> current_piece, Actions possible_actions);
+        void print_white_perspective(
+            std::array<int, 2>& last_move_starting,
+            std::array<int, 2>& last_move_ending,
+            std::array<int, 2> current_piece,
+            Actions possible_actions);
 
         // Helper functions for managing the board
         std::unique_ptr<Piece> create_piece(
@@ -106,11 +113,9 @@ class Board {
 
         std::unique_ptr<Piece> create_promoted_piece_player(int row, int col);
 
-        void computer_action();
+        void computer_action(std::array<int, 2>& last_move_starting, std::array<int, 2>& last_move_ending);
 
         int alfa_beta_pruning(Board board, int depth ,int alpha, int beta);
-
-        // void print_possible_actions();
 };
 
 #endif

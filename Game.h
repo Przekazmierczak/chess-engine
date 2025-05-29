@@ -6,12 +6,16 @@
 #include <expected>
 #include <optional>
 #include <regex>
+#include <iostream>
+#include <fstream>
 
 class Game {
     public:
         Board current_board;
         std::regex valid_format;
         std::optional<std::string> message;
+        std::array<int, 2> last_move_starting;
+        std::array<int, 2> last_move_ending;
 
     Game();
 
@@ -28,6 +32,9 @@ class Game {
 
     void clear_screen();
     void print_logo();
+
+    void save_board();
+    std::expected<Board, std::string> load_board();
 
     std::expected<int, std::string> validate_menu_input(size_t option, size_t first, size_t last);
     std::expected<std::string, std::string> validate_position(std::string position, std::regex valid_format);
