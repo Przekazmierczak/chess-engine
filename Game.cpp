@@ -21,6 +21,7 @@ int Game::menu() {
 
         if (message.has_value()) {
             std::cout << message.value() << std::endl;
+            message.reset();
         }
 
         std::size_t option;
@@ -73,6 +74,7 @@ void Game::game_options() {
 
         if (message.has_value()) {
             std::cout << message.value() << std::endl;
+            message.reset();
         }
 
         std::size_t option;
@@ -127,7 +129,7 @@ void Game::game_simulator_player() {
 
         if (current_board.turn == white) {
             std::string current_positon;
-            std::cout << "Pick a piece to move: ";
+            std::cout << "Pick a piece to move (q for save&quit): ";
 
             if (!(std::cin >> current_positon)) {
                 std::cin.clear(); // Clear error flag
@@ -135,6 +137,8 @@ void Game::game_simulator_player() {
                 message = "Invalid input. Please try again.";
                 continue;
             }
+
+            if (current_positon == "q") return;
 
             auto res_current_position = validate_position(current_positon, valid_format);
 
