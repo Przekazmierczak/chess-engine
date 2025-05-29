@@ -8,9 +8,9 @@ int AlfaBetaPruning::operator()(Board board, int depth, int alpha, int beta) {
     } else if (board.active_pieces.empty()) {
         if (!board.checkin_pieces.empty()) {
             if (board.turn == white) {
-                return -100000 - depth;
+                return -100000 - depth * 50;
             } else {
-                return 100000 + depth;
+                return 100000 + depth * 50;
             }
         } else {
             return 0;

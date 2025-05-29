@@ -19,8 +19,6 @@ using PositionSet = std::unordered_set<
 >;
 std::ostream& operator<<(std::ostream& out, const PositionSet& set);
 
-std::array<int, 2> get_random_element(PositionSet set);
-
 using PositionMap = std::unordered_map<
     std::array<int, 2>,
     PositionSet,

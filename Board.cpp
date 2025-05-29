@@ -623,8 +623,30 @@ void Board::computer_action(Game& game) {
     } else {
         std::sort(actions.begin(), actions.end());
     }
-    game.last_move_starting = {actions[0].old_position[0], actions[0].old_position[1]};
-    game.last_move_ending = {actions[0].new_position[0], actions[0].new_position[1]};
 
-    make_action(actions[0].old_position[0], actions[0].old_position[1], actions[0].new_position[0], actions[0].new_position[1], actions[0].symbol);
+    int best_rating = actions[0].rating;
+    std::vector<Action> best_actions;
+
+    for (auto curr_action : actions) {
+        if (abs(best_rating - curr_action.rating) <= 10) {
+            best_actions.push_back(curr_action);
+        } else {
+            break;
+        }
+    }
+
+    Action picked_action = get_random_element(best_actions);
+
+    game.last_move_starting = {picked_action.old_position[0], picked_action.old_position[1]};
+    game.last_move_ending = {picked_action.new_position[0], picked_action.new_position[1]};
+
+    make_action(picked_action.old_position[0], picked_action.old_position[1], picked_action.new_position[0], picked_action.new_position[1], picked_action.symbol);
+}
+
+Action Board::get_random_element(std::vector<Action> best_actions) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    std::uniform_int_distribution<> dist(0, best_actions.size() - 1);
+    return best_actions[dist(gen)];
 }

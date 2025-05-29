@@ -6,8 +6,6 @@
 #include <regex>
 #include <iostream>
 #include <fstream>
-#include <thread>
-#include <chrono>
 
 #include "Board.h"
 #include "AlfaBeta.h"

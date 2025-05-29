@@ -5,6 +5,7 @@
 #include <array>
 #include <algorithm>
 #include <functional>
+#include <random>
 
 #include "Types.h"
 #include "Piece.h"
@@ -116,6 +117,8 @@ public:
     std::unique_ptr<Piece> create_promoted_piece_player(int row, int col);
 
     void computer_action(Game& game);
+
+    Action get_random_element(std::vector<Action> best_actions);
 };
 
 #endif
