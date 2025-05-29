@@ -7,7 +7,7 @@
 Board::Board()
     : turn(white),
       castling("KQkq"),
-      enpassant({NULL, NULL}),
+      enpassant({8, 8}),
       board(create_board()),
       winner(notFinished) {
     get_possible_actions();
@@ -20,7 +20,7 @@ Board::Board(
     const std::array<std::array<char, 8>, 8>& simplify_board)
     : turn(input_turn),
       castling(input_castling),
-      enpassant({NULL, NULL}),
+      enpassant({8, 8}),
       board(create_board(simplify_board)),
       winner(notFinished) {
     get_possible_actions();
@@ -141,7 +141,7 @@ std::ostream& operator<<(std::ostream& out, const Board& board_class) {
 void Board::reset() {
     turn = white;
     castling = "KQkq";
-    enpassant = {NULL, NULL};
+    enpassant = {8, 8};
     board = create_board();
     winner = notFinished;
     get_possible_actions();
@@ -305,6 +305,11 @@ void Board::print_white_perspective(
     std::cout << "     a    b    c    d    e    f    g    h  " << std::endl;
 };
 
+template <typename T>
+std::unique_ptr<Piece> create_piece_unique(const char& symbol, PieceType piece, PlayerColor player, int row, int col) {
+    return std::make_unique<T>(symbol, piece, player, row, col);
+}
+
 std::unique_ptr<Piece> Board::create_piece(
     const char& symbol,
     const int& row,
@@ -317,12 +322,12 @@ std::unique_ptr<Piece> Board::create_piece(
 
     // Create the appropriate piece based on the symbol
     switch (upperSymbol) {
-        case 'R': return std::make_unique<Rook>(symbol, rook, player, row, col);
-        case 'N': return std::make_unique<Knight>(symbol, knight, player, row, col);
-        case 'B': return std::make_unique<Bishop>(symbol, bishop, player, row, col);
-        case 'K': return std::make_unique<King>(symbol, king, player, row, col);
-        case 'Q': return std::make_unique<Queen>(symbol, queen, player, row, col);
-        default:  return std::make_unique<Pawn>(symbol, pawn, player, row, col);
+        case 'R': return create_piece_unique<Rook>(symbol, rook, player, row, col);
+        case 'N': return create_piece_unique<Knight>(symbol, knight, player, row, col);
+        case 'B': return create_piece_unique<Bishop>(symbol, bishop, player, row, col);
+        case 'K': return create_piece_unique<King>(symbol, king, player, row, col);
+        case 'Q': return create_piece_unique<Queen>(symbol, queen, player, row, col);
+        default:  return create_piece_unique<Pawn>(symbol, pawn, player, row, col);
     }
 }
 
@@ -564,7 +569,7 @@ void Board::check_enpassant(int old_row, int old_col, int new_row) {
         (old_row == 6 && new_row == 4)) {
             enpassant = {(old_row + new_row) / 2, old_col};
     } else {
-        enpassant = {NULL, NULL};
+        enpassant = {8, 8};
     }
 }
 
@@ -656,6 +661,6 @@ Action Board::get_random_element(std::vector<Action> best_actions) {
     std::random_device rd;
     std::mt19937 gen(rd());
 
-    std::uniform_int_distribution<> dist(0, best_actions.size() - 1);
+    std::uniform_int_distribution<size_t> dist(0, best_actions.size() - 1);
     return best_actions[dist(gen)];
 }

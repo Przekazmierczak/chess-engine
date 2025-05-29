@@ -274,38 +274,37 @@ void Game::show_winner() {
 }
 
 void Game::print_logo() {
-    std::cout << "     |\\_        _____ _                   " << std::endl;
-    std::cout << "     /  .\\_    / ____| |                  " << std::endl;
-    std::cout << "    |   ___)  | |    | |__   ___  ___ ___ " << std::endl;
-    std::cout << "    |    \\    | |    | '_ \\ / _ \\/ __/ __|" << std::endl;
-    std::cout << "    |     |   | |____| | | |  __/\\__ \\__ \\" << std::endl;
-    std::cout << "    /_____\\    \\_____|_| |_|\\___||___/___/" << std::endl;
-    std::cout << "   [_______]                              " << std::endl;
+    std::cout << "              _____ _                   " << std::endl;
+    std::cout << "     _/|     / ____| |                  " << std::endl;
+    std::cout << "    // o\\   | |    | |__   ___  ___ ___ " << std::endl;
+    std::cout << "    || ._)  | |    | '_ \\ / _ \\/ __/ __|" << std::endl;
+    std::cout << "    //__\\   | |____| | | |  __/\\__ \\__ \\" << std::endl;
+    std::cout << "    )___(    \\_____|_| |_|\\___||___/___/" << std::endl;
     std::cout << "                                          " << std::endl;
 }
 
 
 void Game::print_white_winner() {
-    std::cout << "  \033[37m_/|                                  \033[90m|\\_\033[0m\n";
-    std::cout << " \033[37m// o\\      White is the winner!      \033[90m/X \\\\\033[0m\n";
-    std::cout << " \033[37m|| \\_)                              \033[90m(_. ||\033[0m\n";
-    std::cout << " \033[37m//__\\                                \033[90m/__\\\\\033[0m\n";
-    std::cout << " \033[37m)___(                                \033[90m)___(\033[0m\n";
+    std::cout << "     \033[37m_/|                            \033[90m|\\_\033[0m\n";
+    std::cout << "    \033[37m// o\\   White is the winner!   \033[90m/X \\\\\033[0m\n";
+    std::cout << "    \033[37m|| \\_)                        \033[90m(_. ||\033[0m\n";
+    std::cout << "    \033[37m//__\\                          \033[90m/__\\\\\033[0m\n";
+    std::cout << "    \033[37m)___(                          \033[90m)___(\033[0m\n";
 }
 
 void Game::print_black_winner() {
-    std::cout << "  \033[37m_/|                                  \033[90m|\\_\033[0m\n";
-    std::cout << " \033[37m// X\\      Black is the winner!      \033[90m/o \\\\\033[0m\n";
-    std::cout << " \033[37m|| ._)                              \033[90m(_/ ||\033[0m\n";
-    std::cout << " \033[37m//__\\                                \033[90m/__\\\\\033[0m\n";
-    std::cout << " \033[37m)___(                                \033[90m)___(\033[0m\n";
+    std::cout << "     \033[37m_/|                            \033[90m|\\_\033[0m\n";
+    std::cout << "    \033[37m// X\\   Black is the winner!   \033[90m/o \\\\\033[0m\n";
+    std::cout << "    \033[37m|| ._)                        \033[90m(_/ ||\033[0m\n";
+    std::cout << "    \033[37m//__\\                          \033[90m/__\\\\\033[0m\n";
+    std::cout << "    \033[37m)___(                          \033[90m)___(\033[0m\n";
 }
 void Game::print_draw() {
-    std::cout << "  \033[37m_/|                                  \033[90m|\\_\033[0m\n";
-    std::cout << " \033[37m// X\\         It is a draw!         \033[90m/X \\\\\033[0m\n";
-    std::cout << " \033[37m|| ._)                              \033[90m(_. ||\033[0m\n";
-    std::cout << " \033[37m//__\\                                \033[90m/__\\\\\033[0m\n";
-    std::cout << " \033[37m)___(                                \033[90m)___(\033[0m\n";
+    std::cout << "     \033[37m_/|                            \033[90m|\\_\033[0m\n";
+    std::cout << "    \033[37m// X\\      It is a draw!      \033[90m/X \\\\\033[0m\n";
+    std::cout << "    \033[37m|| ._)                        \033[90m(_. ||\033[0m\n";
+    std::cout << "    \033[37m//__\\                          \033[90m/__\\\\\033[0m\n";
+    std::cout << "    \033[37m)___(                          \033[90m)___(\033[0m\n";
 }
 
 void Game::save_board() {
@@ -350,9 +349,10 @@ std::expected<Board, std::string> Game::load_board() {
         std::string castling = currect_line;
     
         getline(SaveFile, currect_line);
+
         std::array<int, 2> enpassant;
-        int row = ((int)currect_line[0]) ? (int)currect_line[0] : NULL;
-        int col = ((int)currect_line[1]) ? (int)currect_line[1] : NULL;
+        int row = ((int)currect_line[0]);
+        int col = ((int)currect_line[1]);
         enpassant = {row, col};
         
         SaveFile.close();

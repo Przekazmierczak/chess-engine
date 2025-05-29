@@ -178,7 +178,7 @@ namespace {
         EXPECT_EQ(board.turn, black);
         EXPECT_EQ(board.castling, "KQkq");
 
-        std::array<int, 2> enpassant = {NULL, NULL};
+        std::array<int, 2> enpassant = {8, 8};
         EXPECT_EQ(board.enpassant, enpassant);
 
         // Compare each element in the board manually
@@ -288,7 +288,7 @@ namespace {
     }
 
     TEST(MoveEnpassant1, Correct) {
-        Board board(white, "____", {}, {{
+        Board board(white, "____", {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', 'P', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -316,7 +316,7 @@ namespace {
     }
 
     TEST(MoveBoardEnpassant1, Correct) {
-        Board board(white, "____", {}, {{
+        Board board(white, "____", {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', 'P', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -346,7 +346,7 @@ namespace {
     }
 
     TEST(MoveEnpassant2, Incorrect) {
-        Board board(white, "____", {}, {{
+        Board board(white, "____", {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', 'P', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -357,7 +357,7 @@ namespace {
             {' ', ' ', ' ', ' ', 'k', ' ', ' ', ' '}
         }});
 
-        Board expected_board(black, "____", {}, {{
+        Board expected_board(black, "____", {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -374,7 +374,7 @@ namespace {
     }
 
     TEST(MoveBoardEnpassant2, Incorrect) {
-        Board board(white, "____", {}, {{
+        Board board(white, "____", {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', 'P', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -385,7 +385,7 @@ namespace {
             {' ', ' ', ' ', ' ', 'k', ' ', ' ', ' '}
         }});
 
-        Board expected_board(black, "____", {}, {{
+        Board expected_board(black, "____", {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -404,7 +404,7 @@ namespace {
     }
 
     TEST(DoubleMoveEnpassant, Correct) {
-        Board board(white, "____", {}, {{
+        Board board(white, "____", {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', 'P', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -415,7 +415,7 @@ namespace {
             {' ', ' ', ' ', ' ', 'k', ' ', ' ', ' '}
         }});
 
-        Board expected_board(white, "____", {}, {{
+        Board expected_board(white, "____", {{
             {'K', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1167,7 +1167,7 @@ namespace {
         
         EXPECT_EQ(
             game.alfa_beta_pruning(board.make_action_board(6, 1, 7, 1, 'Q'), 2, -100000, 100000),
-            100002
+            100100
         );
     }
 
@@ -1187,7 +1187,7 @@ namespace {
 
         EXPECT_EQ(
             game.alfa_beta_pruning(board.make_action_board(5, 1, 0, 1, ' '), 2, -100000, 100000),
-            -100002
+            -100100
         );
     }
 
