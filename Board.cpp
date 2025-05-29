@@ -473,6 +473,22 @@ void Board::make_action(int old_row, int old_col, int new_row, int new_col, char
             symbol != ' ') {
             board[old_row][old_col] = Board::create_piece(symbol, old_row, old_col);
         }
+
+        if (board[old_row][old_col]->piece == king && (abs(new_col - old_col) == 2)) {
+            if (new_col == 1) {
+                board[old_row][2] = std::move(board[old_row][0]);
+                board[old_row][0] = nullptr;
+
+                board[old_row][2]->row = old_row;
+                board[old_row][2]->column = 2;
+            } else {
+                board[old_row][4] = std::move(board[old_row][7]);
+                board[old_row][7] = nullptr;
+
+                board[old_row][4]->row = old_row;
+                board[old_row][4]->column = 4;
+            }
+        }
         
         board[new_row][new_col] = std::move(board[old_row][old_col]);
         
@@ -502,6 +518,22 @@ Board Board::make_action_board(int old_row, int old_col, int new_row, int new_co
         if (board[old_row][old_col]->possible_actions.promotion &&
             symbol != ' ') {
             new_board.board[old_row][old_col] = Board::create_piece(symbol, old_row, old_col);
+        }
+
+        if (board[old_row][old_col]->piece == king && (abs(new_col - old_col) == 2)) {
+            if (new_col == 1) {
+                new_board.board[old_row][2] = std::move(new_board.board[old_row][0]);
+                new_board.board[old_row][0] = nullptr;
+
+                new_board.board[old_row][2]->row = old_row;
+                new_board.board[old_row][2]->column = 2;
+            } else {
+                new_board.board[old_row][4] = std::move(new_board.board[old_row][7]);
+                new_board.board[old_row][7] = nullptr;
+
+                new_board.board[old_row][4]->row = old_row;
+                new_board.board[old_row][4]->column = 4;
+            }
         }
         
         new_board.board[new_row][new_col] = std::move(new_board.board[old_row][old_col]);
