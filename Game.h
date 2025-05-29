@@ -6,8 +6,11 @@
 #include <regex>
 #include <iostream>
 #include <fstream>
+#include <thread>
+#include <chrono>
 
 #include "Board.h"
+#include "AlfaBeta.h"
 
 class Game {
     private:
@@ -19,6 +22,8 @@ class Game {
         std::optional<std::string> message;
         std::array<int, 2> last_move_starting;
         std::array<int, 2> last_move_ending;
+
+        AlfaBetaPruning alfa_beta_pruning;
 
         Game(const Game&) = delete;
         Game& operator=(const Game&) = delete;
@@ -45,7 +50,7 @@ class Game {
     void save_board();
     std::expected<Board, std::string> load_board();
 
-    std::expected<int, std::string> validate_menu_input(size_t option, size_t first, size_t last);
+    std::expected<size_t, std::string> validate_menu_input(size_t option, size_t first, size_t last);
     std::expected<std::string, std::string> validate_position(std::string position, std::regex valid_format);
     std::expected<char, std::string> validate_promotion(char symbol);
 };

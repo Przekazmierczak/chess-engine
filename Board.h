@@ -10,6 +10,7 @@
 #include "Piece.h"
 
 class Piece;
+class Game;
 
 class Board {
     public:
@@ -114,9 +115,7 @@ class Board {
 
         std::unique_ptr<Piece> create_promoted_piece_player(int row, int col);
 
-        void computer_action(std::array<int, 2>& last_move_starting, std::array<int, 2>& last_move_ending);
-
-        int alfa_beta_pruning(Board board, int depth ,int alpha, int beta);
+        void computer_action(Game& game);
 };
 
 #endif

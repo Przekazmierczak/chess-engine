@@ -2,9 +2,6 @@
 #include "Board.h"
 #include "Piece.h"
 
-#include <thread>
-#include <chrono>
-
 Game::Game() 
     : current_board(),
       valid_format("[1-8][A-Ha-h]"),
@@ -149,7 +146,7 @@ void Game::game_simulator_player() {
             }
 
         } else {
-            current_board.computer_action(last_move_starting, last_move_ending);
+            current_board.computer_action(*this);
         }
         save_board();
     }
@@ -247,7 +244,7 @@ void Game::game_simulator_AI() {
         }
         // std::this_thread::sleep_for(std::chrono::seconds(1));
 
-        current_board.computer_action(last_move_starting, last_move_ending);
+        current_board.computer_action(*this);
     }
 }
 
@@ -322,8 +319,7 @@ std::expected<Board, std::string> Game::load_board() {
     }
 }
 
-
-std::expected<int, std::string> Game::validate_menu_input(size_t option, size_t first, size_t last) {
+std::expected<size_t, std::string> Game::validate_menu_input(size_t option, size_t first, size_t last) {
     if (option >= first && option <= last) {
         return option;
     }

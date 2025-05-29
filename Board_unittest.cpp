@@ -1,5 +1,6 @@
 #include "Board.h"
 #include "Piece.h"
+#include "Game.h"
 
 #include "gtest/gtest.h"
 #include <iostream>
@@ -73,8 +74,6 @@ namespace {
                 }
             }
         }
-
-        // EXPECT_EQ(*(actual_board[i][j].get()), *(expected_board[i][j].get()));
     }
 
     TEST(CreateBoardMethodWithArg, Correct) {
@@ -1153,6 +1152,8 @@ namespace {
     }
 
     TEST(MinimaxWhiteMate, Correct) {
+        Game& game = Game::getInstance();
+
         Board board(white, "____", {{
             {' ', ' ', ' ', 'K', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1165,12 +1166,14 @@ namespace {
         }});
         
         EXPECT_EQ(
-            board.alfa_beta_pruning(board.make_action_board(6, 1, 7, 1, 'Q'), 2, -100000, 100000),
+            game.alfa_beta_pruning(board.make_action_board(6, 1, 7, 1, 'Q'), 2, -100000, 100000),
             100002
         );
     }
 
     TEST(MinimaxBlackMate, Correct) {
+        Game& game = Game::getInstance();
+
         Board board(black, "____", {{
             {' ', ' ', ' ', 'K', ' ', ' ', ' ', ' '},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'r'},
@@ -1183,12 +1186,14 @@ namespace {
         }});
 
         EXPECT_EQ(
-            board.alfa_beta_pruning(board.make_action_board(5, 1, 0, 1, ' '), 2, -100000, 100000),
+            game.alfa_beta_pruning(board.make_action_board(5, 1, 0, 1, ' '), 2, -100000, 100000),
             -100002
         );
     }
 
     TEST(MinimaxPat, Correct) {
+        Game& game = Game::getInstance();
+
         Board board(black, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'K'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'b'},
@@ -1201,12 +1206,14 @@ namespace {
         }});
 
         EXPECT_EQ(
-            board.alfa_beta_pruning(board.make_action_board(7, 5, 7, 6, ' '), 2, -100000, 100000),
+            game.alfa_beta_pruning(board.make_action_board(7, 5, 7, 6, ' '), 2, -100000, 100000),
             0
         );
     }
 
     TEST(MinimaxPat2, Correct) {
+        Game& game = Game::getInstance();
+
         Board board(black, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'K'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'b'},
@@ -1219,12 +1226,14 @@ namespace {
         }});
 
         EXPECT_EQ(
-            board.alfa_beta_pruning(board.make_action_board(3, 5, 2, 5, ' '), 2, -100000, 100000),
+            game.alfa_beta_pruning(board.make_action_board(3, 5, 2, 5, ' '), 2, -100000, 100000),
             0
         );
     }
 
     TEST(MinimaxOnlyMove, Correct) {
+        Game& game = Game::getInstance();
+
         Board board(black, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'K'},
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', ' '},
@@ -1250,7 +1259,7 @@ namespace {
         expected_board.get_rating();
 
         EXPECT_EQ(
-            board.alfa_beta_pruning(board.make_action_board(2, 0, 2, 7, ' '), 1, -100000, 100000),
+            game.alfa_beta_pruning(board.make_action_board(2, 0, 2, 7, ' '), 1, -100000, 100000),
             expected_board.final_rating
         );
     }
