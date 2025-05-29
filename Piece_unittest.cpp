@@ -1501,7 +1501,6 @@ namespace {
         
         EXPECT_EQ(board_24_check.black_attack_rating, -7);
     }
-
 }
 
 // Main function for GoogleTest

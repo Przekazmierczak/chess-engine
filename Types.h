@@ -69,8 +69,8 @@ struct Actions {
     public:
         Iterator(
             const Actions& c,
-            PositionSet::iterator it,
-            bool attacks_flag
+            const PositionSet::iterator& it,
+            const bool& attacks_flag
         );
 
         const std::array<int, 2>& operator*() const;
@@ -98,7 +98,7 @@ struct Action {
     char symbol;
     int rating;
 
-    Action(std::array<int, 2> input_old_position, std::array<int, 2> input_new_position, char input_symbol, int input_rating);
+    Action(const std::array<int, 2>& input_old_position, const std::array<int, 2>& input_new_position, const char& input_symbol, const int& input_rating);
 
     std::strong_ordering operator<=>(const Action& other) const;
     bool operator==(const Action& other) const = default;
@@ -110,10 +110,10 @@ struct Notation {
     int row;
     char column;
 
-    Notation(std::string input_position);
-    Notation(int row, int col);
+    Notation(const std::string& input_position);
+    Notation(const int& row, const int& col);
 
-    std::array<int, 2> parse_square_notation();
+    std::array<int, 2> parse_square_notation() const;
 
     friend std::ostream& operator<<(std::ostream& out, const Notation& notation);
 };

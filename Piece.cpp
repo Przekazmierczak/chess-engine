@@ -115,7 +115,7 @@ Queen::Queen(const char& input_symbol,
 void Piece::rook_bishop_queen_move_template_active_player(
     Board& board_class,
     const std::vector<std::array<int, 2>>& directions
-) {
+) const {
     // Handles opponent's turn: updates attacked positions and pins
     for (auto direction : directions) {
         int distance = 1; // Distance increment along a direction
@@ -183,7 +183,7 @@ void Piece::rook_bishop_queen_move_template_active_player(
 void Piece::rook_bishop_queen_move_template_opponent(
     Board& board_class,
     const std::vector<std::array<int, 2>>& directions,
-    PositionSet checking_positions
+    const PositionSet& checking_positions
 ) {
     // Handles current player's turn: adds valid moves and attacks
     for (auto direction : directions) {
@@ -247,7 +247,7 @@ void Piece::rook_bishop_queen_rating_template_active_player(
 void Piece::rook_bishop_queen_rating_template_opponent(
     Board& board_class,
     const std::vector<std::array<int, 2>>& directions,
-    PositionSet checking_positions
+    const PositionSet& checking_positions
 ) {
     // Handles current player's turn: adds valid moves and attacks
     for (auto direction : directions) {
@@ -321,7 +321,7 @@ void Pawn::check_piece_possible_moves_opponent (
 
 void Pawn::check_piece_possible_moves_active_player (
     Board& board_class,
-    PositionSet checking_positions
+    const PositionSet& checking_positions
 ) {
     // Determine movement direction based on the pawn's color
     int direction_by_colour = player == white ? 1: -1;
@@ -424,7 +424,7 @@ void Pawn::update_rating_opponent (
 
 void Pawn::update_rating_active_player (
     Board& board_class,
-    PositionSet checking_positions
+    const PositionSet& checking_positions
 ) {
     // Determine movement direction based on the pawn's color
     int direction_by_colour = player == white ? 1: -1;
@@ -487,7 +487,7 @@ void Knight::check_piece_possible_moves_opponent (
 
 void Knight::check_piece_possible_moves_active_player (
     Board& board_class,
-    PositionSet checking_positions
+    const PositionSet& checking_positions
 ) {
     // Define all possible moves for a knight relative to its current position
     std::vector<std::array<int, 2>> directions = {{2, 1}, {-2, 1}, {2, -1}, {-2, -1}, {1, 2}, {-1, 2}, {1, -2}, {-1, -2}};
@@ -540,7 +540,7 @@ void Knight::update_rating_opponent (
 
 void Knight::update_rating_active_player (
     Board& board_class,
-    PositionSet checking_positions
+    const PositionSet& checking_positions
 ) {
     // Define all possible moves for a knight relative to its current position
     std::vector<std::array<int, 2>> directions = {{2, 1}, {-2, 1}, {2, -1}, {-2, -1}, {1, 2}, {-1, 2}, {1, -2}, {-1, -2}};
@@ -585,7 +585,7 @@ void King::check_piece_possible_moves_opponent (
 
 void King::check_piece_possible_moves_active_player (
     Board& board_class,
-    PositionSet checking_positions
+    const PositionSet& checking_positions
 ) {
     // Define all possible moves for the king, including castling directions
     std::vector<std::array<int, 2>> directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}, {0, -2}, {0, 2}};
@@ -667,7 +667,7 @@ void King::update_rating_opponent (
 
 void King::update_rating_active_player (
     Board& board_class,
-    PositionSet checking_positions
+    const PositionSet& checking_positions
 ) {
     // Define all possible moves for the king, including castling directions
     std::vector<std::array<int, 2>> directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}, {0, -2}, {0, 2}};
@@ -700,7 +700,7 @@ void Rook::check_piece_possible_moves_opponent (
 
 void Rook::check_piece_possible_moves_active_player (
     Board& board_class,
-    PositionSet checking_positions
+    const PositionSet& checking_positions
 ) {
     // Define all possible directions the rook can move (vertical and horizontal)
     std::vector<std::array<int, 2>> directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
@@ -721,7 +721,7 @@ void Rook::update_rating_opponent (
 
 void Rook::update_rating_active_player (
     Board& board_class,
-    PositionSet checking_positions
+    const PositionSet& checking_positions
 ) {
     // Define all possible directions the rook can move (vertical and horizontal)
     std::vector<std::array<int, 2>> directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
@@ -742,7 +742,7 @@ void Bishop::check_piece_possible_moves_opponent (
 
 void Bishop::check_piece_possible_moves_active_player (
     Board& board_class,
-    PositionSet checking_positions
+    const PositionSet& checking_positions
 ) {
     // Define all possible directions the rook can move (vertical and horizontal)
     std::vector<std::array<int, 2>> directions = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
@@ -763,7 +763,7 @@ void Bishop::update_rating_opponent (
 
 void Bishop::update_rating_active_player(
     Board& board_class,
-    PositionSet checking_positions
+    const PositionSet& checking_positions
 ) {
     // Define all possible directions the rook can move (vertical and horizontal)
     std::vector<std::array<int, 2>> directions = {{1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
@@ -784,7 +784,7 @@ void Queen::check_piece_possible_moves_opponent (
 
 void Queen::check_piece_possible_moves_active_player (
     Board& board_class,
-    PositionSet checking_positions
+    const PositionSet& checking_positions
 ) {
     // Define all possible directions the rook can move (vertical and horizontal)
     std::vector<std::array<int, 2>> directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
@@ -805,7 +805,7 @@ void Queen::update_rating_opponent (
 
 void Queen::update_rating_active_player (
     Board& board_class,
-    PositionSet checking_positions
+    const PositionSet& checking_positions
 ) {
     // Define all possible directions the rook can move (vertical and horizontal)
     std::vector<std::array<int, 2>> directions = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}, {1, 1}, {1, -1}, {-1, 1}, {-1, -1}};
@@ -814,14 +814,14 @@ void Queen::update_rating_active_player (
     rook_bishop_queen_rating_template_opponent(board_class, directions, checking_positions);
 }
 
-bool Piece::check_if_legal_action(int check_row, int check_col) {
+bool Piece::check_if_legal_action(const int& check_row, const int& check_col) {
     std::array<int, 2> current = {check_row, check_col};
     if (possible_actions.moves.find(current) != possible_actions.moves.end()) return true;
     if (possible_actions.attacks.find(current) != possible_actions.attacks.end()) return true;
     return false;
 }
 
-void Piece::update_move_rating_helping(Board& board_class, PlayerColor player, int row, int col) {
+void Piece::update_move_rating_helping(Board& board_class, const PlayerColor& player, const int& row, const int& col) {
     if (board_class.board[row][col]) {
         if (board_class.board[row][col]->player == player) {
             if (player == white) {

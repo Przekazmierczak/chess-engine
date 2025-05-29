@@ -80,8 +80,8 @@ std::ostream& operator<<(std::ostream& out, const Actions& res) {
 
 Actions::Iterator::Iterator(
     const Actions& c,
-    PositionSet::iterator it,
-    bool attacks_flag)
+    const PositionSet::iterator& it,
+    const bool& attacks_flag)
     : container(c),
       current(it),
       in_attacks(attacks_flag) {
@@ -108,7 +108,7 @@ bool Actions::Iterator::operator!=(const Iterator& other) const {
     return !(*this == other);
 }
 
-Action::Action(std::array<int, 2> input_old_position, std::array<int, 2> input_new_position, char input_symbol, int input_rating) {
+Action::Action(const std::array<int, 2>& input_old_position, const std::array<int, 2>& input_new_position, const char& input_symbol, const int& input_rating) {
     old_position = input_old_position;
     new_position = input_new_position;
     symbol = input_symbol;
@@ -127,17 +127,17 @@ std::ostream& operator<<(std::ostream& out, const Action& action) {
     return out;
 }
 
-Notation::Notation(std:: string position)
+Notation::Notation(const std::string& position)
     : row(int(position[0]) - 48),
       column(position[1]) {
 }
 
-Notation::Notation(int row, int col)
+Notation::Notation(const int& row, const int& col)
     : row(row + 1),
       column(char(104 - col)) {
 }
 
-std::array<int, 2> Notation::parse_square_notation() {
+std::array<int, 2> Notation::parse_square_notation() const {
     std::array<int, 2> position;
 
     position[0] = row - 1;

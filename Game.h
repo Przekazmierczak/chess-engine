@@ -11,20 +11,14 @@
 #include "AlfaBeta.h"
 
 class Game {
-private:
-    Game();
-
 public:
     Board current_board;
-    std::regex valid_format;
+    const std::regex valid_format;
     std::optional<std::string> message;
     std::array<int, 2> last_move_starting;
     std::array<int, 2> last_move_ending;
 
     AlfaBetaPruning alfa_beta_pruning;
-
-    Game(const Game&) = delete;
-    Game& operator=(const Game&) = delete;
 
     static Game& get_instance() {
         static Game instance;
@@ -32,30 +26,37 @@ public:
     }
 
     int menu();
+
+private:
+    Game();
+
+    Game(const Game&) = delete;
+    Game& operator=(const Game&) = delete;
+
     void game_options();
 
     void game_simulator_player();
     void player_pick_destination(
-        std::expected<std::string, std::string>& res_current_position
+        const std::expected<std::string, std::string>& res_current_position
     );
-    std::expected<char, std::string> get_symbol(std::array<int, 2>& curr_row_col);
+    std::expected<char, std::string> get_symbol(const std::array<int, 2>& curr_row_col) const;
 
     void game_simulator_AI();
 
-    void clear_screen();
+    void clear_screen() const;
     void show_winner();
 
-    void print_logo();
-    void print_white_winner();
-    void print_black_winner();
-    void print_draw();
+    void print_logo() const;
+    void print_white_winner() const;
+    void print_black_winner() const;
+    void print_draw() const;
 
-    void save_board();
-    std::expected<Board, std::string> load_board();
+    void save_board() const;
+    std::expected<Board, std::string> load_board() const;
 
-    std::expected<size_t, std::string> validate_menu_input(size_t option, size_t first, size_t last);
-    std::expected<std::string, std::string> validate_position(std::string position, std::regex valid_format);
-    std::expected<char, std::string> validate_promotion(char symbol);
+    std::expected<size_t, std::string> validate_menu_input(const size_t& option, const size_t& first, const size_t& last) const;
+    std::expected<std::string, std::string> validate_position(const std::string& position, const std::regex& valid_format) const;
+    std::expected<char, std::string> validate_promotion(const char& symbol) const;
 };
 
 #endif

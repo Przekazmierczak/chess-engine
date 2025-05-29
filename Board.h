@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <functional>
 #include <random>
+#include <span>
 
 #include "Types.h"
 #include "Piece.h"
@@ -61,6 +62,20 @@ public:
         const std::array<std::array<char, 8>, 8>& simplify_board
     );
 
+    // Custom Destructor (not necessary)
+    ~Board() {
+        for (int i = 0; i < ROWS; ++i) {
+            for (int j = 0; j < COLS; ++j) {
+                board[i][j].reset();
+            }
+        }
+
+        attacked_positions.clear();
+        checkin_pieces.clear();
+        pinned_pieces.clear();
+        active_pieces.clear();
+    }
+    
     Board(const Board& other_board);
 
     Board& operator=(const Board& other_board);
@@ -72,55 +87,57 @@ public:
     // Overloaded output stream operator for the board
     friend std::ostream& operator<<(std::ostream& out, const Board& board_class);
 
-    void reset();
-
-    void print_white_perspective(
-        std::array<int, 2>& last_move_starting,
-        std::array<int, 2>& last_move_ending
-    );
-
-    void print_white_perspective(
-        std::array<int, 2>& last_move_starting,
-        std::array<int, 2>& last_move_ending,
-        std::array<int, 2> current_piece,
-        Actions possible_actions);
-
-    // Helper functions for managing the board
-    std::unique_ptr<Piece> create_piece(
-        const char& symbol, // Character representing the piece (e.g., 'K', 'p')
-        const int& row, // Row position
-        const int& col // Column position
-    );
-
     // Initialize the board with the standard starting position
-    std::array<std::array<std::unique_ptr<Piece>, 8>, 8> create_board();
+    std::array<std::array<std::unique_ptr<Piece>, 8>, 8> create_board() const;
 
     // Initialize the board with a custom configuration
-    std::array<std::array<std::unique_ptr<Piece>, 8>, 8> create_board(const std::array<std::array<char, 8>, 8>& simplify_board);
-
-    // Flattens all checking positions into an unordered set for faster lookups
-    PositionSet flatting_checkin_pieces(
-        const PositionMap& checkin_pieces
-    ) const;
+    std::array<std::array<std::unique_ptr<Piece>, 8>, 8> create_board(const std::array<std::array<char, 8>, 8>& simplify_board) const;
 
     // Calculate possible moves for the current player
     void get_possible_actions();
 
     void get_rating();
 
-    void make_action(int old_row, int old_col, int new_row, int new_col, char symbol);
+    Board make_action_board(const int& old_row, const int& old_col, const int& new_row, const int& new_col, const char& symbol) const;
 
-    Board make_action_board(int old_row, int old_col, int new_row, int new_col, char symbol);
+    void reset();
 
-    void check_enpassant(int old_row, int old_col, int new_row);
+    void print_white_perspective(
+        const std::array<int, 2>& last_move_starting,
+        const std::array<int, 2>& last_move_ending
+    ) const;
 
-    void check_castling(int old_row, int old_col);
+    void print_white_perspective(
+        const std::array<int, 2>& last_move_starting,
+        const std::array<int, 2>& last_move_ending,
+        const std::array<int, 2>& current_piece,
+        const Actions& possible_actions
+    ) const;
 
-    std::unique_ptr<Piece> create_promoted_piece_player(int row, int col);
+    void make_action(const int& old_row, const int& old_col, const int& new_row, const int& new_col, const char& symbol);
 
     void computer_action(Game& game);
 
-    Action get_random_element(std::vector<Action> best_actions);
+private:
+    // Helper functions for managing the board
+    std::unique_ptr<Piece> create_piece(
+        const char& symbol, // Character representing the piece (e.g., 'K', 'p')
+        const int& row, // Row position
+        const int& col // Column position
+    ) const;
+
+    // Flattens all checking positions into an unordered set for faster lookups
+    PositionSet flatting_checkin_pieces(
+        const PositionMap& checkin_pieces
+    ) const;
+
+    void check_enpassant(const int& old_row, const int& old_col, const int& new_row);
+
+    void check_castling(const int& old_row, const int& old_col);
+
+    std::unique_ptr<Piece> create_promoted_piece_player(const int& row, const int& col) const;
+
+    Action get_random_element(std::span<const Action> best_actions) const;
 };
 
 #endif

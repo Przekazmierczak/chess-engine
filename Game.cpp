@@ -159,7 +159,7 @@ void Game::game_simulator_player() {
 }
 
 void Game::player_pick_destination(
-    std::expected<std::string, std::string>& res_current_position
+    const std::expected<std::string, std::string>& res_current_position
 ) {
     clear_screen();
 
@@ -214,7 +214,7 @@ void Game::player_pick_destination(
     }
 }
 
-std::expected<char, std::string> Game::get_symbol(std::array<int, 2>& curr_row_col) {
+std::expected<char, std::string> Game::get_symbol(const std::array<int, 2>& curr_row_col) const {
     char symbol;
     if (current_board.board[curr_row_col[0]][curr_row_col[1]]->possible_actions.promotion) {
         std::cout << "Pick a promotion [Q, R, N, B]: ";
@@ -249,7 +249,7 @@ void Game::game_simulator_AI() {
     }
 }
 
-void Game::clear_screen() {
+void Game::clear_screen() const {
     std::cout << "\x1B[2J\x1B[H";
     print_logo();
 }
@@ -273,7 +273,7 @@ void Game::show_winner() {
     std::cin.get();
 }
 
-void Game::print_logo() {
+void Game::print_logo() const {
     std::cout << "              _____ _                   " << std::endl;
     std::cout << "     _/|     / ____| |                  " << std::endl;
     std::cout << "    // o\\   | |    | |__   ___  ___ ___ " << std::endl;
@@ -284,7 +284,7 @@ void Game::print_logo() {
 }
 
 
-void Game::print_white_winner() {
+void Game::print_white_winner() const {
     std::cout << "     \033[37m_/|                            \033[90m|\\_\033[0m\n";
     std::cout << "    \033[37m// o\\   White is the winner!   \033[90m/X \\\\\033[0m\n";
     std::cout << "    \033[37m|| \\_)                        \033[90m(_. ||\033[0m\n";
@@ -292,14 +292,14 @@ void Game::print_white_winner() {
     std::cout << "    \033[37m)___(                          \033[90m)___(\033[0m\n";
 }
 
-void Game::print_black_winner() {
+void Game::print_black_winner() const {
     std::cout << "     \033[37m_/|                            \033[90m|\\_\033[0m\n";
     std::cout << "    \033[37m// X\\   Black is the winner!   \033[90m/o \\\\\033[0m\n";
     std::cout << "    \033[37m|| ._)                        \033[90m(_/ ||\033[0m\n";
     std::cout << "    \033[37m//__\\                          \033[90m/__\\\\\033[0m\n";
     std::cout << "    \033[37m)___(                          \033[90m)___(\033[0m\n";
 }
-void Game::print_draw() {
+void Game::print_draw() const {
     std::cout << "     \033[37m_/|                            \033[90m|\\_\033[0m\n";
     std::cout << "    \033[37m// X\\      It is a draw!      \033[90m/X \\\\\033[0m\n";
     std::cout << "    \033[37m|| ._)                        \033[90m(_. ||\033[0m\n";
@@ -307,7 +307,7 @@ void Game::print_draw() {
     std::cout << "    \033[37m)___(                          \033[90m)___(\033[0m\n";
 }
 
-void Game::save_board() {
+void Game::save_board() const {
     std::ofstream SaveFile("save.txt");
 
     for (auto &current_row : current_board.board) {
@@ -328,7 +328,7 @@ void Game::save_board() {
     SaveFile.close();
 }
 
-std::expected<Board, std::string> Game::load_board() {
+std::expected<Board, std::string> Game::load_board() const {
     std::ifstream SaveFile("save.txt");
 
     if (SaveFile.is_open()) {
@@ -363,21 +363,21 @@ std::expected<Board, std::string> Game::load_board() {
     }
 }
 
-std::expected<size_t, std::string> Game::validate_menu_input(size_t option, size_t first, size_t last) {
+std::expected<size_t, std::string> Game::validate_menu_input(const size_t& option, const size_t& first, const size_t& last) const {
     if (option >= first && option <= last) {
         return option;
     }
     return std::unexpected("Pick the number from " + std::to_string(first) + "-" + std::to_string(last));
 }
 
-std::expected<std::string, std::string> Game::validate_position(std::string position, std::regex valid_format) {
+std::expected<std::string, std::string> Game::validate_position(const std::string& position, const std::regex& valid_format) const {
     if (std::regex_match(position, valid_format)) {
         return position;
     }
     return std::unexpected("Input does not match the required format. Correct format: <digit><letter>");
 }
 
-std::expected<char, std::string> Game::validate_promotion(char symbol) {
+std::expected<char, std::string> Game::validate_promotion(const char& symbol) const {
     std::unordered_set<char> promotions = {'Q', 'R', 'N', 'B'};
     if (promotions.count(symbol)) {
         return symbol;

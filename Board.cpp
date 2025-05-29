@@ -148,9 +148,9 @@ void Board::reset() {
 }
 
 void Board::print_white_perspective(
-    std::array<int, 2>& last_move_starting,
-    std::array<int, 2>& last_move_ending
-) {
+    const std::array<int, 2>& last_move_starting,
+    const std::array<int, 2>& last_move_ending
+) const {
     auto print_square = [](std::string piece_color, std::string background_color, char mark, char piece) {
         std::cout << "\033[1;" << piece_color << ";" << background_color << "m " << mark << piece << "  \033[0m";
     };
@@ -216,11 +216,11 @@ void Board::print_white_perspective(
 };
 
 void Board::print_white_perspective(
-    std::array<int, 2>& last_move_starting,
-    std::array<int, 2>& last_move_ending,
-    std::array<int, 2> current_piece,
-    Actions possible_actions
-) {
+    const std::array<int, 2>& last_move_starting,
+    const std::array<int, 2>& last_move_ending,
+    const std::array<int, 2>& current_piece,
+    const Actions& possible_actions
+) const {
     auto print_square = [](std::string piece_color, std::string background_color, char mark, char piece) {
         std::cout << "\033[1;" << piece_color << ";" << background_color << "m " << mark << piece << "  \033[0m";
     };
@@ -314,7 +314,7 @@ std::unique_ptr<Piece> Board::create_piece(
     const char& symbol,
     const int& row,
     const int& col
-) {
+) const {
     // Determine player color
     PlayerColor player = isupper(symbol) ? white : black;
 
@@ -332,7 +332,7 @@ std::unique_ptr<Piece> Board::create_piece(
 }
 
 // Create a board with the standard initial position
-std::array<std::array<std::unique_ptr<Piece>, 8>, 8> Board::create_board() {
+std::array<std::array<std::unique_ptr<Piece>, 8>, 8> Board::create_board() const {
     std::array<std::array<char, 8>, 8> simplify_board = {{
         {'R', 'N', 'B', 'K', 'Q', 'B', 'N', 'R'},
         {'P', 'P', 'P', 'P', 'P', 'P', 'P', 'P'},
@@ -359,7 +359,7 @@ std::array<std::array<std::unique_ptr<Piece>, 8>, 8> Board::create_board() {
 }
 
 // Create a board from a custom configuration
-std::array<std::array<std::unique_ptr<Piece>, 8>, 8> Board::create_board(const std::array<std::array<char, 8>, 8>& simplify_board) {
+std::array<std::array<std::unique_ptr<Piece>, 8>, 8> Board::create_board(const std::array<std::array<char, 8>, 8>& simplify_board) const {
     std::array<std::array<std::unique_ptr<Piece>, 8>, 8> board;
 
     // Populate the board with pieces
@@ -474,7 +474,7 @@ void Board::get_rating() {
     final_rating = white_material_rating + white_attack_rating + black_material_rating + black_attack_rating;
 }
 
-void Board::make_action(int old_row, int old_col, int new_row, int new_col, char symbol) {
+void Board::make_action(const int& old_row, const int& old_col, const int& new_row, const int& new_col, const char& symbol) {
     if (board[old_row][old_col] &&
         board[old_row][old_col]->check_if_legal_action(new_row, new_col)
     ) {
@@ -519,7 +519,7 @@ void Board::make_action(int old_row, int old_col, int new_row, int new_col, char
     
 }
 
-Board Board::make_action_board(int old_row, int old_col, int new_row, int new_col, char symbol) {
+Board Board::make_action_board(const int& old_row, const int& old_col, const int& new_row, const int& new_col, const char& symbol) const {
     Board new_board(*this);
     if (board[old_row][old_col] &&
         board[old_row][old_col]->check_if_legal_action(new_row, new_col)
@@ -563,7 +563,7 @@ Board Board::make_action_board(int old_row, int old_col, int new_row, int new_co
     return new_board;
 }
 
-void Board::check_enpassant(int old_row, int old_col, int new_row) {
+void Board::check_enpassant(const int& old_row, const int& old_col, const int& new_row) {
     if (board[old_row][old_col]->piece == pawn &&
         (old_row == 1 && new_row == 3) ||
         (old_row == 6 && new_row == 4)) {
@@ -573,7 +573,7 @@ void Board::check_enpassant(int old_row, int old_col, int new_row) {
     }
 }
 
-void Board::check_castling(int old_row, int old_col) {
+void Board::check_castling(const int& old_row, const int& old_col) {
     std::unordered_map<
     std::array<int, 2>,
     std::vector<int>,
@@ -594,7 +594,7 @@ void Board::check_castling(int old_row, int old_col) {
     }
 }
 
-std::unique_ptr<Piece> Board::create_promoted_piece_player(int row, int col) {
+std::unique_ptr<Piece> Board::create_promoted_piece_player(const int& row, const int& col) const {
     char symbol;
     std::cout << "Pick a promotion [Q, R, N, B, P]: ";
     std::cin >> symbol;
@@ -657,7 +657,7 @@ void Board::computer_action(Game& game) {
     make_action(picked_action.old_position[0], picked_action.old_position[1], picked_action.new_position[0], picked_action.new_position[1], picked_action.symbol);
 }
 
-Action Board::get_random_element(std::vector<Action> best_actions) {
+Action Board::get_random_element(std::span<const Action> best_actions) const {
     std::random_device rd;
     std::mt19937 gen(rd());
 

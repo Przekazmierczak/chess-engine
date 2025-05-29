@@ -14,13 +14,12 @@ class Board;
 
 // Base class representing a generic chess piece
 class Piece {
-    public:
+public:
     char symbol; // Character symbol representing the piece (e.g., 'P' for pawn)
     PieceType piece; // Name of the piece (e.g., "pawn")
     PlayerColor player; // Player owning the piece ("white" or "black")
     int row; // Row position of the piece on the board
     int column; // Column position of the piece on the board
-
     Actions possible_actions; // Stores the possible actions for the piece
 
     // Constructor
@@ -40,6 +39,9 @@ class Piece {
     // Overloaded output stream operator for Piece
     friend std::ostream& operator<<(std::ostream& out, const Piece& piece);
 
+    friend class Board;
+
+protected:
     // Check if a position is within the board bounds
     bool is_valid_position(const Board& board, const int& row, const int& column) const;
 
@@ -55,12 +57,12 @@ class Piece {
     void rook_bishop_queen_move_template_active_player (
         Board& board_class,
         const std::vector<std::array<int, 2>>& directions
-    );
+    ) const;
 
     void rook_bishop_queen_move_template_opponent (
         Board& board_class,
         const std::vector<std::array<int, 2>>& directions,
-        PositionSet checking_positions
+        const PositionSet& checking_positions
     );
 
     void rook_bishop_queen_rating_template_active_player (
@@ -71,7 +73,7 @@ class Piece {
     void rook_bishop_queen_rating_template_opponent (
         Board& board_class,
         const std::vector<std::array<int, 2>>& directions,
-        PositionSet checking_positions
+        const PositionSet& checking_positions
     );
 
     // Pure virtual function to determine piece-specific possible moves
@@ -81,12 +83,12 @@ class Piece {
 
     virtual void check_piece_possible_moves_active_player (
         Board& board_class,
-        PositionSet checking_positions
+        const PositionSet& checking_positions
     ) = 0;
 
     virtual int const get_value() const = 0;
     
-    bool check_if_legal_action(int check_row, int check_col);
+    bool check_if_legal_action(const int& check_row, const int& check_col);
 
     virtual void update_rating_opponent (
         Board& board_class
@@ -94,14 +96,14 @@ class Piece {
 
     virtual void update_rating_active_player (
         Board& board_class,
-        PositionSet checking_positions
+        const PositionSet& checking_positions
     ) = 0;
 
-    void update_move_rating_helping(
+    void update_move_rating_helping (
         Board& board_class,
-        PlayerColor player,
-        int row,
-        int col
+        const PlayerColor& player,
+        const int& row,
+        const int& col
     );
 };
 
@@ -115,13 +117,14 @@ public:
         const int& input_column
     );
 
+private:
     void check_piece_possible_moves_opponent (
         Board& board_class
     ) override;
 
     void check_piece_possible_moves_active_player (
         Board& board_class,
-        PositionSet checking_positions
+        const PositionSet& checking_positions
     ) override;
 
     void update_rating_opponent (
@@ -130,7 +133,7 @@ public:
 
     void update_rating_active_player (
         Board& board_class,
-        PositionSet checking_positions
+        const PositionSet& checking_positions
         ) override;
 
     int const get_value() const override {return 1;};
@@ -146,13 +149,14 @@ public:
         const int& input_column
     );
 
+private:
     void check_piece_possible_moves_opponent (
         Board& board_class
     ) override;
 
     void check_piece_possible_moves_active_player (
         Board& board_class,
-        PositionSet checking_positions
+        const PositionSet& checking_positions
     ) override;
 
     void update_rating_opponent (
@@ -161,7 +165,7 @@ public:
 
     void update_rating_active_player (
         Board& board_class,
-        PositionSet checking_positions
+        const PositionSet& checking_positions
     ) override;
 
     int const get_value() const override {return 3;};
@@ -177,13 +181,14 @@ public:
         const int& input_column
     );
 
+private:
     void check_piece_possible_moves_opponent (
         Board& board_class
     ) override;
 
     void check_piece_possible_moves_active_player (
         Board& board_class,
-        PositionSet checking_positions
+        const PositionSet& checking_positions
     ) override;
 
     void update_rating_opponent (
@@ -192,7 +197,7 @@ public:
 
     void update_rating_active_player (
         Board& board_class,
-        PositionSet checking_positions
+        const PositionSet& checking_positions
     ) override;
 
     int const get_value() const override {return 50;};
@@ -208,13 +213,14 @@ public:
         const int& input_column
     );
 
+private:
     void check_piece_possible_moves_opponent (
         Board& board_class
     ) override;
 
     void check_piece_possible_moves_active_player (
         Board& board_class,
-        PositionSet checking_positions
+        const PositionSet& checking_positions
     ) override;
 
     void update_rating_opponent (
@@ -223,7 +229,7 @@ public:
 
     void update_rating_active_player (
         Board& board_class,
-        PositionSet checking_positions
+        const PositionSet& checking_positions
     ) override;
 
     int const get_value() const override {return 5;};
@@ -239,13 +245,14 @@ public:
         const int& input_column
     );
 
+private:
     void check_piece_possible_moves_opponent (
         Board& board_class
     ) override;
 
     void check_piece_possible_moves_active_player (
         Board& board_class,
-        PositionSet checking_positions
+        const PositionSet& checking_positions
     ) override;
 
     void update_rating_opponent (
@@ -254,7 +261,7 @@ public:
 
     void update_rating_active_player (
         Board& board_class,
-        PositionSet checking_positions
+        const PositionSet& checking_positions
     ) override;
 
     int const get_value() const override {return 3;};
@@ -270,13 +277,14 @@ public:
         const int& input_column
     );
 
+private:
     void check_piece_possible_moves_opponent (
         Board& board_class
     ) override;
 
     void check_piece_possible_moves_active_player (
         Board& board_class,
-        PositionSet checking_positions
+        const PositionSet& checking_positions
     ) override;
 
     void update_rating_opponent (
@@ -285,7 +293,7 @@ public:
 
     void update_rating_active_player (
         Board& board_class,
-        PositionSet checking_positions
+        const PositionSet& checking_positions
     ) override;
 
     int const get_value() const override {return 9;};

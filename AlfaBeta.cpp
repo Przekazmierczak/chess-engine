@@ -1,6 +1,6 @@
 #include "AlfaBeta.h"
 
-int AlfaBetaPruning::operator()(Board board, int depth, int alpha, int beta) {
+int AlfaBetaPruning::operator()(Board board, const int depth, int alpha, int beta) {
     board.get_possible_actions();
     if (depth == 0) {
         board.get_rating();
