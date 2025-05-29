@@ -7,6 +7,7 @@
 #include <functional>
 
 #include "Types.h"
+#include "Piece.h"
 
 class Piece;
 

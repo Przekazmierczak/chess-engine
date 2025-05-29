@@ -6,10 +6,9 @@
 #include "tuple"
 
 int main() {
-    Game game;
+    Game& game = Game::getInstance();
 
     game.menu();
-
 
     return 0;
 }

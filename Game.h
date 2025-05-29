@@ -1,15 +1,18 @@
 #ifndef GAME_H
 #define GAME_H
 
-#include "Board.h"
-
 #include <expected>
 #include <optional>
 #include <regex>
 #include <iostream>
 #include <fstream>
 
+#include "Board.h"
+
 class Game {
+    private:
+        Game();
+
     public:
         Board current_board;
         std::regex valid_format;
@@ -17,7 +20,13 @@ class Game {
         std::array<int, 2> last_move_starting;
         std::array<int, 2> last_move_ending;
 
-    Game();
+        Game(const Game&) = delete;
+        Game& operator=(const Game&) = delete;
+
+        static Game& getInstance() {
+            static Game instance;
+            return instance;
+        }
 
     int menu();
     void game_options();
