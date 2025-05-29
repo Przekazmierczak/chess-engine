@@ -43,7 +43,12 @@ public:
     void game_simulator_AI();
 
     void clear_screen();
+    void show_winner();
+
     void print_logo();
+    void print_white_winner();
+    void print_black_winner();
+    void print_draw();
 
     void save_board();
     std::expected<Board, std::string> load_board();

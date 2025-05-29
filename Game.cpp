@@ -118,11 +118,7 @@ void Game::game_simulator_player() {
         }
         
         if (current_board.winner != notFinished) {
-            if (current_board.winner == draw) {
-                std::cout << "It is the draw!" << std::endl;
-            } else {
-                std::cout << current_board.winner << " is the winner!" << std::endl;
-            }
+            show_winner();
             break;
         }
         // std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -239,11 +235,7 @@ void Game::game_simulator_AI() {
         current_board.print_white_perspective(last_move_starting, last_move_ending);
         
         if (current_board.winner != notFinished) {
-            if (current_board.winner == draw) {
-                std::cout << "It is the draw!" << std::endl;
-            } else {
-                std::cout << current_board.winner << " is the winner!" << std::endl;
-            }
+            show_winner();
             break;
         }
         // std::this_thread::sleep_for(std::chrono::seconds(1));
@@ -257,6 +249,20 @@ void Game::clear_screen() {
     print_logo();
 }
 
+void Game::show_winner() {
+    if (current_board.winner == whiteWin) {
+        print_white_winner();
+    } else if (current_board.winner == blackWin) {
+        print_black_winner();
+    } else {
+        print_draw();
+    }
+
+    std::cout << "Press any key to continue...";
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    std::cin.get();
+}
+
 void Game::print_logo() {
     std::cout << "     |\\_        _____ _                   " << std::endl;
     std::cout << "     /  .\\_    / ____| |                  " << std::endl;
@@ -266,6 +272,30 @@ void Game::print_logo() {
     std::cout << "    /_____\\    \\_____|_| |_|\\___||___/___/" << std::endl;
     std::cout << "   [_______]                              " << std::endl;
     std::cout << "                                          " << std::endl;
+}
+
+
+void Game::print_white_winner() {
+    std::cout << "  \033[37m_/|                                  \033[90m|\\_\033[0m\n";
+    std::cout << " \033[37m// o\\      White is the winner!      \033[90m/X \\\\\033[0m\n";
+    std::cout << " \033[37m|| \\_)                              \033[90m(_. ||\033[0m\n";
+    std::cout << " \033[37m//__\\                                \033[90m/__\\\\\033[0m\n";
+    std::cout << " \033[37m)___(                                \033[90m)___(\033[0m\n";
+}
+
+void Game::print_black_winner() {
+    std::cout << "  \033[37m_/|                                  \033[90m|\\_\033[0m\n";
+    std::cout << " \033[37m// X\\      Black is the winner!      \033[90m/o \\\\\033[0m\n";
+    std::cout << " \033[37m|| ._)                              \033[90m(_/ ||\033[0m\n";
+    std::cout << " \033[37m//__\\                                \033[90m/__\\\\\033[0m\n";
+    std::cout << " \033[37m)___(                                \033[90m)___(\033[0m\n";
+}
+void Game::print_draw() {
+    std::cout << "  \033[37m_/|                                  \033[90m|\\_\033[0m\n";
+    std::cout << " \033[37m// X\\         It is a draw!         \033[90m/X \\\\\033[0m\n";
+    std::cout << " \033[37m|| ._)                              \033[90m(_. ||\033[0m\n";
+    std::cout << " \033[37m//__\\                                \033[90m/__\\\\\033[0m\n";
+    std::cout << " \033[37m)___(                                \033[90m)___(\033[0m\n";
 }
 
 void Game::save_board() {
