@@ -6,7 +6,7 @@
 #include "tuple"
 
 int main() {
-    Game& game = Game::getInstance();
+    Game& game = Game::get_instance();
 
     game.menu();
 

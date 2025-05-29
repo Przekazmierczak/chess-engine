@@ -13,25 +13,25 @@
 #include "AlfaBeta.h"
 
 class Game {
-    private:
-        Game();
+private:
+    Game();
 
-    public:
-        Board current_board;
-        std::regex valid_format;
-        std::optional<std::string> message;
-        std::array<int, 2> last_move_starting;
-        std::array<int, 2> last_move_ending;
+public:
+    Board current_board;
+    std::regex valid_format;
+    std::optional<std::string> message;
+    std::array<int, 2> last_move_starting;
+    std::array<int, 2> last_move_ending;
 
-        AlfaBetaPruning alfa_beta_pruning;
+    AlfaBetaPruning alfa_beta_pruning;
 
-        Game(const Game&) = delete;
-        Game& operator=(const Game&) = delete;
+    Game(const Game&) = delete;
+    Game& operator=(const Game&) = delete;
 
-        static Game& getInstance() {
-            static Game instance;
-            return instance;
-        }
+    static Game& get_instance() {
+        static Game instance;
+        return instance;
+    }
 
     int menu();
     void game_options();

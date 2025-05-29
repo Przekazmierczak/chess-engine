@@ -6,7 +6,7 @@
 class Board;
 
 class AlfaBetaPruning {
-    public:
+public:
     int operator()(Board board, int depth, int alpha, int beta);
 };
 

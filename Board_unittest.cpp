@@ -1152,7 +1152,7 @@ namespace {
     }
 
     TEST(MinimaxWhiteMate, Correct) {
-        Game& game = Game::getInstance();
+        Game& game = Game::get_instance();
 
         Board board(white, "____", {{
             {' ', ' ', ' ', 'K', ' ', ' ', ' ', ' '},
@@ -1172,7 +1172,7 @@ namespace {
     }
 
     TEST(MinimaxBlackMate, Correct) {
-        Game& game = Game::getInstance();
+        Game& game = Game::get_instance();
 
         Board board(black, "____", {{
             {' ', ' ', ' ', 'K', ' ', ' ', ' ', ' '},
@@ -1192,7 +1192,7 @@ namespace {
     }
 
     TEST(MinimaxPat, Correct) {
-        Game& game = Game::getInstance();
+        Game& game = Game::get_instance();
 
         Board board(black, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'K'},
@@ -1212,7 +1212,7 @@ namespace {
     }
 
     TEST(MinimaxPat2, Correct) {
-        Game& game = Game::getInstance();
+        Game& game = Game::get_instance();
 
         Board board(black, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'K'},
@@ -1232,7 +1232,7 @@ namespace {
     }
 
     TEST(MinimaxOnlyMove, Correct) {
-        Game& game = Game::getInstance();
+        Game& game = Game::get_instance();
 
         Board board(black, "____", {{
             {' ', ' ', ' ', ' ', ' ', ' ', ' ', 'K'},
