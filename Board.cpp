@@ -138,6 +138,15 @@ std::ostream& operator<<(std::ostream& out, const Board& board_class) {
     return out;
 };
 
+void Board::reset() {
+    turn = white;
+    castling = "KQkq";
+    enpassant = {NULL, NULL};
+    board = create_board();
+    winner = notFinished;
+    get_possible_actions();
+}
+
 void Board::print_white_perspective(
     std::array<int, 2>& last_move_starting,
     std::array<int, 2>& last_move_ending

@@ -72,6 +72,8 @@ public:
     // Overloaded output stream operator for the board
     friend std::ostream& operator<<(std::ostream& out, const Board& board_class);
 
+    void reset();
+
     void print_white_perspective(
         std::array<int, 2>& last_move_starting,
         std::array<int, 2>& last_move_ending

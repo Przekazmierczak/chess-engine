@@ -5,8 +5,8 @@
 Game::Game() 
     : current_board(),
       valid_format("[1-8][A-Ha-h]"),
-      last_move_starting({8, 8}),
-      last_move_ending({8, 8}) {
+      last_move_starting({-1, -1}),
+      last_move_ending({-1, -1}) {
 }
 
 int Game::menu() {
@@ -121,7 +121,6 @@ void Game::game_simulator_player() {
             show_winner();
             break;
         }
-        // std::this_thread::sleep_for(std::chrono::seconds(1));
 
         if (current_board.turn == white) {
             std::string current_positon;
@@ -134,7 +133,14 @@ void Game::game_simulator_player() {
                 continue;
             }
 
-            if (current_positon == "q") return;
+            if (current_positon == "q") {
+                current_board.reset();
+
+                last_move_starting = {-1, -1};
+                last_move_ending = {-1, -1};
+
+                return;
+            }
 
             auto res_current_position = validate_position(current_positon, valid_format);
 
@@ -238,7 +244,6 @@ void Game::game_simulator_AI() {
             show_winner();
             break;
         }
-        // std::this_thread::sleep_for(std::chrono::seconds(1));
 
         current_board.computer_action(*this);
     }
@@ -257,6 +262,11 @@ void Game::show_winner() {
     } else {
         print_draw();
     }
+
+    current_board.reset();
+
+    last_move_starting = {-1, -1};
+    last_move_ending = {-1, -1};
 
     std::cout << "Press any key to continue...";
     std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
