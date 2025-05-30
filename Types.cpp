@@ -29,7 +29,7 @@ std::ostream& operator<<(std::ostream& out, const PositionMap& map) {
 
         out << "{" << position.first[0] << ", " << position.first[1] << "}: ";
 
-        std::cout << position.second;
+        out << position.second;
     }
     out << "]";
     return out;
@@ -77,7 +77,6 @@ std::ostream& operator<<(std::ostream& out, const Actions& res) {
     return out;
 };
 
-
 Actions::Iterator::Iterator(
     const Actions& c,
     const PositionSet::iterator& it,
@@ -93,6 +92,7 @@ const std::array<int, 2>& Actions::Iterator::operator*() const {
 
 Actions::Iterator& Actions::Iterator::operator++() {
     ++current;
+    // Switch from attacks to moves once attacks end
     if (in_attacks && current == container.attacks.end()) {
         current = container.moves.begin();
         in_attacks = false;

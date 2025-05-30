@@ -814,22 +814,24 @@ void Queen::update_rating_active_player (
     rook_bishop_queen_rating_template_opponent(board_class, directions, checking_positions);
 }
 
-bool Piece::check_if_legal_action(const int& check_row, const int& check_col) {
+bool Piece::check_if_legal_action(int check_row, int check_col) {
     std::array<int, 2> current = {check_row, check_col};
+    // Check if the position is in valid moves or attacks
     if (possible_actions.moves.find(current) != possible_actions.moves.end()) return true;
     if (possible_actions.attacks.find(current) != possible_actions.attacks.end()) return true;
     return false;
 }
 
-void Piece::update_move_rating_helping(Board& board_class, const PlayerColor& player, const int& row, const int& col) {
+void Piece::update_move_rating_helping(Board& board_class, const PlayerColor& player, int row, int col) {
     if (board_class.board[row][col]) {
         if (board_class.board[row][col]->player == player) {
             if (player == white) {
-                // There is no benefit in covering own king
+                // Increase protecting rating only if not protecting the king
                 if (board_class.board[row][col]->piece != king) {
                     board_class.white_attack_rating += board_class.protecting_rating_weight * board_class.board[row][col]->get_value();
                 }
             } else {
+                // Increase attack rating against opponent's pieces
                 if (board_class.board[row][col]->piece != king) {
                     board_class.black_attack_rating -= board_class.protecting_rating_weight * board_class.board[row][col]->get_value();
                 }
@@ -842,6 +844,7 @@ void Piece::update_move_rating_helping(Board& board_class, const PlayerColor& pl
             }
         }
     } else {
+        // Increment rating for controlling empty squares
         if (player == white) {
             board_class.white_attack_rating += 1;
         } else {

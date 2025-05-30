@@ -39,6 +39,7 @@ public:
     // Overloaded output stream operator for Piece
     friend std::ostream& operator<<(std::ostream& out, const Piece& piece);
 
+    // Allows Board class to access private/protected members of Piece
     friend class Board;
 
 protected:
@@ -53,7 +54,7 @@ protected:
         const PositionMap& pinned_pieces
     ) const;
 
-    // Helper method for rook, bishop, and queen movement logic
+    // Helper methods for rook, bishop, and queen movement logic
     void rook_bishop_queen_move_template_active_player (
         Board& board_class,
         const std::vector<std::array<int, 2>>& directions
@@ -86,10 +87,13 @@ protected:
         const PositionSet& checking_positions
     ) = 0;
 
+    // Get the point value of the piece
     virtual int const get_value() const = 0;
     
-    bool check_if_legal_action(const int& check_row, const int& check_col);
+    // Validate if a given action is legal for the piece
+    bool check_if_legal_action(int check_row, int check_col);
 
+    // Virtual functions to update the piece's rating during gameplay
     virtual void update_rating_opponent (
         Board& board_class
     ) = 0;
@@ -99,11 +103,12 @@ protected:
         const PositionSet& checking_positions
     ) = 0;
 
+    // Helper to update ratings for moves aiding a player
     void update_move_rating_helping (
         Board& board_class,
         const PlayerColor& player,
-        const int& row,
-        const int& col
+        int row,
+        int col
     );
 };
 
@@ -118,24 +123,29 @@ public:
     );
 
 private:
+    // Implements pawn-specific move logic for the opponent's turn
     void check_piece_possible_moves_opponent (
         Board& board_class
     ) override;
 
+    // Implements pawn-specific move logic for the active player's turn
     void check_piece_possible_moves_active_player (
         Board& board_class,
         const PositionSet& checking_positions
     ) override;
 
+    // Update the rating of the pawn for the opponent
     void update_rating_opponent (
         Board& board_class
     ) override;
 
+    // Update the rating of the pawn for the active player
     void update_rating_active_player (
         Board& board_class,
         const PositionSet& checking_positions
-        ) override;
-
+    ) override;
+    
+    // Returns the point value of a pawn
     int const get_value() const override {return 1;};
 };
 
@@ -150,24 +160,29 @@ public:
     );
 
 private:
+    // Implements knight-specific move logic for the opponent's turn
     void check_piece_possible_moves_opponent (
         Board& board_class
     ) override;
 
+    // Implements knight-specific move logic for the active player's turn
     void check_piece_possible_moves_active_player (
         Board& board_class,
         const PositionSet& checking_positions
     ) override;
 
+    // Update the rating of the knight for the opponent
     void update_rating_opponent (
         Board& board_class
     ) override;
 
+    // Update the rating of the knight for the active player
     void update_rating_active_player (
         Board& board_class,
         const PositionSet& checking_positions
     ) override;
 
+    // Returns the point value of a knight
     int const get_value() const override {return 3;};
 };
 
@@ -182,24 +197,29 @@ public:
     );
 
 private:
+    // Implements king-specific move logic for the opponent's turn
     void check_piece_possible_moves_opponent (
         Board& board_class
     ) override;
 
+    // Implements king-specific move logic for the active player's turn
     void check_piece_possible_moves_active_player (
         Board& board_class,
         const PositionSet& checking_positions
     ) override;
 
+    // Update the rating of the king for the opponent
     void update_rating_opponent (
         Board& board_class
     ) override;
 
+    // Update the rating of the king for the active player
     void update_rating_active_player (
         Board& board_class,
         const PositionSet& checking_positions
     ) override;
 
+    // Returns the point value of a king
     int const get_value() const override {return 50;};
 };
 
@@ -214,24 +234,29 @@ public:
     );
 
 private:
+    // Implements rook-specific move logic for the opponent's turn
     void check_piece_possible_moves_opponent (
         Board& board_class
     ) override;
 
+    // Implements rook-specific move logic for the active player's turn
     void check_piece_possible_moves_active_player (
         Board& board_class,
         const PositionSet& checking_positions
     ) override;
 
+    // Update the rating of the rook for the opponent
     void update_rating_opponent (
         Board& board_class
     ) override;
 
+    // Update the rating of the rook for the active player
     void update_rating_active_player (
         Board& board_class,
         const PositionSet& checking_positions
     ) override;
 
+    // Returns the point value of a rook
     int const get_value() const override {return 5;};
 };
 
@@ -246,24 +271,29 @@ public:
     );
 
 private:
+    // Implements bishop-specific move logic for the opponent's turn
     void check_piece_possible_moves_opponent (
         Board& board_class
     ) override;
 
+    // Implements bishop-specific move logic for the active player's turn
     void check_piece_possible_moves_active_player (
         Board& board_class,
         const PositionSet& checking_positions
     ) override;
 
+    // Update the rating of the bishop for the opponent
     void update_rating_opponent (
         Board& board_class
     ) override;
 
+    // Update the rating of the bishop for the active player
     void update_rating_active_player (
         Board& board_class,
         const PositionSet& checking_positions
     ) override;
 
+    // Returns the point value of a bishop
     int const get_value() const override {return 3;};
 };
 
@@ -278,24 +308,29 @@ public:
     );
 
 private:
+    // Implements queen-specific move logic for the opponent's turn
     void check_piece_possible_moves_opponent (
         Board& board_class
     ) override;
 
+    // Implements queen-specific move logic for the active player's turn
     void check_piece_possible_moves_active_player (
         Board& board_class,
         const PositionSet& checking_positions
     ) override;
 
+    // Update the rating of the queen for the opponent
     void update_rating_opponent (
         Board& board_class
     ) override;
 
+    // Update the rating of the queen for the active player
     void update_rating_active_player (
         Board& board_class,
         const PositionSet& checking_positions
     ) override;
 
+    // Returns the point value of a queen
     int const get_value() const override {return 9;};
 };
 
