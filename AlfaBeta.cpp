@@ -1,6 +1,6 @@
 #include "AlfaBeta.h"
 
-int AlfaBetaPruning::operator()(Board board, const int depth, int alpha, int beta) {
+int AlfaBetaPruning::operator()(Board board, int depth, int alpha, int beta) {
     board.get_possible_actions(); // Generate all possible moves for the current board state
 
     if (depth == 0) { // Base case: evaluate and return the board rating at maximum search depth
@@ -25,7 +25,12 @@ int AlfaBetaPruning::operator()(Board board, const int depth, int alpha, int bet
             for (const auto& move : board.board[position[0]][position[1]]->possible_actions) {
                 // Lambda to apply move and recursively evaluate resulting board
                 auto make_and_minimax = [&](char promotion) {
-                    return (*this)(board.make_action_board(position[0], position[1], move[0], move[1], promotion), depth - 1, alpha, beta);
+                    return (*this)(board.make_action_board(
+                        position[0],
+                        position[1],
+                        move[0],
+                        move[1],
+                        promotion), depth - 1, alpha, beta);
                 };
 
                 if (board.turn == white) {

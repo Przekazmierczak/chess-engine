@@ -67,48 +67,48 @@ bool Piece::is_not_pinned(
 Pawn::Pawn(const char& input_symbol,
     const PieceType& input_piece,
     const PlayerColor& input_player,
-    const int& input_row,
-    const int& input_column
+    int input_row,
+    int input_column
 ): Piece(input_symbol, input_piece, input_player, input_row, input_column) {}
 
 // Derived class representing a Knight
 Knight::Knight(const char& input_symbol,
     const PieceType& input_piece,
     const PlayerColor& input_player,
-    const int& input_row,
-    const int& input_column
+    int input_row,
+    int input_column
 ): Piece(input_symbol, input_piece, input_player, input_row, input_column) {}
 
 // Derived class representing a King
 King::King(const char& input_symbol,
     const PieceType& input_piece,
     const PlayerColor& input_player,
-    const int& input_row,
-    const int& input_column
+    int input_row,
+    int input_column
 ): Piece(input_symbol, input_piece, input_player, input_row, input_column) {}
 
 // Derived class representing a Rook
 Rook::Rook(const char& input_symbol,
     const PieceType& input_piece,
     const PlayerColor& input_player,
-    const int& input_row,
-    const int& input_column
+    int input_row,
+    int input_column
 ): Piece(input_symbol, input_piece, input_player, input_row, input_column) {}
 
 // Derived class representing a Bishop
 Bishop::Bishop(const char& input_symbol,
     const PieceType& input_piece,
     const PlayerColor& input_player,
-    const int& input_row,
-    const int& input_column
+    int input_row,
+    int input_column
 ): Piece(input_symbol, input_piece, input_player, input_row, input_column) {}
 
 // Derived class representing a Queen
 Queen::Queen(const char& input_symbol,
     const PieceType& input_piece,
     const PlayerColor& input_player,
-    const int& input_row,
-    const int& input_column
+    int input_row,
+    int input_column
 ): Piece(input_symbol, input_piece, input_player, input_row, input_column) {}
 
 // Helper method for rook, bishop, and queen movement logic

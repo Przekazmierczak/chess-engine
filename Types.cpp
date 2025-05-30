@@ -108,7 +108,12 @@ bool Actions::Iterator::operator!=(const Iterator& other) const {
     return !(*this == other);
 }
 
-Action::Action(const std::array<int, 2>& input_old_position, const std::array<int, 2>& input_new_position, const char& input_symbol, const int& input_rating) {
+Action::Action(
+    const std::array<int, 2>& input_old_position,
+    const std::array<int, 2>& input_new_position,
+    char input_symbol,
+    int input_rating
+) {
     old_position = input_old_position;
     new_position = input_new_position;
     symbol = input_symbol;
@@ -132,7 +137,7 @@ Notation::Notation(const std::string& position)
       column(position[1]) {
 }
 
-Notation::Notation(const int& row, const int& col)
+Notation::Notation(int row, int col)
     : row(row + 1),
       column(char(104 - col)) {
 }

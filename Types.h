@@ -111,7 +111,7 @@ struct Action {
     Action(
         const std::array<int, 2>& input_old_position,
         const std::array<int, 2>& input_new_position,
-        const char& input_symbol, const int& input_rating
+        char input_symbol, int input_rating
     );
 
     std::strong_ordering operator<=>(const Action& other) const;
@@ -126,7 +126,7 @@ struct Notation {
     char column;
 
     Notation(const std::string& input_position); // Initialize from notation string
-    Notation(const int& row, const int& col); // Initialize from indices
+    Notation(int row, int col); // Initialize from indices
 
     std::array<int, 2> parse_square_notation() const; // Convert notation to indices
 

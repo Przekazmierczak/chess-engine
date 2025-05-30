@@ -8,7 +8,7 @@ class Board;
 class AlfaBetaPruning {
 public:
     // Evaluates the best move for the given board state using the Alpha-Beta pruning algorithm.
-    int operator()(Board board, const int depth, int alpha, int beta);
+    int operator()(Board board, int depth, int alpha, int beta);
 };
 
 #endif

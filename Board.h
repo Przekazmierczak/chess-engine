@@ -122,10 +122,10 @@ public:
     void apply_move(Board& target_board, int old_row, int old_col, int new_row, int new_col, char symbol) const;
 
     // Execute a move on the board
-    void make_action(const int& old_row, const int& old_col, const int& new_row, const int& new_col, const char& symbol);
+    void make_action(int old_row, int old_col, int new_row, int new_col, char symbol);
 
     // Generate a new board after a move (AlfaBetaPruning)
-    Board make_action_board(const int& old_row, const int& old_col, const int& new_row, const int& new_col, const char& symbol) const;
+    Board make_action_board(int old_row, int old_col, int new_row, int new_col, char symbol) const;
 
     // Generate AI move
     void computer_action(Game& game);
@@ -133,9 +133,9 @@ public:
 private:
     // Helper functions for creating pieces
     std::unique_ptr<Piece> create_piece(
-        const char& symbol,
-        const int& row,
-        const int& col
+        char symbol,
+        int row,
+        int col
     ) const;
 
     // Flattens all checking positions into an unordered set for faster lookups
@@ -144,13 +144,13 @@ private:
     ) const;
 
     // Handle en passant logic during a move
-    void check_enpassant(const int& old_row, const int& old_col, const int& new_row);
+    void check_enpassant(int old_row, int old_col, int new_row);
 
     // Handle castling logic during a move
-    void check_castling(const int& old_row, const int& old_col);
+    void check_castling(int old_row, int old_col);
 
     // Promote a pawn and create the promoted piece
-    std::unique_ptr<Piece> create_promoted_piece_player(const int& row, const int& col) const;
+    std::unique_ptr<Piece> create_promoted_piece_player(int row, int col) const;
 
     // Select a random action from a set of best possible actions
     Action get_random_element(std::span<const Action> best_actions) const;

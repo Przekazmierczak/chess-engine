@@ -63,9 +63,18 @@ private:
     std::expected<Board, std::string> load_board() const;
 
     // Input validation methods
-    std::expected<size_t, std::string> validate_menu_input(const size_t& option, const size_t& first, const size_t& last) const;
-    std::expected<std::string, std::string> validate_position(const std::string& position, const std::regex& valid_format) const;
-    std::expected<char, std::string> validate_promotion(const char& symbol) const;
+    std::expected<size_t, std::string> validate_menu_input(
+        size_t option,
+        size_t first,
+        size_t last
+    ) const;
+    std::expected<std::string, std::string> validate_position(
+        const std::string& position,
+        const std::regex& valid_format
+    ) const;
+    std::expected<char, std::string> validate_promotion(
+        char symbol
+    ) const;
 };
 
 #endif

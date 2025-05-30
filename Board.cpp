@@ -178,7 +178,9 @@ std::array<std::array<std::unique_ptr<Piece>, 8>, 8> Board::create_board() const
 }
 
 // Create a board from a custom configuration
-std::array<std::array<std::unique_ptr<Piece>, 8>, 8> Board::create_board(const std::array<std::array<char, 8>, 8>& simplify_board) const {
+std::array<std::array<std::unique_ptr<Piece>, 8>, 8> Board::create_board(
+    const std::array<std::array<char, 8>, 8>& simplify_board
+) const {
     std::array<std::array<std::unique_ptr<Piece>, 8>, 8> board;
 
     // Populate the board with pieces
@@ -358,7 +360,15 @@ void Board::print_white_perspective(
     };
     
     // Determine colors considering selection, attacks, moves, and last move highlights
-    auto get_colors = [](bool has_piece, bool is_white_piece, bool is_selected, bool is_move, bool is_attack, bool is_light_square, bool is_last_move) {
+    auto get_colors = [](
+        bool has_piece,
+        bool is_white_piece,
+        bool is_selected,
+        bool is_move,
+        bool is_attack,
+        bool is_light_square,
+        bool is_last_move
+    ) {
         std::string piece_color = is_white_piece ? "34" : "35"; // Blue for white, magenta for black
         std::string background_color;
         
@@ -400,7 +410,15 @@ void Board::print_white_perspective(
                 std::array<int, 2>{row, col} == last_move_ending
             );
     
-            auto [piece_color, background_color] = get_colors(has_piece, is_white_piece, is_selected, is_move, is_attack, is_light_square, is_last_move);
+            auto [piece_color, background_color] = get_colors(
+                has_piece,
+                is_white_piece,
+                is_selected,
+                is_move,
+                is_attack,
+                is_light_square,
+                is_last_move
+            );
             if (has_piece) {
                 print_square(piece_color, background_color, is_white_piece ? '^' : ' ', piece_symbol);
             } else {
@@ -440,7 +458,7 @@ void Board::print_white_perspective(
 };
 
 // Execute a move on the board
-void Board::make_action(const int& old_row, const int& old_col, const int& new_row, const int& new_col, const char& symbol) {
+void Board::make_action(int old_row, int old_col, int new_row, int new_col, char symbol) {
     // Check if there is a piece at the old position and the move to the new position is legal
     if (board[old_row][old_col] &&
         board[old_row][old_col]->check_if_legal_action(new_row, new_col)
@@ -492,7 +510,7 @@ void Board::make_action(const int& old_row, const int& old_col, const int& new_r
 }
 
 // Generate a new board after a move (AlfaBetaPruning)
-Board Board::make_action_board(const int& old_row, const int& old_col, const int& new_row, const int& new_col, const char& symbol) const {
+Board Board::make_action_board(int old_row, int old_col, int new_row, int new_col, char symbol) const {
     Board new_board(*this);
 
     // Check if there is a piece at the old position and the move to the new position is legal
@@ -573,7 +591,14 @@ void Board::computer_action(Game& game) {
                     {position[0], position[1]},
                     {move[0], move[1]},
                     curr_symbol,
-                    game.alfa_beta_pruning(make_action_board(position[0], position[1], move[0], move[1], curr_symbol), 2, -100000, 100000)
+                    game.alfa_beta_pruning(
+                        make_action_board(
+                            position[0],
+                            position[1],
+                            move[0],
+                            move[1],
+                            curr_symbol
+                        ), 2, -100000, 100000)
                 );
 
                 // Add this evaluated action to the list of possible actions
@@ -626,9 +651,9 @@ std::unique_ptr<Piece> create_piece_unique(const char& symbol, PieceType piece, 
 }
 
 std::unique_ptr<Piece> Board::create_piece(
-    const char& symbol,
-    const int& row,
-    const int& col
+    char symbol,
+    int row,
+    int col
 ) const {
     // Determine player color
     PlayerColor player = isupper(symbol) ? white : black;
@@ -664,7 +689,7 @@ PositionSet Board::flatting_checkin_pieces(
 }
 
 // Handle en passant logic during a move
-void Board::check_enpassant(const int& old_row, const int& old_col, const int& new_row) {
+void Board::check_enpassant(int old_row, int old_col, int new_row) {
     if (board[old_row][old_col]->piece == pawn &&
         (old_row == 1 && new_row == 3) ||
         (old_row == 6 && new_row == 4)) {
@@ -675,7 +700,7 @@ void Board::check_enpassant(const int& old_row, const int& old_col, const int& n
 }
 
 // Handle castling logic during a move
-void Board::check_castling(const int& old_row, const int& old_col) {
+void Board::check_castling(int old_row, int old_col) {
     std::unordered_map<
     std::array<int, 2>,
     std::vector<int>,
@@ -697,7 +722,7 @@ void Board::check_castling(const int& old_row, const int& old_col) {
 }
 
 // Promote a pawn and create the promoted piece
-std::unique_ptr<Piece> Board::create_promoted_piece_player(const int& row, const int& col) const {
+std::unique_ptr<Piece> Board::create_promoted_piece_player(int row, int col) const {
     char symbol;
     std::cout << "Pick a promotion [Q, R, N, B, P]: ";
     std::cin >> symbol;

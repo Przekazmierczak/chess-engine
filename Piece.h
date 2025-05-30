@@ -118,8 +118,8 @@ public:
     Pawn(const char& input_symbol,
         const PieceType& input_piece,
         const PlayerColor& input_player,
-        const int& input_row,
-        const int& input_column
+        int input_row,
+        int input_column
     );
 
 private:
@@ -155,8 +155,8 @@ public:
     Knight(const char& input_symbol,
         const PieceType& input_piece,
         const PlayerColor& input_player,
-        const int& input_row,
-        const int& input_column
+        int input_row,
+        int input_column
     );
 
 private:
@@ -192,8 +192,8 @@ public:
     King(const char& input_symbol,
         const PieceType& input_piece,
         const PlayerColor& input_player,
-        const int& input_row,
-        const int& input_column
+        int input_row,
+        int input_column
     );
 
 private:
@@ -229,8 +229,8 @@ public:
     Rook(const char& input_symbol,
         const PieceType& input_piece,
         const PlayerColor& input_player,
-        const int& input_row,
-        const int& input_column
+        int input_row,
+        int input_column
     );
 
 private:
@@ -266,8 +266,8 @@ public:
     Bishop(const char& input_symbol,
         const PieceType& input_piece,
         const PlayerColor& input_player,
-        const int& input_row,
-        const int& input_column
+        int input_row,
+        int input_column
     );
 
 private:
@@ -303,8 +303,8 @@ public:
     Queen(const char& input_symbol,
         const PieceType& input_piece,
         const PlayerColor& input_player,
-        const int& input_row,
-        const int& input_column
+        int input_row,
+        int input_column
     );
 
 private:

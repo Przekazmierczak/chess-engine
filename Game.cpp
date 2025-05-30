@@ -399,21 +399,30 @@ std::expected<Board, std::string> Game::load_board() const {
     }
 }
 
-std::expected<size_t, std::string> Game::validate_menu_input(const size_t& option, const size_t& first, const size_t& last) const {
+std::expected<size_t, std::string> Game::validate_menu_input(
+    size_t option,
+    size_t first,
+    size_t last
+) const {
     if (option >= first && option <= last) {
         return option;
     }
     return std::unexpected("Pick the number from " + std::to_string(first) + "-" + std::to_string(last));
 }
 
-std::expected<std::string, std::string> Game::validate_position(const std::string& position, const std::regex& valid_format) const {
+std::expected<std::string, std::string> Game::validate_position(
+    const std::string& position,
+    const std::regex& valid_format
+) const {
     if (std::regex_match(position, valid_format)) {
         return position;
     }
     return std::unexpected("Input does not match the required format. Correct format: <digit><letter>");
 }
 
-std::expected<char, std::string> Game::validate_promotion(const char& symbol) const {
+std::expected<char, std::string> Game::validate_promotion(
+    char symbol
+) const {
     std::unordered_set<char> promotions = {'Q', 'R', 'N', 'B'};
     if (promotions.count(symbol)) {
         return symbol;
