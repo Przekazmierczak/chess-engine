@@ -226,7 +226,6 @@ void Piece::rook_bishop_queen_rating_template_active_player(
     // Handles opponent's turn: updates attacked positions and pins
     for (auto direction : directions) {
         int distance = 1; // Distance increment along a direction
-        bool absolute_pin_check = false; // Tracks if a piece is pinned
 
         while (true) {
             int new_row = row + distance * direction[0];

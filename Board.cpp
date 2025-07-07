@@ -691,8 +691,8 @@ PositionSet Board::flatting_checkin_pieces(
 // Handle en passant logic during a move
 void Board::check_enpassant(int old_row, int old_col, int new_row) {
     if (board[old_row][old_col]->piece == pawn &&
-        (old_row == 1 && new_row == 3) ||
-        (old_row == 6 && new_row == 4)) {
+        ((old_row == 1 && new_row == 3) ||
+        (old_row == 6 && new_row == 4))) {
             enpassant = {(old_row + new_row) / 2, old_col};
     } else {
         enpassant = {8, 8};
