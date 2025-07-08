@@ -1,3 +1,13 @@
+```
+                _____ _                      ______             _
+     _/|       / ____| |                    |  ____|           (_)                 |\_ 
+    // o\     | |    | |__   ___  ___ ___   | |__   _ __   __ _ _ _ __   ___      /X \\
+    || ._)    | |    | '_ \ / _ \/ __/ __|  |  __| | '_ \ / _` | | '_ \ / _ \    (_. ||
+    //__\     | |____| | | |  __/\__ \__ \  | |____| | | | (_| | | | | |  __/     /__\\
+    )___(      \_____|_| |_|\___||___/___/  |______|_| |_|\__, |_|_| |_|\___|     )___(
+                                                           __/ |
+                                                          |___/              
+```
 # C++ Chess Engine with Alpha-Beta Pruning
 
 This project is a complete implementation of a chess engine written in modern C++. It includes the full set of chess rules, an object-oriented structure for piece behavior, and an AI system using the Alpha-Beta pruning algorithm to efficiently evaluate moves. A command-line interface allows the user to play against the AI or simulate games between two AIs. The project also includes a suite of unit tests.
