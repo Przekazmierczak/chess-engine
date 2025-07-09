@@ -12,6 +12,8 @@
 
 This project is a complete implementation of a chess engine written in modern C++. It includes the full set of chess rules, an object-oriented structure for piece behavior, and an AI system using the Alpha-Beta pruning algorithm to efficiently evaluate moves. A command-line interface allows the user to play against the AI or simulate games between two AIs. The project also includes a suite of unit tests.
 
+![ChessEngine](https://github.com/user-attachments/assets/2254b632-cc52-4745-b5ff-76d689582e3a)
+
 ## Features
 
 - Complete implementation of chess rules:
