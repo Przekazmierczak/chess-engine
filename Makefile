@@ -21,7 +21,7 @@ SRCDIR = src
 OBJDIR = build
 
 # Compiler flags
-CPPFLAGS = -g -Wall -std=c++23 -I$(INCLUDEDIR)
+CPPFLAGS = -g -Wall -O3 -std=c++23 -I$(INCLUDEDIR)
 
 # Name of the output binary
 OUTPUT = $(OUTPUT_CMD)
